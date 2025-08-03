@@ -602,6 +602,11 @@ const Slide: React.FC<SlideProps> = ({
                 {slide.title}
               </div>
             )}
+            {slide.content && (
+              <div className="mt-auto">
+                {slide.content}
+              </div>
+            )}
           </div>
         ) : (
           // Regular layout for other slides
