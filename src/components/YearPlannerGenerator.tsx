@@ -606,7 +606,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col justify-between">
-        <div className="flex-1 flex flex-col justify-center space-y-6">
+        <div className="flex-1 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="text-white text-base font-arial">Sexualität</div>
             <StarRating />
@@ -638,7 +638,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col justify-between">
-        <div className="flex-1 flex flex-col justify-center space-y-6">
+        <div className="flex-1 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="text-white text-base font-arial">Gemeinsame Zeit</div>
             <StarRating />
