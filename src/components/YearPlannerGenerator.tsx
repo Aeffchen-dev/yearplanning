@@ -1,270 +1,469 @@
-import React, { useState, Suspense, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Box, Html, PerspectiveCamera } from '@react-three/drei';
+import React, { useState, useRef } from 'react';
 import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
-import { motion } from 'framer-motion';
-import * as THREE from 'three';
+import { Textarea } from './ui/textarea';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
-// Month cube component for 3D calendar
-const MonthCube = ({ position, monthData, monthIndex }: any) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime + monthIndex) * 0.1;
-    }
-  });
+interface EmojiPosition {
+  emoji: string;
+  x: number;
+  y: number;
+  label: string;
+}
 
-  const monthColors = [
-    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-    '#FECA57', '#FF9FF3', '#54A0FF', '#5F27CD',
-    '#00D2D3', '#FF9F43', '#EE5A24', '#0097E6'
+interface StarRating {
+  [key: string]: number;
+}
+
+const YearPlannerGenerator = () => {
+  const [currentSlide, setCurrentSlide] = useState(1);
+  const [emojiPositions, setEmojiPositions] = useState<EmojiPosition[]>([]);
+  const [starRatings, setStarRatings] = useState<StarRating>({});
+  const [textInputs, setTextInputs] = useState<{[key: string]: string}>({});
+  const [showBuilderWarning, setShowBuilderWarning] = useState(true);
+  const graphRef = useRef<HTMLDivElement>(null);
+
+  const totalSlides = 24;
+
+  const emojis = [
+    { emoji: '❤️', label: 'Beziehung' },
+    { emoji: '👯‍♀️', label: 'Freunde' },
+    { emoji: '🐶', label: 'Kalle' },
+    { emoji: '🤸', label: 'Hobbies' },
+    { emoji: '🫀', label: 'Gesundheit' },
+    { emoji: '👩‍💻', label: 'Beruf' }
   ];
 
-  return (
-    <group position={position}>
-      <Box ref={meshRef} args={[2, 2, 2]}>
-        <meshStandardMaterial color={monthColors[monthIndex]} />
-      </Box>
-      
-      <Html position={[0, 1.5, 0]} center>
-        <div className="bg-white/90 px-2 py-1 rounded shadow-lg text-sm font-bold text-black">
-          {monthData.name}
-        </div>
-      </Html>
-      
-      <Html position={[0, -1.5, 0]} center>
-        <div className="bg-white/80 px-2 py-1 rounded shadow text-xs text-black">
-          {monthData.daysInMonth} days
-        </div>
-      </Html>
-    </group>
-  );
-};
-
-// Year display component
-const YearDisplay = ({ year, position }: any) => {
-  return (
-    <group position={position}>
-      <Text
-        fontSize={3}
-        color="#333"
-        anchorX="center"
-        anchorY="middle"
-        font="/fonts/inter-bold.woff"
-      >
-        {year}
-      </Text>
-    </group>
-  );
-};
-
-// Floating controls component
-const FloatingControls = ({ selectedYear, setSelectedYear, onExport }: any) => {
-  const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: 21 }, (_, i) => currentYear + i);
-
-  return (
-    <Html position={[0, 8, 0]} center>
-      <motion.div 
-        className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-2xl font-bold text-gray-800">3D Year Planner</h1>
-          
-          <div className="flex items-center gap-4">
-            <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
-              <SelectTrigger className="w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {yearOptions.map((year) => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Button onClick={onExport} variant="default" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
-              Export Plan
-            </Button>
-          </div>
-          
-          <p className="text-sm text-gray-600 text-center max-w-md">
-            Explore your year in 3D! Rotate and zoom to see each month. Click Export to download your planner.
-          </p>
-        </div>
-      </motion.div>
-    </Html>
-  );
-};
-
-// Main 3D Scene component
-const YearPlannerScene = ({ selectedYear }: { selectedYear: number }) => {
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+  const relationshipAspects = [
+    'Sexualität',
+    'Emotionale Verbundenheit', 
+    'Kommunikation',
+    'Vertrauen',
+    'Gemeinsame Zeit',
+    'Zusammen gelacht',
+    'Konfliktbewältigung',
+    'Freiheit, Unabhängigkeit'
   ];
 
-  const getDaysInMonth = (year: number, month: number) => {
-    return new Date(year, month + 1, 0).getDate();
+  const handleEmojiDrop = (emoji: string, label: string, event: React.MouseEvent) => {
+    if (!graphRef.current) return;
+    
+    const rect = graphRef.current.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    
+    setEmojiPositions(prev => [
+      ...prev.filter(pos => pos.emoji !== emoji),
+      { emoji, x, y, label }
+    ]);
   };
 
-  const generateMonthData = () => {
-    return months.map((monthName, monthIndex) => ({
-      name: monthName,
-      daysInMonth: getDaysInMonth(selectedYear, monthIndex),
-      monthIndex
+  const handleStarClick = (aspect: string, rating: number) => {
+    setStarRatings(prev => ({
+      ...prev,
+      [aspect]: rating
     }));
   };
 
-  const monthsData = generateMonthData();
-
-  // Arrange months in a circle
-  const radius = 8;
-  const positions = monthsData.map((_, index) => {
-    const angle = (index / 12) * Math.PI * 2;
-    return [
-      Math.cos(angle) * radius,
-      Math.sin(index * 0.5) * 2,
-      Math.sin(angle) * radius
-    ];
-  });
-
-  const handleExport = () => {
-    // Create a simple export functionality
-    const plannerData = {
-      year: selectedYear,
-      months: monthsData,
-      exported: new Date().toISOString()
-    };
-    
-    const dataStr = JSON.stringify(plannerData, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = `year-planner-${selectedYear}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
+  const handleStarDoubleClick = (aspect: string, rating: number) => {
+    setStarRatings(prev => ({
+      ...prev,
+      [aspect]: rating - 0.5
+    }));
   };
 
-  return (
-    <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
-      <pointLight position={[-10, -10, -10]} intensity={0.5} />
-      
-      {/* Year display in center */}
-      <YearDisplay year={selectedYear} position={[0, 0, 0]} />
-      
-      {/* Month cubes arranged in circle */}
-      {monthsData.map((monthData, index) => (
-        <MonthCube
-          key={monthData.name}
-          position={positions[index]}
-          monthData={monthData}
-          monthIndex={index}
-        />
-      ))}
-      
-      {/* Floating controls */}
-      <FloatingControls
-        selectedYear={selectedYear}
-        setSelectedYear={() => {}} // Will be handled by parent
-        onExport={handleExport}
-      />
-      
-      {/* Camera controls */}
-      <OrbitControls
-        enablePan={true}
-        enableZoom={true}
-        enableRotate={true}
-        minDistance={5}
-        maxDistance={30}
-        autoRotate={true}
-        autoRotateSpeed={0.5}
-      />
-      
-      {/* Camera */}
-      <PerspectiveCamera makeDefault position={[0, 5, 15]} />
-    </>
-  );
-};
+  const StarRatingComponent = ({ aspect }: { aspect: string }) => {
+    const rating = starRatings[aspect] || 0;
+    
+    return (
+      <div className="flex items-center space-x-2 mb-4">
+        <span className="text-sm font-medium w-48 text-left">{aspect}</span>
+        <div className="flex space-x-1">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star
+              key={star}
+              className={`w-6 h-6 cursor-pointer transition-colors ${
+                star <= rating 
+                  ? 'fill-yellow-400 text-yellow-400' 
+                  : star - 0.5 === rating
+                  ? 'fill-yellow-400/50 text-yellow-400'
+                  : 'text-gray-300'
+              }`}
+              onClick={() => handleStarClick(aspect, star)}
+              onDoubleClick={() => handleStarDoubleClick(aspect, star)}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
 
-const YearPlannerGenerator = () => {
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-  return (
-    <div className="h-screen w-full relative overflow-hidden bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100">
-      {/* Top controls overlay */}
-      <div className="absolute top-4 left-4 z-10">
-        <Card className="bg-white/80 backdrop-blur-md border-white/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Year Planner Builder</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
-                <SelectTrigger className="w-32">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 21 }, (_, i) => new Date().getFullYear() + i).map((year) => (
-                    <SelectItem key={year} value={year.toString()}>
-                      {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+  const renderSlide = () => {
+    switch (currentSlide) {
+      case 1:
+        return (
+          <div className="text-center space-y-8">
+            <h1 className="text-6xl font-bold mb-8">Year Planning</h1>
+            <p className="text-lg text-gray-600">1 / {totalSlides}</p>
+            <div className="space-y-4">
+              <h2 className="text-3xl font-semibold">01 The past year</h2>
+              <p className="text-lg">
+                Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.
+              </p>
+              <p className="text-sm text-gray-500">Swipe um weiter zu navigieren</p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="mt-8 text-sm text-gray-400">
+              <p>Relationship by design</p>
+              <p>Feedback geben</p>
+            </div>
+          </div>
+        );
 
-      {/* Instructions overlay */}
-      <div className="absolute bottom-4 right-4 z-10">
-        <Card className="bg-white/80 backdrop-blur-md border-white/20 max-w-sm">
-          <CardContent className="p-4">
-            <h3 className="font-semibold mb-2">How to use:</h3>
-            <ul className="text-sm space-y-1">
-              <li>• Drag to rotate the view</li>
-              <li>• Scroll to zoom in/out</li>
-              <li>• Each cube represents a month</li>
-              <li>• Auto-rotation shows all angles</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+      case 2:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">2 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">01 The past year</h2>
+            </div>
+            
+            <div 
+              ref={graphRef}
+              className="relative w-full h-96 border-2 border-gray-300 bg-gradient-to-br from-red-50 via-yellow-50 to-green-50 cursor-crosshair"
+              style={{
+                backgroundImage: `
+                  linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+                `,
+                backgroundSize: '20% 20%'
+              }}
+              onClick={(e) => {
+                // Allow clicking on graph area to place the first emoji as example
+                if (emojiPositions.length === 0) {
+                  handleEmojiDrop('❤️', 'Beziehung', e);
+                }
+              }}
+            >
+              {/* Axis labels */}
+              <div className="absolute -left-24 top-4 text-sm font-medium -rotate-90 origin-center">
+                Viel Zeit
+              </div>
+              <div className="absolute -left-24 bottom-4 text-sm font-medium -rotate-90 origin-center">
+                Wenig Zeit
+              </div>
+              <div className="absolute left-4 -top-8 text-sm font-medium">
+                Nicht im Fokus
+              </div>
+              <div className="absolute right-4 -top-8 text-sm font-medium">
+                Im Fokus
+              </div>
+              <div className="absolute left-4 -bottom-8 text-sm font-medium">
+                Hat mich belastet
+              </div>
+              <div className="absolute right-4 -bottom-8 text-sm font-medium">
+                Hat mich erfüllt
+              </div>
 
-      {/* 3D Canvas */}
-      <Canvas>
-        <Suspense fallback={
-          <Html center>
-            <div className="bg-white p-4 rounded-lg shadow-lg">
-              <div className="flex items-center gap-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                <span>Building your 3D year planner...</span>
+              {/* Placed emojis */}
+              {emojiPositions.map((pos, index) => (
+                <div
+                  key={index}
+                  className="absolute text-2xl cursor-move"
+                  style={{ left: `${pos.x}%`, top: `${pos.y}%`, transform: 'translate(-50%, -50%)' }}
+                  title={pos.label}
+                >
+                  {pos.emoji}
+                </div>
+              ))}
+            </div>
+
+            {/* Emoji palette */}
+            <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+              {emojis.map((item) => (
+                <div
+                  key={item.emoji}
+                  className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+                  onClick={(e) => handleEmojiDrop(item.emoji, item.label, e)}
+                >
+                  <span className="text-2xl">{item.emoji}</span>
+                  <span className="text-sm font-medium">{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-center text-sm text-gray-600">
+              Platziert die Emojis auf dem Graphen
+            </p>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">3 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">01 The past year</h2>
+            </div>
+            
+            <div className="space-y-6 max-w-2xl mx-auto">
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Worauf seid ihr stolz?</h3>
+                <Textarea 
+                  className="w-full h-24"
+                  value={textInputs.proud || ''}
+                  onChange={(e) => setTextInputs(prev => ({ ...prev, proud: e.target.value }))}
+                />
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Wofür seid ihr dankbar?</h3>
+                <Textarea 
+                  className="w-full h-24"
+                  value={textInputs.grateful || ''}
+                  onChange={(e) => setTextInputs(prev => ({ ...prev, grateful: e.target.value }))}
+                />
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Was wollt ihr nächstes Jahr besser machen?</h3>
+                <Textarea 
+                  className="w-full h-24"
+                  value={textInputs.improve || ''}
+                  onChange={(e) => setTextInputs(prev => ({ ...prev, improve: e.target.value }))}
+                />
               </div>
             </div>
-          </Html>
-        }>
-          <YearPlannerScene selectedYear={selectedYear} />
-        </Suspense>
-      </Canvas>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">4 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">02 Health Check</h2>
+            </div>
+            
+            <div className="text-center space-y-4">
+              <p className="text-lg">
+                Schaut auf eure Beziehung: Was läuft gut? Was braucht mehr Achtsamkeit?
+              </p>
+            </div>
+          </div>
+        );
+
+      case 5:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">5 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">02 Health Check</h2>
+            </div>
+            
+            <div className="max-w-2xl mx-auto space-y-6">
+              {relationshipAspects.slice(0, 4).map((aspect) => (
+                <StarRatingComponent key={aspect} aspect={aspect} />
+              ))}
+              <p className="text-sm text-gray-600 text-center mt-4">
+                Füllt die Sterne aus, Doppelklick für halbgefüllt
+              </p>
+            </div>
+          </div>
+        );
+
+      case 6:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">6 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">02 Health Check</h2>
+            </div>
+            
+            <div className="max-w-2xl mx-auto space-y-6">
+              {relationshipAspects.slice(4, 8).map((aspect) => (
+                <StarRatingComponent key={aspect} aspect={aspect} />
+              ))}
+              <p className="text-sm text-gray-600 text-center mt-4">
+                Füllt die Sterne aus, Doppelklick für halbgefüllt
+              </p>
+            </div>
+          </div>
+        );
+
+      case 7:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">7 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">01 The past year</h2>
+            </div>
+            
+            <div className="text-center space-y-4">
+              <p className="text-lg">
+                Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder fürs kommende Jahr aus.
+              </p>
+            </div>
+          </div>
+        );
+
+      case 8:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">8 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">03 The new year</h2>
+            </div>
+            
+            <div className="text-center space-y-4">
+              <p className="text-lg">
+                Richtet euren Blick auf das kommende Jahr: Was nehmt ihr euch vor? Was wollt ihr erreichen?
+              </p>
+            </div>
+          </div>
+        );
+
+      case 9:
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+              <p className="text-lg text-gray-600">9 / {totalSlides}</p>
+              <h2 className="text-2xl font-semibold mt-4">03 The new year</h2>
+            </div>
+            
+            <div className="space-y-6 max-w-2xl mx-auto">
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Was wollen wir neu initiieren?</h3>
+                <Textarea 
+                  className="w-full h-24"
+                  value={textInputs.initiate || ''}
+                  onChange={(e) => setTextInputs(prev => ({ ...prev, initiate: e.target.value }))}
+                />
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Womit wollen wir aufhören, weil es uns nicht gut tut?</h3>
+                <Textarea 
+                  className="w-full h-24"
+                  value={textInputs.stop || ''}
+                  onChange={(e) => setTextInputs(prev => ({ ...prev, stop: e.target.value }))}
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="text-center space-y-8">
+            <h1 className="text-5xl font-bold mb-4">Year Planning</h1>
+            <p className="text-lg text-gray-600">{currentSlide} / {totalSlides}</p>
+            <div className="space-y-4">
+              <h2 className="text-2xl font-semibold">Slide {currentSlide}</h2>
+              <p className="text-lg">Content for slide {currentSlide} coming soon...</p>
+            </div>
+          </div>
+        );
+    }
+  };
+
+  const nextSlide = () => {
+    if (currentSlide < totalSlides) {
+      setCurrentSlide(currentSlide + 1);
+    }
+  };
+
+  const prevSlide = () => {
+    if (currentSlide > 1) {
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
+
+  if (showBuilderWarning) {
+    return (
+      <div className="min-h-screen bg-gray-800 flex items-center justify-center">
+        <div className="bg-gray-900 text-white p-8 rounded-lg max-w-md text-center">
+          <div className="mb-4">
+            <div className="w-12 h-12 bg-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <span className="text-white font-bold text-xl">B</span>
+            </div>
+          </div>
+          <h2 className="text-xl font-semibold mb-2">
+            You are previewing user-generated content built with{' '}
+            <span className="text-purple-400">Builder.io</span>
+          </h2>
+          <p className="text-gray-300 mb-4 text-sm">
+            Please use caution when viewing, as it may include unverified or potentially unsafe material
+          </p>
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <input type="checkbox" id="dont-show" className="rounded" />
+            <label htmlFor="dont-show" className="text-sm text-gray-300">
+              Don't show this message again
+            </label>
+          </div>
+          <Button 
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2"
+            onClick={() => setShowBuilderWarning(false)}
+          >
+            Show Content
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Main content */}
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="mb-8 text-center">
+          <p className="text-sm text-gray-500 mb-4">Hello world project</p>
+        </div>
+
+        {/* Slide content */}
+        <div className="mb-12">
+          {renderSlide()}
+        </div>
+
+        {/* Navigation */}
+        <div className="flex justify-between items-center">
+          <Button 
+            variant="outline" 
+            onClick={prevSlide}
+            disabled={currentSlide === 1}
+            className="flex items-center space-x-2"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span>Previous</span>
+          </Button>
+          
+          <div className="text-sm text-gray-500">
+            Swipe um weiter zu navigieren
+          </div>
+          
+          <Button 
+            variant="outline" 
+            onClick={nextSlide}
+            disabled={currentSlide === totalSlides}
+            className="flex items-center space-x-2"
+          >
+            <span>Next</span>
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-12 text-center text-sm text-gray-400 space-y-1">
+          <p>Relationship by design</p>
+          <p>Feedback geben</p>
+        </div>
+      </div>
     </div>
   );
 };
