@@ -605,26 +605,28 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 5,
     label: { number: "02", text: "Health Check" },
     content: (
-      <div className="space-y-8 flex-1">
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">Sexualität</div>
-          <StarRating />
-        </div>
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">
-            Emotionale Verbundenheit
+      <div className="flex-1 flex flex-col justify-between">
+        <div className="flex-1 flex flex-col justify-center space-y-6">
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">Sexualität</div>
+            <StarRating />
           </div>
-          <StarRating />
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">
+              Emotionale Verbundenheit
+            </div>
+            <StarRating />
+          </div>
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">Kommunikation</div>
+            <StarRating />
+          </div>
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">Vertrauen</div>
+            <StarRating />
+          </div>
         </div>
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">Kommunikation</div>
-          <StarRating />
-        </div>
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">Vertrauen</div>
-          <StarRating />
-        </div>
-        <div className="text-center text-white text-xs font-arial mt-auto">
+        <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
           Füllt die Sterne aus, Doppelklick für halbgefüllt
         </div>
       </div>
@@ -635,30 +637,32 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 6,
     label: { number: "02", text: "Health Check" },
     content: (
-      <div className="space-y-8 flex-1">
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">Gemeinsame Zeit</div>
-          <StarRating />
-        </div>
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">
-            Zusammen gelacht
+      <div className="flex-1 flex flex-col justify-between">
+        <div className="flex-1 flex flex-col justify-center space-y-6">
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">Gemeinsame Zeit</div>
+            <StarRating />
           </div>
-          <StarRating />
-        </div>
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">
-            Konfliktbewältigung
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">
+              Zusammen gelacht
+            </div>
+            <StarRating />
           </div>
-          <StarRating />
-        </div>
-        <div className="space-y-2">
-          <div className="text-white text-base font-arial">
-            Freiheit, Unabhängigkeit
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">
+              Konfliktbewältigung
+            </div>
+            <StarRating />
           </div>
-          <StarRating />
+          <div className="space-y-2">
+            <div className="text-white text-base font-arial">
+              Freiheit, Unabhängigkeit
+            </div>
+            <StarRating />
+          </div>
         </div>
-        <div className="text-center text-white text-xs font-arial mt-auto">
+        <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
           Füllt die Sterne aus, Doppelklick für halbgefüllt
         </div>
       </div>
