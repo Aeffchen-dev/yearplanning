@@ -76,12 +76,126 @@ const TextArea: React.FC<TextAreaProps> = ({
   );
 };
 
-// Simple slides data - focusing on core functionality first
-const slides = [
+interface EmojiIconProps {
+  emoji: string;
+  label: string;
+}
+
+const EmojiIcon: React.FC<EmojiIconProps> = ({ emoji, label }) => (
+  <div className="flex items-center gap-2">
+    <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center">
+      <span className="text-2xl">{emoji}</span>
+    </div>
+    <span className="text-white text-base font-arial flex-1">{label}</span>
+  </div>
+);
+
+const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
+  type,
+}) => (
+  <div className="relative w-full h-[310px] my-8">
+    {/* Axes */}
+    <svg className="absolute inset-0 w-full h-full">
+      {/* Horizontal line */}
+      <path
+        d="M0.812554 154.84C0.709031 154.943 0.709031 155.111 0.812554 155.215L2.49956 156.902C2.60309 157.005 2.77093 157.005 2.87446 156.902C2.97798 156.798 2.97798 156.63 2.87446 156.527L1.37489 155.027L2.87446 153.528C2.97798 153.424 2.97798 153.256 2.87446 153.153C2.77093 153.049 2.60309 153.049 2.49956 153.153L0.812554 154.84ZM307.099 155.215C307.203 155.111 307.203 154.943 307.099 154.84L305.412 153.153C305.309 153.049 305.141 153.049 305.037 153.153C304.934 153.256 304.934 153.424 305.037 153.528L306.537 155.027L305.037 156.527C304.934 156.63 304.934 156.798 305.037 156.902C305.141 157.005 305.309 157.005 305.412 156.902L307.099 155.215ZM1 155.027H306.912V154.762H1V155.027Z"
+        fill="white"
+      />
+      {/* Vertical line */}
+      <path
+        d="M155.143 0.312554C155.04 0.209031 154.872 0.209031 154.768 0.312554L153.081 1.99956C152.978 2.10309 152.978 2.27093 153.081 2.37446C153.185 2.47798 153.353 2.47798 153.456 2.37446L154.956 0.874891L156.455 2.37446C156.559 2.47798 156.727 2.47798 156.83 2.37446C156.934 2.27093 156.934 2.10309 156.83 1.99956L155.143 0.312554ZM154.768 309.599C154.872 309.703 155.04 309.703 155.143 309.599L156.83 307.912C156.934 307.809 156.934 307.641 156.83 307.537C156.727 307.434 156.559 307.434 156.455 307.537L154.956 309.037L153.456 307.537C153.353 307.434 153.185 307.434 153.081 307.537C152.978 307.641 152.978 307.809 153.081 307.912L154.768 309.599ZM154.956 0.5V309.412H155.221V0.5H154.956Z"
+        fill="white"
+      />
+    </svg>
+
+    {/* Labels */}
+    {type === "past-year" ? (
+      <>
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial">
+          Nicht im Fokus
+          <br />
+          Wenig Zeit
+        </div>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-12 text-right font-arial">
+          Im Fokus
+          <br />
+          Viel Zeit
+        </div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-20 text-center font-arial">
+          Hat mich erfüllt
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
+          Hat mich belastet
+        </div>
+      </>
+    ) : (
+      <>
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial">
+          Schwer umsetzbar
+        </div>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-14 text-right font-arial">
+          Einfach umsetzbar
+        </div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-18 text-center font-arial">
+          Hoher Impact
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-22 text-center font-arial">
+          Niedriger Impact
+        </div>
+        {/* Highlighted quadrant */}
+        <div className="absolute top-4 left-1/2 w-[153px] h-[132px] bg-white bg-opacity-5"></div>
+        <div className="absolute top-20 left-1/2 translate-x-11 text-white text-opacity-30 text-xs text-center w-16 leading-tight font-arial">
+          diese Ziele geht ihr an
+        </div>
+      </>
+    )}
+  </div>
+);
+
+const FocusAreasSection: React.FC = () => {
+  const [focusAreas, setFocusAreas] = useState(Array(5).fill(""));
+
+  const handleFocusChange = (index: number, value: string) => {
+    const newFocusAreas = [...focusAreas];
+    newFocusAreas[index] = value;
+    setFocusAreas(newFocusAreas);
+  };
+
+  return (
+    <div className="space-y-3 flex-1">
+      {[1, 2, 3, 4, 5].map((i, index) => (
+        <div key={i} className="bg-[#FFE299] flex flex-col">
+          <div className="p-4">
+            <textarea
+              placeholder="Fokus"
+              value={focusAreas[index]}
+              onChange={(e) => handleFocusChange(index, e.target.value)}
+              className={`w-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[40px]`}
+            />
+          </div>
+          <div className="px-4 pb-4 flex justify-end">
+            <StarRating />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+interface SlideData {
+  id: number;
+  label: { number: string; text: string };
+  title?: string;
+  content?: React.ReactNode;
+}
+
+const slides: SlideData[] = [
+  // Slide 1
   {
     id: 1,
     label: { number: "01", text: "The past year" },
-    title: "Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.",
+    title:
+      "Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.",
     content: (
       <div className="flex-1 flex flex-col justify-center">
         <div className="text-center text-white text-xs font-arial">
@@ -90,10 +204,69 @@ const slides = [
       </div>
     ),
   },
+  // Slide 2
   {
     id: 2,
+    label: { number: "01", text: "The past year" },
+    content: (
+      <div className="space-y-8 flex-1">
+        <GraphComponent type="past-year" />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <EmojiIcon emoji="❤️" label="Beziehung" />
+            <EmojiIcon emoji="👯‍♀️" label="Freunde" />
+            <EmojiIcon emoji="🐶" label="Kalle" />
+          </div>
+          <div className="space-y-2">
+            <EmojiIcon emoji="🤸" label="Hobbies" />
+            <EmojiIcon emoji="🫀" label="Gesundheit" />
+            <EmojiIcon emoji="👩‍💻" label="Beruf" />
+          </div>
+        </div>
+        <div className="text-center text-white text-xs font-arial">
+          Platziert die Emojis auf dem Graphen
+        </div>
+      </div>
+    ),
+  },
+  // Slide 3
+  {
+    id: 3,
+    label: { number: "01", text: "The past year" },
+    content: (
+      <div className="space-y-4 flex-1">
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Worauf seid ihr stolz?
+          </div>
+          <TextArea placeholder="Wir sind stolz auf ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Wofür seid ihr dankbar?
+          </div>
+          <TextArea placeholder="Wir sind dankbar für ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Was wollt ihr nächstes Jahr besser machen?
+          </div>
+          <TextArea placeholder="Wir nehmen uns vor ..." />
+        </div>
+      </div>
+    ),
+  },
+  // Slide 4
+  {
+    id: 4,
     label: { number: "02", text: "Health Check" },
-    title: "Schaut auf eure Beziehung: Was läuft gut? Was braucht mehr Achtsamkeit?",
+    title:
+      "Schaut auf eure Beziehung: Was läuft gut? Was braucht mehr Achtsamkeit?",
+  },
+  // Slide 5
+  {
+    id: 5,
+    label: { number: "02", text: "Health Check" },
     content: (
       <div className="space-y-8 flex-1">
         <div className="space-y-2">
@@ -101,14 +274,87 @@ const slides = [
           <StarRating />
         </div>
         <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Emotionale Verbundenheit
+          </div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
           <div className="text-white text-base font-arial">Kommunikation</div>
           <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">Vertrauen</div>
+          <StarRating />
+        </div>
+        <div className="text-center text-white text-xs font-arial mt-auto">
+          Füllt die Sterne aus, Doppelklick für halbgefüllt
         </div>
       </div>
     ),
   },
+  // Slide 6
   {
-    id: 3,
+    id: 6,
+    label: { number: "02", text: "Health Check" },
+    content: (
+      <div className="space-y-8 flex-1">
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">Gemeinsame Zeit</div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Zusammen gelacht
+          </div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Konfliktbewältigung
+          </div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Freiheit, Unabhängigkeit
+          </div>
+          <StarRating />
+        </div>
+        <div className="text-center text-white text-xs font-arial mt-auto">
+          Füllt die Sterne aus, Doppelklick für halbgefüllt
+        </div>
+      </div>
+    ),
+  },
+  // Slide 7
+  {
+    id: 7,
+    label: { number: "02", text: "Health Check" },
+    content: (
+      <div className="flex-1 flex flex-col">
+        <div className="text-white text-base mb-4 font-arial">
+          Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder
+          fürs kommende Jahr aus.
+        </div>
+        <TextArea
+          placeholder="Unsere Erkenntnisse"
+          className="flex-1"
+          rows={12}
+        />
+      </div>
+    ),
+  },
+  // Slide 8
+  {
+    id: 8,
+    label: { number: "03", text: "The new year" },
+    title:
+      "Richtet euren Blick auf das kommende Jahr: Was nehmt ihr euch vor? Was wollt ihr erreichen?",
+  },
+  // Slide 9
+  {
+    id: 9,
     label: { number: "03", text: "The new year" },
     content: (
       <div className="space-y-4 flex-1">
@@ -118,13 +364,132 @@ const slides = [
           </div>
           <TextArea placeholder="Wir starten mit ..." />
         </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Womit wollen wir aufhören, weil es uns nicht gut tut?
+          </div>
+          <TextArea placeholder="Wir stoppen ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Was wollt ihr weiter machen?
+          </div>
+          <TextArea placeholder="Wir machen weiter mit ..." />
+        </div>
+      </div>
+    ),
+  },
+  // Slide 10
+  {
+    id: 10,
+    label: { number: "03", text: "The new year" },
+    content: (
+      <div className="space-y-4 flex-1">
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Was wollen wir bis Jahresende geschafft haben?
+          </div>
+          <TextArea placeholder="Wir schaffen ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Welches Ziel nehmen wir aus dem letzten Jahr mit?
+          </div>
+          <TextArea placeholder="Wir nehmen mit ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Welche Projekte nehmen wir uns vor?
+          </div>
+          <TextArea placeholder="Unsere Projekte ..." />
+        </div>
+      </div>
+    ),
+  },
+  // Slide 11
+  {
+    id: 11,
+    label: { number: "03", text: "The new year" },
+    content: (
+      <div className="space-y-6 flex-1">
+        <div className="text-white text-base font-arial">
+          Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
+          hat dieser Bereich jeweils?
+        </div>
+        <FocusAreasSection />
+      </div>
+    ),
+  },
+  // Slide 12
+  {
+    id: 12,
+    label: { number: "04", text: "Plan and terminate" },
+    title:
+      "Jetzt geht es darum, eure Ideen fürs kommende Jahr zu sammeln und auf ihre Machbarkeit zu untersuchen und zu priorisieren.",
+  },
+  // Slide 13
+  {
+    id: 13,
+    label: { number: "04", text: "Plan and terminate" },
+    content: (
+      <div className="space-y-6 flex-1">
+        <div className="text-white text-base font-arial">
+          Nehmt euch ein Blatt Papier und ordnet eure Ziele auf dem Graphen ein.
+          Ihr könnt wenige große bzw. mehrere kleine Ziele festlegen. Ihr
+          solltet nur die Ziele angehen, die einen hohen Impact haben und
+          einfach umsetzbar sind.
+        </div>
+        <GraphComponent type="goals" />
+        <button className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors">
+          Vorlage herunterladen
+        </button>
       </div>
     ),
   },
 ];
 
+// Generate slides 14-23 with goal planning template
+for (let i = 14; i <= 23; i++) {
+  slides.push({
+    id: i,
+    label: { number: "04", text: "Plan and terminate" },
+    content: (
+      <div className="space-y-6 flex-1">
+        <div>
+          <div className="text-white text-base mb-2 font-arial">Ziel</div>
+          <TextArea placeholder="Ziel beschreiben" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="text-white text-base flex-1 font-arial">Prio</div>
+          <StarRating />
+        </div>
+        <div>
+          <div className="text-white text-base mb-2 font-arial">
+            Wie messen wir den Erfolg?
+          </div>
+          <TextArea placeholder="So messen wir ..." />
+        </div>
+        <div>
+          <div className="text-white text-base mb-2 font-arial">
+            Wie gehen wir es Schritt für Schritt an?
+          </div>
+          <TextArea placeholder="Diese Schritte machen wir, um es zu erreichen" />
+        </div>
+      </div>
+    ),
+  });
+}
+
+// Final slide 24
+slides.push({
+  id: 24,
+  label: { number: "Finally", text: "" },
+  title:
+    "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
+});
+
 interface SlideProps {
-  slide: any;
+  slide: SlideData;
   isActive: boolean;
   onPrevSlide: () => void;
   onNextSlide: () => void;
@@ -180,6 +545,10 @@ const Slide: React.FC<SlideProps> = ({
 
 export default function YearPlannerGenerator() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -188,6 +557,72 @@ export default function YearPlannerGenerator() {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  // Touch/Mouse handlers
+  const handleStart = (clientX: number) => {
+    setIsDragging(true);
+    setStartX(clientX);
+  };
+
+  const handleMove = (clientX: number) => {
+    if (!isDragging) return;
+    const diff = clientX - startX;
+    setTranslateX(diff);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    if (Math.abs(translateX) > 100) {
+      if (translateX > 0) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
+    }
+    setTranslateX(0);
+  };
+
+  // Keyboard navigation and iOS keyboard handling
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") prevSlide();
+      if (e.key === "ArrowRight") nextSlide();
+    };
+
+    // iOS keyboard handling to prevent page position issues
+    const handleFocusIn = () => {
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+      }
+    };
+
+    const handleFocusOut = () => {
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        document.body.style.position = '';
+        document.body.style.width = '';
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 100);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("focusin", handleFocusIn);
+    document.addEventListener("focusout", handleFocusOut);
+    
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("focusin", handleFocusIn);
+      document.removeEventListener("focusout", handleFocusOut);
+    };
+  }, []);
 
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative">
@@ -198,7 +633,7 @@ export default function YearPlannerGenerator() {
             Year Planning
           </h1>
           <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
-            {currentSlide + 1} / {slides.length}
+            {currentSlide + 1} / 24
           </div>
         </div>
       </div>
@@ -224,17 +659,33 @@ export default function YearPlannerGenerator() {
       </div>
 
       {/* Slider container */}
-      <div className="flex h-full pt-16 pb-12">
-        <div className="w-full h-full flex-shrink-0">
-          <Slide
-            slide={slides[currentSlide]}
-            isActive={true}
-            onPrevSlide={prevSlide}
-            onNextSlide={nextSlide}
-            currentSlide={currentSlide}
-            totalSlides={slides.length}
-          />
-        </div>
+      <div
+        ref={sliderRef}
+        className="flex h-full transition-transform duration-300 ease-out pt-16 pb-12"
+        style={{
+          transform: `translateX(calc(-${currentSlide * (100 / slides.length)}% + ${translateX}px))`,
+          width: `${slides.length * 100}%`,
+        }}
+        onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+        onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+        onTouchEnd={handleEnd}
+      >
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className="w-full h-full flex-shrink-0"
+            style={{ width: `${100 / slides.length}%` }}
+          >
+            <Slide
+              slide={slide}
+              isActive={index === currentSlide}
+              onPrevSlide={prevSlide}
+              onNextSlide={nextSlide}
+              currentSlide={currentSlide}
+              totalSlides={slides.length}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
