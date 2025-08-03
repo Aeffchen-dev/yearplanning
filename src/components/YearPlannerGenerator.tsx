@@ -516,7 +516,7 @@ const Slide: React.FC<SlideProps> = ({
 
         {/* Label */}
         <div className="mb-4 md:mb-6">
-          <div className="inline-flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 border border-white rounded-full text-xs md:text-sm font-black font-kokoro">
+          <div className="inline-flex items-center px-2 md:px-3 py-1 md:py-1.5 border border-white rounded-full text-xs md:text-sm font-black font-kokoro">
             {slide.label.number}
             {slide.label.text && (
               <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
