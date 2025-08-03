@@ -52,6 +52,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				planner: {
+					grid: 'hsl(var(--planner-grid))',
+					cell: 'hsl(var(--planner-cell))',
+					header: 'hsl(var(--planner-header))',
+				},
+				info: {
+					DEFAULT: 'hsl(var(--info-background))',
+					foreground: 'hsl(var(--info-foreground))',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
