@@ -300,14 +300,182 @@ const slides: SlideData[] = [
   },
 ];
 
-// Generate more slides (simplified for demonstration)
-for (let i = 7; i <= 24; i++) {
+// Add slides 7-24 with complete content from original
+slides.push(
+  // Slide 7
+  {
+    id: 7,
+    label: { number: "01", text: "The past year" },
+    content: (
+      <div className="flex-1 flex flex-col">
+        <div className="text-white text-base mb-4 font-arial">
+          Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder
+          fürs kommende Jahr aus.
+        </div>
+        <TextArea
+          placeholder="Unsere Erkenntnisse"
+          className="flex-1"
+          rows={12}
+        />
+      </div>
+    ),
+  },
+  // Slide 8
+  {
+    id: 8,
+    label: { number: "03", text: "The new year" },
+    title:
+      "Richtet euren Blick auf das kommende Jahr: Was nehmt ihr euch vor? Was wollt ihr erreichen?",
+  },
+  // Slide 9
+  {
+    id: 9,
+    label: { number: "03", text: "The new year" },
+    content: (
+      <div className="space-y-4 flex-1">
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Was wollen wir neu initiieren?
+          </div>
+          <TextArea placeholder="Wir starten mit ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Womit wollen wir aufhören, weil es uns nicht gut tut?
+          </div>
+          <TextArea placeholder="Wir stoppen ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Was wollt ihr weiter machen?
+          </div>
+          <TextArea placeholder="Wir machen weiter mit ..." />
+        </div>
+      </div>
+    ),
+  },
+  // Slide 10
+  {
+    id: 10,
+    label: { number: "03", text: "The new year" },
+    content: (
+      <div className="space-y-4 flex-1">
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Was wollen wir bis Jahresende geschafft haben?
+          </div>
+          <TextArea placeholder="Wir schaffen ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Welches Ziel nehmen wir aus dem letzten Jahr mit?
+          </div>
+          <TextArea placeholder="Wir nehmen mit ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Welche Projekte nehmen wir uns vor?
+          </div>
+          <TextArea placeholder="Unsere Projekte ..." />
+        </div>
+      </div>
+    ),
+  },
+  // Slide 11
+  {
+    id: 11,
+    label: { number: "03", text: "The new year" },
+    content: (
+      <div className="space-y-6 flex-1">
+        <div className="text-white text-base font-arial">
+          Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
+          hat dieser Bereich jeweils?
+        </div>
+        <div className="space-y-3 flex-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="bg-[#FFE299] flex flex-col">
+              <div className="p-4">
+                <textarea
+                  placeholder="Fokus"
+                  className="w-full bg-transparent text-[#B29F71] placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[40px]"
+                />
+              </div>
+              <div className="px-4 pb-4 flex justify-end">
+                <StarRating />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  // Slide 12
+  {
+    id: 12,
+    label: { number: "04", text: "Plan and terminate" },
+    title:
+      "Jetzt geht es darum, eure Ideen fürs kommende Jahr zu sammeln und auf ihre Machbarkeit zu untersuchen und zu priorisieren.",
+  },
+  // Slide 13
+  {
+    id: 13,
+    label: { number: "04", text: "Plan and terminate" },
+    content: (
+      <div className="space-y-6 flex-1">
+        <div className="text-white text-base font-arial">
+          Nehmt euch ein Blatt Papier und ordnet eure Ziele auf dem Graphen ein.
+          Ihr könnt wenige große bzw. mehrere kleine Ziele festlegen. Ihr
+          solltet nur die Ziele angehen, die einen hohen Impact haben und
+          einfach umsetzbar sind.
+        </div>
+        <GraphComponent type="goals" />
+        <button className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors">
+          Vorlage herunterladen
+        </button>
+      </div>
+    ),
+  }
+);
+
+// Generate slides 14-23 with goal planning template
+for (let i = 14; i <= 23; i++) {
   slides.push({
     id: i,
-    label: { number: i <= 7 ? "01" : i <= 11 ? "02" : i <= 17 ? "03" : "04", text: i <= 7 ? "The past year" : i <= 11 ? "Health Check" : i <= 17 ? "The new year" : "Plan and terminate" },
-    title: `Slide ${i} - Content coming soon...`,
+    label: { number: "04", text: "Plan and terminate" },
+    content: (
+      <div className="space-y-6 flex-1">
+        <div>
+          <div className="text-white text-base mb-2 font-arial">Ziel</div>
+          <TextArea placeholder="Ziel beschreiben" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="text-white text-base flex-1 font-arial">Prio</div>
+          <StarRating />
+        </div>
+        <div>
+          <div className="text-white text-base mb-2 font-arial">
+            Wie messen wir den Erfolg?
+          </div>
+          <TextArea placeholder="So messen wir ..." />
+        </div>
+        <div>
+          <div className="text-white text-base mb-2 font-arial">
+            Wie gehen wir es Schritt für Schritt an?
+          </div>
+          <TextArea placeholder="Diese Schritte machen wir, um es zu erreichen" />
+        </div>
+      </div>
+    ),
   });
 }
+
+// Final slide 24
+slides.push({
+  id: 24,
+  label: { number: "Finally", text: "" },
+  title:
+    "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
+});
 
 interface SlideProps {
   slide: SlideData;
