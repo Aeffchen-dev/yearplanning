@@ -239,72 +239,6 @@ const DraggableEmoji: React.FC<DraggableEmojiProps> = ({ emoji, label, initialX 
   );
 };
 
-interface DraggableFloatingEmojiProps {
-  id: string;
-  emoji: string;
-  label: string;
-  initialX: number;
-  initialY: number;
-  onDrag: (id: string, x: number, y: number) => void;
-}
-
-const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({ 
-  id, emoji, label, initialX, initialY, onDrag 
-}) => {
-  const [position, setPosition] = useState({ x: initialX, y: initialY });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    });
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging) return;
-    
-    const newX = e.clientX - dragStart.x;
-    const newY = e.clientY - dragStart.y;
-    
-    setPosition({ x: newX, y: newY });
-    onDrag(id, newX, newY);
-  }, [isDragging, dragStart, id, onDrag]);
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
-
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
-
-  return (
-    <div
-      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 ${isDragging ? 'opacity-75' : ''}`}
-      style={{
-        transform: `translate(${position.x}px, ${position.y}px)`,
-        transition: isDragging ? 'none' : 'transform 0.1s ease'
-      }}
-      onMouseDown={handleMouseDown}
-      title={label}
-    >
-      <span className="text-2xl pointer-events-none">{emoji}</span>
-    </div>
-  );
-};
 
 const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
   type,
@@ -438,6 +372,73 @@ const FocusAreasSection: React.FC = () => {
           </div>
         </div>
       ))}
+    </div>
+  );
+};
+
+interface DraggableFloatingEmojiProps {
+  id: string;
+  emoji: string;
+  label: string;
+  initialX: number;
+  initialY: number;
+  onDrag: (id: string, x: number, y: number) => void;
+}
+
+const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({ 
+  id, emoji, label, initialX, initialY, onDrag 
+}) => {
+  const [position, setPosition] = useState({ x: initialX, y: initialY });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
+    
+    setPosition({ x: newX, y: newY });
+    onDrag(id, newX, newY);
+  }, [isDragging, dragStart, id, onDrag]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  return (
+    <div
+      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 ${isDragging ? 'opacity-75' : ''}`}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: isDragging ? 'none' : 'transform 0.1s ease'
+      }}
+      onMouseDown={handleMouseDown}
+      title={label}
+    >
+      <span className="text-2xl pointer-events-none">{emoji}</span>
     </div>
   );
 };
