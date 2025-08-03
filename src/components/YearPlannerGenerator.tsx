@@ -168,6 +168,8 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
         y2="50%"
         stroke="white"
         strokeWidth="1"
+        markerStart="url(#arrowhead-left)"
+        markerEnd="url(#arrowhead-right)"
       />
       {/* Vertical line (Y-axis) - centered horizontally with padding */}
       <line
@@ -177,7 +179,65 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
         y2="calc(100% - 32px)"
         stroke="white"
         strokeWidth="1"
+        markerStart="url(#arrowhead-up)"
+        markerEnd="url(#arrowhead-down)"
       />
+      
+      {/* Arrow markers */}
+      <defs>
+        <marker
+          id="arrowhead-left"
+          markerWidth="10"
+          markerHeight="7"
+          refX="1"
+          refY="3.5"
+          orient="auto"
+        >
+          <polygon
+            points="10 0, 0 3.5, 10 7"
+            fill="white"
+          />
+        </marker>
+        <marker
+          id="arrowhead-right"
+          markerWidth="10"
+          markerHeight="7"
+          refX="9"
+          refY="3.5"
+          orient="auto"
+        >
+          <polygon
+            points="0 0, 10 3.5, 0 7"
+            fill="white"
+          />
+        </marker>
+        <marker
+          id="arrowhead-up"
+          markerWidth="7"
+          markerHeight="10"
+          refX="3.5"
+          refY="1"
+          orient="auto"
+        >
+          <polygon
+            points="0 10, 3.5 0, 7 10"
+            fill="white"
+          />
+        </marker>
+        <marker
+          id="arrowhead-down"
+          markerWidth="7"
+          markerHeight="10"
+          refX="3.5"
+          refY="9"
+          orient="auto"
+        >
+          <polygon
+            points="0 0, 3.5 10, 7 0"
+            fill="white"
+          />
+        </marker>
+      </defs>
     </svg>
 
     {/* Labels */}
@@ -195,12 +255,12 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
           <br />
           Viel Zeit
         </div>
-        {/* Top X-axis label */}
+        {/* Top X-axis label - above the line */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
           Hat mich erfüllt
         </div>
-        {/* Bottom X-axis label */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
+        {/* Bottom X-axis label - below the line */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial" style={{ marginTop: '8px' }}>
           Hat mich belastet
         </div>
       </>
@@ -214,12 +274,12 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
         <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 text-right font-arial">
           Einfach umsetzbar
         </div>
-        {/* Top X-axis label */}
+        {/* Top X-axis label - above the line */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
           Hoher Impact
         </div>
-        {/* Bottom X-axis label */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
+        {/* Bottom X-axis label - below the line */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial" style={{ marginTop: '8px' }}>
           Niedriger Impact
         </div>
         {/* Highlighted quadrant */}
