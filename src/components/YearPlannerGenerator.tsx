@@ -12,6 +12,7 @@ const StarRating: React.FC<StarRatingProps> = ({
   readonly = false,
 }) => {
   const [rating, setRating] = useState(value);
+  const [hover, setHover] = useState(0);
 
   const handleClick = (starIndex: number) => {
     if (readonly) return;
@@ -43,15 +44,18 @@ const StarRating: React.FC<StarRatingProps> = ({
   return (
     <div className="flex gap-1 md:gap-3">
       {[1, 2, 3, 4, 5].map((star) => {
-        // Calculate how much of this star should be filled
-        const starFill = Math.max(0, Math.min(1, rating - star + 1));
+        // Use hover value if hovering, otherwise use rating
+        const displayValue = hover > 0 ? hover : rating;
+        const starFill = Math.max(0, Math.min(1, displayValue - star + 1));
         const fillPercentage = Math.round(starFill * 100);
         
         return (
           <button
             key={star}
-            className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer"
+            className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer transition-colors duration-200"
             onClick={() => handleClick(star)}
+            onMouseEnter={() => !readonly && setHover(star)}
+            onMouseLeave={() => !readonly && setHover(0)}
             disabled={readonly}
           >
             <svg viewBox="0 0 24 24" className="w-full h-full">
@@ -70,13 +74,11 @@ const StarRating: React.FC<StarRatingProps> = ({
               />
               
               {/* Star fill */}
-              {fillPercentage > 0 && (
-                <path
-                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                  fill="currentColor"
-                  clipPath={`url(#star-clip-${star})`}
-                />
-              )}
+              <path
+                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                fill={fillPercentage > 0 ? "currentColor" : "none"}
+                clipPath={fillPercentage > 0 ? `url(#star-clip-${star})` : undefined}
+              />
             </svg>
           </button>
         );
