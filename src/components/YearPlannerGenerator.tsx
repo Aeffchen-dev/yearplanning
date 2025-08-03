@@ -61,7 +61,6 @@ const StarRating: React.FC<StarRatingProps> = ({
   const renderStar = (starIndex: number) => {
     // Determine if this star should be filled based on hover or rating
     const currentValue = hoveredStar > 0 ? hoveredStar : rating;
-    const isHovered = hoveredStar > 0;
     
     // Calculate fill percentage for this star
     let fillPercentage = 0;
@@ -75,18 +74,14 @@ const StarRating: React.FC<StarRatingProps> = ({
       fillPercentage = Math.round(partial * 100);
     }
 
-    // Use different opacity for hover vs actual rating
-    const opacity = isHovered ? 0.7 : 1;
-
     return (
       <button
         key={starIndex}
-        className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer transition-all duration-200 hover:scale-110"
+        className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer transition-colors duration-200"
         onClick={() => handleClick(starIndex)}
         onMouseEnter={() => handleMouseEnter(starIndex)}
         onMouseLeave={handleMouseLeave}
         disabled={readonly}
-        style={{ opacity }}
       >
         <svg viewBox="0 0 24 24" className="w-full h-full">
           <defs>
