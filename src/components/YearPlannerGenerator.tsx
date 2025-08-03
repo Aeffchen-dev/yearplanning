@@ -154,6 +154,28 @@ const EmojiIcon: React.FC<EmojiIconProps> = ({ emoji, label }) => (
   </div>
 );
 
+interface DraggableEmojiIconProps {
+  emoji: string;
+  label: string;
+  onStartDrag: (emoji: string, label: string) => void;
+}
+
+const DraggableEmojiIcon: React.FC<DraggableEmojiIconProps> = ({ emoji, label, onStartDrag }) => {
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onStartDrag(emoji, label);
+  };
+
+  return (
+    <div className="flex items-center gap-2 cursor-pointer select-none" onMouseDown={handleMouseDown}>
+      <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+        <span className="text-2xl pointer-events-none">{emoji}</span>
+      </div>
+      <span className="text-white text-base font-arial flex-1 pointer-events-none">{label}</span>
+    </div>
+  );
+};
+
 interface DraggableEmojiProps {
   emoji: string;
   label: string;
@@ -205,6 +227,73 @@ const DraggableEmoji: React.FC<DraggableEmojiProps> = ({ emoji, label, initialX 
     <div
       ref={emojiRef}
       className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-10 ${isDragging ? 'opacity-75' : ''}`}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: isDragging ? 'none' : 'transform 0.1s ease'
+      }}
+      onMouseDown={handleMouseDown}
+      title={label}
+    >
+      <span className="text-2xl pointer-events-none">{emoji}</span>
+    </div>
+  );
+};
+
+interface DraggableFloatingEmojiProps {
+  id: string;
+  emoji: string;
+  label: string;
+  initialX: number;
+  initialY: number;
+  onDrag: (id: string, x: number, y: number) => void;
+}
+
+const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({ 
+  id, emoji, label, initialX, initialY, onDrag 
+}) => {
+  const [position, setPosition] = useState({ x: initialX, y: initialY });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
+    
+    setPosition({ x: newX, y: newY });
+    onDrag(id, newX, newY);
+  }, [isDragging, dragStart, id, onDrag]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  return (
+    <div
+      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 ${isDragging ? 'opacity-75' : ''}`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: isDragging ? 'none' : 'transform 0.1s ease'
@@ -353,6 +442,73 @@ const FocusAreasSection: React.FC = () => {
   );
 };
 
+const SlideWithDraggableEmojis: React.FC = () => {
+  const [draggedEmojis, setDraggedEmojis] = useState<Array<{id: string, emoji: string, label: string, x: number, y: number}>>([]);
+  const [draggedEmojiId, setDraggedEmojiId] = useState<string | null>(null);
+
+  const handleStartDrag = (emoji: string, label: string) => {
+    const newId = `${emoji}-${Date.now()}`;
+    const newEmoji = {
+      id: newId,
+      emoji,
+      label,
+      x: 50, // Start position
+      y: 50
+    };
+    setDraggedEmojis(prev => [...prev, newEmoji]);
+    setDraggedEmojiId(newId);
+  };
+
+  const handleEmojiDrag = (id: string, x: number, y: number) => {
+    setDraggedEmojis(prev => prev.map(emoji => 
+      emoji.id === id ? { ...emoji, x, y } : emoji
+    ));
+  };
+
+  return (
+    <div className="flex flex-col h-full gap-8">
+      <div className="flex-1 flex items-center justify-center min-h-0 relative">
+        <div className="w-full h-full flex items-center justify-center">
+          <img 
+            src="/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png" 
+            alt="Past year graph" 
+            className="max-w-full max-h-full object-contain"
+          />
+        </div>
+        {/* Dragged emojis positioned over the image */}
+        {draggedEmojis.map((emoji) => (
+          <DraggableFloatingEmoji
+            key={emoji.id}
+            id={emoji.id}
+            emoji={emoji.emoji}
+            label={emoji.label}
+            initialX={emoji.x}
+            initialY={emoji.y}
+            onDrag={handleEmojiDrag}
+          />
+        ))}
+      </div>
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <DraggableEmojiIcon emoji="❤️" label="Beziehung" onStartDrag={handleStartDrag} />
+            <DraggableEmojiIcon emoji="👯‍♀️" label="Freunde" onStartDrag={handleStartDrag} />
+            <DraggableEmojiIcon emoji="🐶" label="Kalle" onStartDrag={handleStartDrag} />
+          </div>
+          <div className="space-y-2">
+            <DraggableEmojiIcon emoji="🤸" label="Hobbies" onStartDrag={handleStartDrag} />
+            <DraggableEmojiIcon emoji="🫀" label="Gesundheit" onStartDrag={handleStartDrag} />
+            <DraggableEmojiIcon emoji="👩‍💻" label="Beruf" onStartDrag={handleStartDrag} />
+          </div>
+        </div>
+        <div className="text-center text-white text-sm font-arial">
+          Platziert die Emojis auf dem Graphen
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface SlideData {
   id: number;
   label: { number: string; text: string };
@@ -380,29 +536,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 2,
     label: { number: "01", text: "The past year" },
     content: (
-      <div className="flex flex-col h-full gap-8">
-        <div className="flex-1 flex items-center justify-center min-h-0 relative">
-          <div className="w-full h-full flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png" 
-              alt="Past year graph" 
-              className="max-w-full max-h-full object-contain"
-            />
-          </div>
-          {/* Draggable emojis positioned over the image */}
-          <DraggableEmoji emoji="❤️" label="Beziehung" initialX={20} initialY={20} />
-          <DraggableEmoji emoji="👯‍♀️" label="Freunde" initialX={60} initialY={20} />
-          <DraggableEmoji emoji="🐶" label="Kalle" initialX={100} initialY={20} />
-          <DraggableEmoji emoji="🤸" label="Hobbies" initialX={140} initialY={20} />
-          <DraggableEmoji emoji="🫀" label="Gesundheit" initialX={180} initialY={20} />
-          <DraggableEmoji emoji="👩‍💻" label="Beruf" initialX={220} initialY={20} />
-        </div>
-        <div className="space-y-4">
-          <div className="text-center text-white text-sm font-arial">
-            Platziert die Emojis auf dem Graphen
-          </div>
-        </div>
-      </div>
+      <SlideWithDraggableEmojis />
     ),
   },
   // Slide 3
@@ -996,10 +1130,6 @@ export default function YearPlannerGenerator() {
         onTouchStart={(e) => handleStart(e.touches[0].clientX)}
         onTouchMove={(e) => handleMove(e.touches[0].clientX)}
         onTouchEnd={handleEnd}
-        onMouseDown={(e) => handleStart(e.clientX)}
-        onMouseMove={(e) => handleMove(e.clientX)}
-        onMouseUp={handleEnd}
-        onMouseLeave={handleEnd}
       >
         {slidesArray.map((slide, index) => (
           <div
