@@ -14,38 +14,36 @@ const StarRating: React.FC<StarRatingProps> = ({
   const [rating, setRating] = useState(value);
   const [hover, setHover] = useState(0);
 
-  const handleClick = (newRating: number) => {
+  const handleClick = (starIndex: number) => {
     if (!readonly) {
-      setRating(newRating);
-      onChange?.(newRating);
+      const currentStarValue = Math.max(0, Math.min(1, rating - starIndex + 1));
+      
+      // Cycle through: 0 → 0.33 → 0.5 → 0.75 → 1 → 0
+      let nextValue;
+      if (currentStarValue === 0) {
+        nextValue = 0.33;
+      } else if (currentStarValue <= 0.33) {
+        nextValue = 0.5;
+      } else if (currentStarValue <= 0.5) {
+        nextValue = 0.75;
+      } else if (currentStarValue <= 0.75) {
+        nextValue = 1;
+      } else {
+        nextValue = 0;
+      }
+      
+      // Calculate the new rating
+      const newRating = nextValue === 0 ? starIndex - 1 : starIndex - 1 + nextValue;
+      setRating(Math.max(0, newRating));
+      onChange?.(Math.max(0, newRating));
     }
   };
 
   const handleDoubleClick = (starIndex: number) => {
     if (!readonly) {
-      // If clicking on the same star that's currently the rating, cycle through fractional values
-      if (starIndex === Math.ceil(rating)) {
-        const baseValue = starIndex - 1;
-        const currentFraction = rating - baseValue;
-        
-        if (currentFraction <= 0.33) {
-          setRating(baseValue + 0.5);
-          onChange?.(baseValue + 0.5);
-        } else if (currentFraction <= 0.5) {
-          setRating(baseValue + 0.75);
-          onChange?.(baseValue + 0.75);
-        } else if (currentFraction <= 0.75) {
-          setRating(baseValue + 1);
-          onChange?.(baseValue + 1);
-        } else {
-          setRating(baseValue + 0.33);
-          onChange?.(baseValue + 0.33);
-        }
-      } else {
-        // For a different star, set to 1/3 filled
-        setRating(starIndex - 1 + 0.33);
-        onChange?.(starIndex - 1 + 0.33);
-      }
+      // Double click sets to full value
+      setRating(starIndex);
+      onChange?.(starIndex);
     }
   };
 
