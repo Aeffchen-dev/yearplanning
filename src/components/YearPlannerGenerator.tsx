@@ -328,16 +328,6 @@ const Slide: React.FC<SlideProps> = ({
 }) => (
   <div className="w-full h-full flex items-center justify-center bg-black text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
-      {/* Header */}
-      <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
-        <h1 className="responsive-title font-bold italic leading-[120%] font-serif">
-          Year Planning
-        </h1>
-        <div className="flex-1 text-right text-sm md:text-base font-arial">
-          {slide.id} / 24
-        </div>
-      </div>
-
       {/* Card */}
       <div className="flex-1 bg-[#161616] rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 relative">
         {/* Left click zone */}
@@ -375,12 +365,6 @@ const Slide: React.FC<SlideProps> = ({
 
         {/* Content */}
         <div className="flex-1 flex flex-col min-h-0">{slide.content}</div>
-      </div>
-
-      {/* Footer */}
-      <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial">
-        <div className="flex-1">Relationship by design</div>
-        <div className="hidden sm:block">Feedback geben</div>
       </div>
     </div>
   </div>
@@ -444,10 +428,34 @@ export default function YearPlannerGenerator() {
 
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative">
+      {/* Fixed Header */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-center">
+        <div className="w-full max-w-[500px] responsive-main-padding">
+          <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
+            <h1 className="responsive-title font-bold italic leading-[120%] font-serif text-white">
+              Year Planning
+            </h1>
+            <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
+              {currentSlide + 1} / 24
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Fixed Footer */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-center">
+        <div className="w-full max-w-[500px] responsive-main-padding">
+          <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial text-white">
+            <div className="flex-1">Relationship by design</div>
+            <div className="hidden sm:block">Feedback geben</div>
+          </div>
+        </div>
+      </div>
+
       {/* Slider container */}
       <div
         ref={sliderRef}
-        className="flex h-full transition-transform duration-300 ease-out"
+        className="flex h-full transition-transform duration-300 ease-out pt-16 pb-12"
         style={{
           transform: `translateX(calc(-${currentSlide * (100 / slides.length)}% + ${translateX}px))`,
           width: `${slides.length * 100}%`,
