@@ -351,32 +351,50 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
   </div>
 );
 
-const FocusAreasSection: React.FC = () => {
-  const [focusAreas, setFocusAreas] = useState(Array(5).fill(""));
+interface FocusAreasSectionProps {
+  starRatings: {[key: string]: number};
+  updateStarRating: (key: string, value: number) => void;
+  textareaValues: {[key: string]: string};
+  updateTextareaValue: (key: string, value: string) => void;
+}
 
+const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({ 
+  starRatings, 
+  updateStarRating, 
+  textareaValues, 
+  updateTextareaValue 
+}) => {
   const handleFocusChange = (index: number, value: string) => {
-    const newFocusAreas = [...focusAreas];
-    newFocusAreas[index] = value;
-    setFocusAreas(newFocusAreas);
+    updateTextareaValue(`slide11-focus-${index}`, value);
   };
 
   return (
     <div className="h-full flex flex-col gap-4">
-      {[1, 2, 3, 4, 5].map((i, index) => (
-        <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
-          <div className="p-4 flex-1 min-h-0 flex flex-col">
-            <textarea
-              placeholder="Fokus"
-              value={focusAreas[index]}
-              onChange={(e) => handleFocusChange(index, e.target.value)}
-              className={`w-full flex-1 bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
-            />
+      {[1, 2, 3, 4, 5].map((i, index) => {
+        const focusKey = `slide11-focus-${index}`;
+        const starKey = `slide11-star-${index}`;
+        const focusValue = textareaValues[focusKey] || '';
+        
+        return (
+          <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
+            <div className="p-4 flex-1 min-h-0 flex flex-col">
+              <textarea
+                placeholder="Fokus"
+                value={focusValue}
+                onChange={(e) => handleFocusChange(index, e.target.value)}
+                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+              />
+            </div>
+            <div className="px-4 pb-2 flex justify-end flex-shrink-0">
+              <StarRating 
+                starColor="black" 
+                value={starRatings[starKey] || 0}
+                onChange={(value) => updateStarRating(starKey, value)}
+              />
+            </div>
           </div>
-          <div className="px-4 pb-2 flex justify-end flex-shrink-0">
-            <StarRating starColor="black" />
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
@@ -461,8 +479,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   );
 };
 
-const SlideWithDraggableEmojis: React.FC = () => {
-  const [draggedEmojis, setDraggedEmojis] = useState<Array<{id: string, emoji: string, label: string, x: number, y: number}>>([]);
+interface SlideWithDraggableEmojisProps {
+  draggedEmojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>;
+  updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void;
+}
+
+const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({ draggedEmojis, updateDraggedEmojis }) => {
   const [draggedEmojiId, setDraggedEmojiId] = useState<string | null>(null);
 
   const handleStartDrag = (emoji: string, label: string) => {
@@ -474,14 +496,16 @@ const SlideWithDraggableEmojis: React.FC = () => {
       x: 50, // Start position
       y: 50
     };
-    setDraggedEmojis(prev => [...prev, newEmoji]);
+    const newEmojis = [...draggedEmojis, newEmoji];
+    updateDraggedEmojis(newEmojis);
     setDraggedEmojiId(newId);
   };
 
   const handleEmojiDrag = (id: string, x: number, y: number) => {
-    setDraggedEmojis(prev => prev.map(emoji => 
+    const newEmojis = draggedEmojis.map(emoji => 
       emoji.id === id ? { ...emoji, x, y } : emoji
-    ));
+    );
+    updateDraggedEmojis(newEmojis);
   };
 
   return (
@@ -535,7 +559,14 @@ interface SlideData {
   content?: React.ReactNode;
 }
 
-const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (key: string, value: string) => void): SlideData[] => [
+const slides = (
+  textareaValues: {[key: string]: string}, 
+  updateTextareaValue: (key: string, value: string) => void,
+  starRatings: {[key: string]: number},
+  updateStarRating: (key: string, value: number) => void,
+  draggedEmojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>,
+  updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void
+): SlideData[] => [
   // Slide 1
   {
     id: 1,
@@ -555,7 +586,10 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 2,
     label: { number: "01", text: "The past year" },
     content: (
-      <SlideWithDraggableEmojis />
+      <SlideWithDraggableEmojis 
+        draggedEmojis={draggedEmojis}
+        updateDraggedEmojis={updateDraggedEmojis}
+      />
     ),
   },
   // Slide 3
@@ -616,21 +650,33 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
             <div className="text-white text-base font-arial">Sexualität</div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide5-sexuality'] || 0}
+              onChange={(value) => updateStarRating('slide5-sexuality', value)}
+            />
           </div>
           <div className="space-y-2">
             <div className="text-white text-base font-arial">
               Emotionale Verbundenheit
             </div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide5-emotional'] || 0}
+              onChange={(value) => updateStarRating('slide5-emotional', value)}
+            />
           </div>
           <div className="space-y-2">
             <div className="text-white text-base font-arial">Kommunikation</div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide5-communication'] || 0}
+              onChange={(value) => updateStarRating('slide5-communication', value)}
+            />
           </div>
           <div className="space-y-2">
             <div className="text-white text-base font-arial">Vertrauen</div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide5-trust'] || 0}
+              onChange={(value) => updateStarRating('slide5-trust', value)}
+            />
           </div>
         </div>
         <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
@@ -648,25 +694,37 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
             <div className="text-white text-base font-arial">Gemeinsame Zeit</div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide6-time'] || 0}
+              onChange={(value) => updateStarRating('slide6-time', value)}
+            />
           </div>
           <div className="space-y-2">
             <div className="text-white text-base font-arial">
               Zusammen gelacht
             </div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide6-laughter'] || 0}
+              onChange={(value) => updateStarRating('slide6-laughter', value)}
+            />
           </div>
           <div className="space-y-2">
             <div className="text-white text-base font-arial">
               Konfliktbewältigung
             </div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide6-conflict'] || 0}
+              onChange={(value) => updateStarRating('slide6-conflict', value)}
+            />
           </div>
           <div className="space-y-2">
             <div className="text-white text-base font-arial">
               Freiheit, Unabhängigkeit
             </div>
-            <StarRating />
+            <StarRating 
+              value={starRatings['slide6-freedom'] || 0}
+              onChange={(value) => updateStarRating('slide6-freedom', value)}
+            />
           </div>
         </div>
         <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
@@ -796,7 +854,12 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
           hat dieser Bereich jeweils?
         </div>
         <div className="flex-1 min-h-0">
-          <FocusAreasSection />
+          <FocusAreasSection 
+            starRatings={starRatings}
+            updateStarRating={updateStarRating}
+            textareaValues={textareaValues}
+            updateTextareaValue={updateTextareaValue}
+          />
         </div>
       </div>
     ),
@@ -969,16 +1032,56 @@ export default function YearPlannerGenerator() {
   const [translateX, setTranslateX] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // State for all textarea values
-  const [textareaValues, setTextareaValues] = useState<{[key: string]: string}>({});
+  // State for all textarea values with localStorage persistence
+  const [textareaValues, setTextareaValues] = useState<{[key: string]: string}>(() => {
+    try {
+      const saved = localStorage.getItem('yearPlanner-textareas');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  // State for star ratings with localStorage persistence
+  const [starRatings, setStarRatings] = useState<{[key: string]: number}>(() => {
+    try {
+      const saved = localStorage.getItem('yearPlanner-starRatings');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  // State for dragged emojis with localStorage persistence
+  const [draggedEmojis, setDraggedEmojis] = useState<Array<{id: string, emoji: string, label: string, x: number, y: number}>>(() => {
+    try {
+      const saved = localStorage.getItem('yearPlanner-draggedEmojis');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const updateTextareaValue = (key: string, value: string) => {
-    setTextareaValues(prev => ({ ...prev, [key]: value }));
+    const newValues = { ...textareaValues, [key]: value };
+    setTextareaValues(newValues);
+    localStorage.setItem('yearPlanner-textareas', JSON.stringify(newValues));
+  };
+
+  const updateStarRating = (key: string, value: number) => {
+    const newRatings = { ...starRatings, [key]: value };
+    setStarRatings(newRatings);
+    localStorage.setItem('yearPlanner-starRatings', JSON.stringify(newRatings));
+  };
+
+  const updateDraggedEmojis = (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => {
+    setDraggedEmojis(emojis);
+    localStorage.setItem('yearPlanner-draggedEmojis', JSON.stringify(emojis));
   };
 
   // Create slides array with state integration
   const slidesArray = useMemo(() => {
-    const baseSlides = slides(textareaValues, updateTextareaValue);
+    const baseSlides = slides(textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis);
     
     // Generate slides 14-23 with goal planning template
     for (let i = 14; i <= 23; i++) {
@@ -998,7 +1101,10 @@ export default function YearPlannerGenerator() {
             </div>
             <div className="flex items-center gap-2">
               <div className="text-white text-base flex-1 font-arial">Prio</div>
-              <StarRating />
+              <StarRating 
+                value={starRatings[`slide${i}-prio`] || 0}
+                onChange={(value) => updateStarRating(`slide${i}-prio`, value)}
+              />
             </div>
             <div className="flex-1 flex flex-col">
               <div className="text-white text-base mb-2 font-arial">
@@ -1036,7 +1142,7 @@ export default function YearPlannerGenerator() {
     });
 
     return baseSlides;
-  }, [textareaValues, updateTextareaValue]);
+  }, [textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slidesArray.length);
