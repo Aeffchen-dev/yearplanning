@@ -149,7 +149,7 @@
     }
 
     .responsive-main-padding {
-      padding: 12px !important;
+      padding: 16px !important;
     }
   }
 
@@ -167,7 +167,7 @@
     }
 
     .responsive-main-padding {
-      padding: 8px !important;
+      padding: 16px !important;
     }
   }
 }
