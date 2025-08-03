@@ -900,8 +900,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : slide.id === 2 ? (
-          // Slide 2 - no scrolling for draggable emojis
+        ) : slide.id === 2 || slide.id === 13 ? (
+          // Slide 2 (draggable emojis) and Slide 13 (image) - no scrolling
           <>
             <div className="mb-4 md:mb-6">
               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-black font-kokoro leading-[100%]">
