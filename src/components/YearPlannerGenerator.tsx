@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 
 interface StarRatingProps {
   value?: number;
@@ -253,7 +253,7 @@ interface SlideData {
   content?: React.ReactNode;
 }
 
-const slides: SlideData[] = [
+const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (key: string, value: string) => void): SlideData[] => [
   // Slide 1
   {
     id: 1,
@@ -303,19 +303,31 @@ const slides: SlideData[] = [
           <div className="text-white text-base mb-4 font-arial">
             Worauf seid ihr stolz?
           </div>
-          <TextArea placeholder="Wir sind stolz auf ..." />
+          <TextArea 
+            placeholder="Wir sind stolz auf ..." 
+            value={textareaValues['slide3-proud'] || ''}
+            onChange={(value) => updateTextareaValue('slide3-proud', value)}
+          />
         </div>
         <div className="flex-1">
           <div className="text-white text-base mb-4 font-arial">
             Wofür seid ihr dankbar?
           </div>
-          <TextArea placeholder="Wir sind dankbar für ..." />
+          <TextArea 
+            placeholder="Wir sind dankbar für ..." 
+            value={textareaValues['slide3-grateful'] || ''}
+            onChange={(value) => updateTextareaValue('slide3-grateful', value)}
+          />
         </div>
         <div className="flex-1">
           <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr nächstes Jahr besser machen?
           </div>
-          <TextArea placeholder="Wir nehmen uns vor ..." />
+          <TextArea 
+            placeholder="Wir nehmen uns vor ..." 
+            value={textareaValues['slide3-improve'] || ''}
+            onChange={(value) => updateTextareaValue('slide3-improve', value)}
+          />
         </div>
       </div>
     ),
@@ -405,6 +417,8 @@ const slides: SlideData[] = [
           placeholder="Unsere Erkenntnisse"
           className="flex-1"
           rows={12}
+          value={textareaValues['slide7-insights'] || ''}
+          onChange={(value) => updateTextareaValue('slide7-insights', value)}
         />
       </div>
     ),
@@ -426,19 +440,31 @@ const slides: SlideData[] = [
           <div className="text-white text-base mb-4 font-arial">
             Was wollen wir neu initiieren?
           </div>
-          <TextArea placeholder="Wir starten mit ..." />
+          <TextArea 
+            placeholder="Wir starten mit ..." 
+            value={textareaValues['slide9-initiate'] || ''}
+            onChange={(value) => updateTextareaValue('slide9-initiate', value)}
+          />
         </div>
         <div className="flex-1">
           <div className="text-white text-base mb-4 font-arial">
             Womit wollen wir aufhören, weil es uns nicht gut tut?
           </div>
-          <TextArea placeholder="Wir stoppen ..." />
+          <TextArea 
+            placeholder="Wir stoppen ..." 
+            value={textareaValues['slide9-stop'] || ''}
+            onChange={(value) => updateTextareaValue('slide9-stop', value)}
+          />
         </div>
         <div className="flex-1">
           <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr weiter machen?
           </div>
-          <TextArea placeholder="Wir machen weiter mit ..." />
+          <TextArea 
+            placeholder="Wir machen weiter mit ..." 
+            value={textareaValues['slide9-continue'] || ''}
+            onChange={(value) => updateTextareaValue('slide9-continue', value)}
+          />
         </div>
       </div>
     ),
@@ -453,19 +479,31 @@ const slides: SlideData[] = [
           <div className="text-white text-base mb-4 font-arial">
             Was wollen wir bis Jahresende geschafft haben?
           </div>
-          <TextArea placeholder="Wir schaffen ..." />
+          <TextArea 
+            placeholder="Wir schaffen ..." 
+            value={textareaValues['slide10-achieve'] || ''}
+            onChange={(value) => updateTextareaValue('slide10-achieve', value)}
+          />
         </div>
         <div className="flex-1">
           <div className="text-white text-base mb-4 font-arial">
             Welches Ziel nehmen wir aus dem letzten Jahr mit?
           </div>
-          <TextArea placeholder="Wir nehmen mit ..." />
+          <TextArea 
+            placeholder="Wir nehmen mit ..." 
+            value={textareaValues['slide10-carry'] || ''}
+            onChange={(value) => updateTextareaValue('slide10-carry', value)}
+          />
         </div>
         <div className="flex-1">
           <div className="text-white text-base mb-4 font-arial">
             Welche Projekte nehmen wir uns vor?
           </div>
-          <TextArea placeholder="Unsere Projekte ..." />
+          <TextArea 
+            placeholder="Unsere Projekte ..." 
+            value={textareaValues['slide10-projects'] || ''}
+            onChange={(value) => updateTextareaValue('slide10-projects', value)}
+          />
         </div>
       </div>
     ),
@@ -512,45 +550,6 @@ const slides: SlideData[] = [
   },
 ];
 
-// Generate slides 14-23 with goal planning template
-for (let i = 14; i <= 23; i++) {
-  slides.push({
-    id: i,
-    label: { number: "04", text: "Plan and terminate" },
-    content: (
-      <div className="space-y-6 flex-1">
-        <div>
-          <div className="text-white text-base mb-2 font-arial">Ziel</div>
-          <TextArea placeholder="Ziel beschreiben" />
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="text-white text-base flex-1 font-arial">Prio</div>
-          <StarRating />
-        </div>
-        <div>
-          <div className="text-white text-base mb-2 font-arial">
-            Wie messen wir den Erfolg?
-          </div>
-          <TextArea placeholder="So messen wir ..." />
-        </div>
-        <div>
-          <div className="text-white text-base mb-2 font-arial">
-            Wie gehen wir es Schritt für Schritt an?
-          </div>
-          <TextArea placeholder="Diese Schritte machen wir, um es zu erreichen" />
-        </div>
-      </div>
-    ),
-  });
-}
-
-// Final slide 24
-slides.push({
-  id: 24,
-  label: { number: "Finally", text: "" },
-  title:
-    "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
-});
 
 interface SlideProps {
   slide: SlideData;
@@ -665,12 +664,78 @@ export default function YearPlannerGenerator() {
   const [translateX, setTranslateX] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
 
+  // State for all textarea values
+  const [textareaValues, setTextareaValues] = useState<{[key: string]: string}>({});
+
+  const updateTextareaValue = (key: string, value: string) => {
+    setTextareaValues(prev => ({ ...prev, [key]: value }));
+  };
+
+  // Create slides array with state integration
+  const slidesArray = useMemo(() => {
+    const baseSlides = slides(textareaValues, updateTextareaValue);
+    
+    // Generate slides 14-23 with goal planning template
+    for (let i = 14; i <= 23; i++) {
+      baseSlides.push({
+        id: i,
+        label: { number: "04", text: "Plan and terminate" },
+        content: (
+          <div className="space-y-6 flex-1">
+            <div>
+              <div className="text-white text-base mb-2 font-arial">Ziel</div>
+              <TextArea 
+                placeholder="Ziel beschreiben" 
+                value={textareaValues[`slide${i}-goal`] || ''}
+                onChange={(value) => updateTextareaValue(`slide${i}-goal`, value)}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="text-white text-base flex-1 font-arial">Prio</div>
+              <StarRating />
+            </div>
+            <div>
+              <div className="text-white text-base mb-2 font-arial">
+                Wie messen wir den Erfolg?
+              </div>
+              <TextArea 
+                placeholder="So messen wir ..." 
+                value={textareaValues[`slide${i}-measure`] || ''}
+                onChange={(value) => updateTextareaValue(`slide${i}-measure`, value)}
+              />
+            </div>
+            <div>
+              <div className="text-white text-base mb-2 font-arial">
+                Wie gehen wir es Schritt für Schritt an?
+              </div>
+              <TextArea 
+                placeholder="Diese Schritte machen wir, um es zu erreichen" 
+                value={textareaValues[`slide${i}-steps`] || ''}
+                onChange={(value) => updateTextareaValue(`slide${i}-steps`, value)}
+              />
+            </div>
+          </div>
+        ),
+      });
+    }
+
+    // Final slide 24
+    baseSlides.push({
+      id: 24,
+      label: { number: "Finally", text: "" },
+      title:
+        "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
+    });
+
+    return baseSlides;
+  }, [textareaValues, updateTextareaValue]);
+
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setCurrentSlide((prev) => (prev + 1) % slidesArray.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setCurrentSlide((prev) => (prev - 1 + slidesArray.length) % slidesArray.length);
   };
 
   const goToSlide = (index: number) => {
@@ -778,8 +843,8 @@ export default function YearPlannerGenerator() {
         ref={sliderRef}
         className="flex h-full transition-transform duration-300 ease-out"
         style={{
-          transform: `translateX(calc(-${currentSlide * (100 / slides.length)}% + ${translateX}px))`,
-          width: `${slides.length * 100}vw`,
+          transform: `translateX(calc(-${currentSlide * (100 / slidesArray.length)}% + ${translateX}px))`,
+          width: `${slidesArray.length * 100}vw`,
           paddingTop: '54px',
           paddingBottom: '54px'
         }}
@@ -791,11 +856,11 @@ export default function YearPlannerGenerator() {
         onMouseUp={handleEnd}
         onMouseLeave={handleEnd}
       >
-        {slides.map((slide, index) => (
+        {slidesArray.map((slide, index) => (
           <div
             key={slide.id}
             className="w-full h-full flex-shrink-0"
-            style={{ width: `${100 / slides.length}%` }}
+            style={{ width: `${100 / slidesArray.length}%` }}
           >
             <Slide
               slide={slide}
@@ -803,7 +868,7 @@ export default function YearPlannerGenerator() {
               onPrevSlide={prevSlide}
               onNextSlide={nextSlide}
               currentSlide={currentSlide}
-              totalSlides={slides.length}
+              totalSlides={slidesArray.length}
             />
           </div>
         ))}
