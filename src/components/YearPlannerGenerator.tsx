@@ -21,19 +21,31 @@ const StarRating: React.FC<StarRatingProps> = ({
     }
   };
 
-  const handleDoubleClick = (newRating: number) => {
+  const handleDoubleClick = (starIndex: number) => {
     if (!readonly) {
-      // Cycle through fractional values: 0 -> 0.33 -> 0.5 -> 0.75 -> 1
-      const currentValue = rating === newRating ? rating : 0;
-      let nextValue;
-      if (currentValue === 0) nextValue = 0.33;
-      else if (currentValue === 0.33) nextValue = 0.5;
-      else if (currentValue === 0.5) nextValue = 0.75;
-      else if (currentValue === 0.75) nextValue = 1;
-      else nextValue = 0;
-      
-      setRating(nextValue);
-      onChange?.(nextValue);
+      // If clicking on the same star that's currently the rating, cycle through fractional values
+      if (starIndex === Math.ceil(rating)) {
+        const baseValue = starIndex - 1;
+        const currentFraction = rating - baseValue;
+        
+        if (currentFraction <= 0.33) {
+          setRating(baseValue + 0.5);
+          onChange?.(baseValue + 0.5);
+        } else if (currentFraction <= 0.5) {
+          setRating(baseValue + 0.75);
+          onChange?.(baseValue + 0.75);
+        } else if (currentFraction <= 0.75) {
+          setRating(baseValue + 1);
+          onChange?.(baseValue + 1);
+        } else {
+          setRating(baseValue + 0.33);
+          onChange?.(baseValue + 0.33);
+        }
+      } else {
+        // For a different star, set to 1/3 filled
+        setRating(starIndex - 1 + 0.33);
+        onChange?.(starIndex - 1 + 0.33);
+      }
     }
   };
 
@@ -654,7 +666,7 @@ export default function YearPlannerGenerator() {
     <div className="w-full h-screen bg-black overflow-hidden relative">
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-4">
-        <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
+        <div className="flex items-center gap-2 md:gap-4 mb-4">
           <h1 className="text-[28px] font-bold italic leading-[120%] font-kokoro text-white">
             Year Planning
           </h1>
@@ -666,18 +678,18 @@ export default function YearPlannerGenerator() {
 
       {/* Fixed Footer */}
       <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-4 pb-4">
-        <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial text-white">
+        <div className="flex items-center gap-2 mt-4 text-base font-arial text-white">
           <a 
             href="https://relationshipbydesign.de/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex-1"
+            className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis"
           >
             Relationship by design
           </a>
           <a 
             href="mailto:hello@relationshipbydesign.de?subject=Feedback Year Planning"
-            className="hidden sm:block"
+            className="whitespace-nowrap"
           >
             Feedback geben
           </a>
@@ -687,10 +699,12 @@ export default function YearPlannerGenerator() {
       {/* Slider container */}
       <div
         ref={sliderRef}
-        className="flex h-full transition-transform duration-300 ease-out pt-16 pb-12"
+        className="flex h-full transition-transform duration-300 ease-out mx-4"
         style={{
           transform: `translateX(calc(-${currentSlide * (100 / slides.length)}% + ${translateX}px))`,
-          width: `${slides.length * 100}%`,
+          width: `calc(${slides.length * 100}% - 32px)`,
+          paddingTop: '72px',
+          paddingBottom: '72px'
         }}
         onTouchStart={(e) => handleStart(e.touches[0].clientX)}
         onTouchMove={(e) => handleMove(e.touches[0].clientX)}
