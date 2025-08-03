@@ -703,8 +703,8 @@ export default function YearPlannerGenerator() {
         style={{
           transform: `translateX(calc(-${currentSlide * (100 / slides.length)}% + ${translateX}px))`,
           width: `${slides.length * 100}vw`,
-          paddingTop: '72px',
-          paddingBottom: '72px'
+          paddingTop: '76px',
+          paddingBottom: '76px'
         }}
         onTouchStart={(e) => handleStart(e.touches[0].clientX)}
         onTouchMove={(e) => handleMove(e.touches[0].clientX)}
