@@ -317,28 +317,30 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 2,
     label: { number: "01", text: "The past year" },
     content: (
-      <div className="space-y-8 flex-1">
-        <div className="w-full h-[310px] my-8 flex items-center justify-center">
+      <div className="h-full flex flex-col justify-between">
+        <div className="w-full flex-1 flex items-center justify-center mb-6">
           <img 
             src="/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png" 
             alt="Past year graph" 
             className="max-w-full max-h-full object-contain"
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <EmojiIcon emoji="❤️" label="Beziehung" />
-            <EmojiIcon emoji="👯‍♀️" label="Freunde" />
-            <EmojiIcon emoji="🐶" label="Kalle" />
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <EmojiIcon emoji="❤️" label="Beziehung" />
+              <EmojiIcon emoji="👯‍♀️" label="Freunde" />
+              <EmojiIcon emoji="🐶" label="Kalle" />
+            </div>
+            <div className="space-y-2">
+              <EmojiIcon emoji="🤸" label="Hobbies" />
+              <EmojiIcon emoji="🫀" label="Gesundheit" />
+              <EmojiIcon emoji="👩‍💻" label="Beruf" />
+            </div>
           </div>
-          <div className="space-y-2">
-            <EmojiIcon emoji="🤸" label="Hobbies" />
-            <EmojiIcon emoji="🫀" label="Gesundheit" />
-            <EmojiIcon emoji="👩‍💻" label="Beruf" />
+          <div className="text-center text-white text-sm font-arial">
+            Platziert die Emojis auf dem Graphen
           </div>
-        </div>
-        <div className="text-center text-white text-xs font-arial">
-          Platziert die Emojis auf dem Graphen
         </div>
       </div>
     ),
