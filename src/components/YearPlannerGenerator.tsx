@@ -15,16 +15,11 @@ interface StarRating {
 }
 
 const YearPlannerGenerator = () => {
-  console.log('YearPlannerGenerator component loading...');
-  
   const [currentSlide, setCurrentSlide] = useState(1);
   const [emojiPositions, setEmojiPositions] = useState<EmojiPosition[]>([]);
   const [starRatings, setStarRatings] = useState<StarRating>({});
   const [textInputs, setTextInputs] = useState<{[key: string]: string}>({});
-  const [showBuilderWarning, setShowBuilderWarning] = useState(true);
   const graphRef = useRef<HTMLDivElement>(null);
-  
-  console.log('Current slide:', currentSlide, 'Show warning:', showBuilderWarning);
 
   const totalSlides = 24;
 
@@ -388,44 +383,6 @@ const YearPlannerGenerator = () => {
       setCurrentSlide(currentSlide - 1);
     }
   };
-
-  console.log('Rendering component, showBuilderWarning:', showBuilderWarning);
-  
-  if (showBuilderWarning) {
-    return (
-      <div className="min-h-screen bg-gray-800 flex items-center justify-center">
-        <div className="bg-gray-900 text-white p-8 rounded-lg max-w-md text-center">
-          <div className="mb-4">
-            <div className="w-12 h-12 bg-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">B</span>
-            </div>
-          </div>
-          <h2 className="text-xl font-semibold mb-2">
-            You are previewing user-generated content built with{' '}
-            <span className="text-purple-400">Builder.io</span>
-          </h2>
-          <p className="text-gray-300 mb-4 text-sm">
-            Please use caution when viewing, as it may include unverified or potentially unsafe material
-          </p>
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <input type="checkbox" id="dont-show" className="rounded" />
-            <label htmlFor="dont-show" className="text-sm text-gray-300">
-              Don't show this message again
-            </label>
-          </div>
-          <Button 
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2"
-            onClick={() => {
-              console.log('Show Content button clicked');
-              setShowBuilderWarning(false);
-            }}
-          >
-            Show Content
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white">
