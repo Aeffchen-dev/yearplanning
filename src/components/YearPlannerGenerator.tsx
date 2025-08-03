@@ -391,6 +391,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -403,13 +404,37 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging) return;
+    if (!isDragging || !containerRef.current) return;
     
-    const newX = e.clientX - dragStart.x;
-    const newY = e.clientY - dragStart.y;
+    // Get the image container (the direct parent of the emoji)
+    const imageContainer = containerRef.current.parentElement;
+    if (!imageContainer) return;
     
-    setPosition({ x: newX, y: newY });
-    onDrag(id, newX, newY);
+    const containerRect = imageContainer.getBoundingClientRect();
+    const emojiSize = 48; // 48px = w-12 h-12
+    
+    // Calculate new position relative to the viewport
+    let newX = e.clientX - dragStart.x;
+    let newY = e.clientY - dragStart.y;
+    
+    // Convert to relative position within the container
+    const relativeToContainer = {
+      x: newX - containerRect.left,
+      y: newY - containerRect.top
+    };
+    
+    // Apply boundaries - keep emoji within the image container bounds
+    const minX = 0;
+    const maxX = containerRect.width - emojiSize;
+    const minY = 0;
+    const maxY = containerRect.height - emojiSize;
+    
+    // Constrain the relative position
+    relativeToContainer.x = Math.max(minX, Math.min(maxX, relativeToContainer.x));
+    relativeToContainer.y = Math.max(minY, Math.min(maxY, relativeToContainer.y));
+    
+    setPosition({ x: relativeToContainer.x, y: relativeToContainer.y });
+    onDrag(id, relativeToContainer.x, relativeToContainer.y);
   }, [isDragging, dragStart, id, onDrag]);
 
   const handleMouseUp = useCallback(() => {
@@ -430,6 +455,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
 
   return (
     <div
+      ref={containerRef}
       className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 ${isDragging ? 'opacity-75' : ''}`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
