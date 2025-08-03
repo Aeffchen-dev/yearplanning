@@ -894,8 +894,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : (
-          // Regular layout for other slides
+        ) : slide.id === 2 ? (
+          // Slide 2 - no scrolling for draggable emojis
           <>
             <div className="mb-4 md:mb-6">
               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-black font-kokoro leading-[100%]">
@@ -913,6 +913,26 @@ const Slide: React.FC<SlideProps> = ({
             )}
             
             <div className="flex-1 flex flex-col min-h-0">{slide.content}</div>
+          </>
+        ) : (
+          // Regular layout for other slides with scrolling
+          <>
+            <div className="mb-4 md:mb-6 flex-shrink-0">
+              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-black font-kokoro leading-[100%]">
+                {slide.label.number}
+                {slide.label.text && (
+                  <span className="ml-1">{slide.label.text}</span>
+                )}
+              </div>
+            </div>
+
+            {slide.title && (
+              <div className="font-arial whitespace-pre-line responsive-subtitle leading-[120%] mb-6 md:mb-10 flex-shrink-0">
+                {slide.title}
+              </div>
+            )}
+            
+            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">{slide.content}</div>
           </>
         )}
       </div>
