@@ -21,29 +21,55 @@ const StarRating: React.FC<StarRatingProps> = ({
     }
   };
 
+  const handleDoubleClick = (newRating: number) => {
+    if (!readonly) {
+      // Cycle through fractional values: 0 -> 0.33 -> 0.5 -> 0.75 -> 1
+      const currentValue = rating === newRating ? rating : 0;
+      let nextValue;
+      if (currentValue === 0) nextValue = 0.33;
+      else if (currentValue === 0.33) nextValue = 0.5;
+      else if (currentValue === 0.5) nextValue = 0.75;
+      else if (currentValue === 0.75) nextValue = 1;
+      else nextValue = 0;
+      
+      setRating(nextValue);
+      onChange?.(nextValue);
+    }
+  };
+
   return (
     <div className="flex gap-1 md:gap-3">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          className={`w-8 h-8 md:w-10 md:h-10 transition-all duration-200 ${
-            star <= (hover || rating) ? "text-white" : "text-white"
-          } ${!readonly ? "hover:scale-110 cursor-pointer" : "cursor-default"}`}
-          onMouseEnter={() => !readonly && setHover(star)}
-          onMouseLeave={() => !readonly && setHover(0)}
-          onClick={() => handleClick(star)}
-          disabled={readonly}
-        >
-          <svg viewBox="0 0 45 43" className="w-full h-full">
-            <path
-              d="M22.5 2L27.8 15.8L43 17.1L32.3 26.8L35.6 42L22.5 34.3L9.4 42L12.7 26.8L2 17.1L17.2 15.8L22.5 2Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill={star <= (hover || rating) ? "currentColor" : "none"}
-            />
-          </svg>
-        </button>
-      ))}
+      {[1, 2, 3, 4, 5].map((star) => {
+        const currentValue = hover || rating;
+        const fillAmount = Math.max(0, Math.min(1, currentValue - star + 1));
+        
+        return (
+          <button
+            key={star}
+            className={`w-8 h-8 md:w-10 md:h-10 transition-colors duration-200 text-white ${!readonly ? "cursor-pointer" : "cursor-default"}`}
+            onMouseEnter={() => !readonly && setHover(star)}
+            onMouseLeave={() => !readonly && setHover(0)}
+            onClick={() => handleClick(star)}
+            onDoubleClick={() => handleDoubleClick(star)}
+            disabled={readonly}
+          >
+            <svg viewBox="0 0 45 43" className="w-full h-full">
+              <defs>
+                <linearGradient id={`starGradient-${star}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset={`${fillAmount * 100}%`} stopColor="currentColor" />
+                  <stop offset={`${fillAmount * 100}%`} stopColor="transparent" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M22.5 2L27.8 15.8L43 17.1L32.3 26.8L35.6 42L22.5 34.3L9.4 42L12.7 26.8L2 17.1L17.2 15.8L22.5 2Z"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill={fillAmount > 0 ? `url(#starGradient-${star})` : "none"}
+              />
+            </svg>
+          </button>
+        );
+      })}
     </div>
   );
 };
@@ -523,7 +549,7 @@ const Slide: React.FC<SlideProps> = ({
         />
 
         <div className="mb-4 md:mb-6">
-          <div className="inline-flex items-center px-2 md:px-3 py-1 md:py-1.5 border border-white rounded-full text-xs md:text-sm font-black font-kokoro">
+          <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
             {slide.label.number}
             {slide.label.text && (
               <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
@@ -532,12 +558,12 @@ const Slide: React.FC<SlideProps> = ({
         </div>
 
         {slide.title && (
-          <div className="responsive-subtitle leading-[120%] mb-6 md:mb-10 font-arial whitespace-pre-line">
+          <div className={`font-arial whitespace-pre-line ${[1, 4, 8, 12, 24].includes(slide.id) ? 'text-[32px] leading-[120%] text-center flex-1 flex items-center justify-center' : 'responsive-subtitle leading-[120%] mb-6 md:mb-10'}`}>
             {slide.title}
           </div>
         )}
 
-        <div className="flex-1 flex flex-col min-h-0">{slide.content}</div>
+        <div className={`${slide.title && [1, 4, 8, 12, 24].includes(slide.id) ? '' : 'flex-1 flex flex-col min-h-0'}`}>{slide.content}</div>
       </div>
     </div>
   </div>
