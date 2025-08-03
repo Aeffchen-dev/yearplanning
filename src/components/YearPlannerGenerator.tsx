@@ -15,7 +15,7 @@ const StarRating: React.FC<StarRatingProps> = ({
 }) => {
   const [rating, setRating] = useState(value);
   const [hoverRating, setHoverRating] = useState(0);
-  const componentId = useRef(Math.random().toString(36).substr(2, 9)).current;
+  const componentId = useRef(Math.random().toString(36).substring(2, 11)).current;
 
   useEffect(() => {
     setRating(value);
