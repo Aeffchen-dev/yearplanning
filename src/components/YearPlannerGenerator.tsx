@@ -627,7 +627,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
           </div>
         </div>
         <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
-          Füllt die Sterne aus, Doppelklick für halbgefüllt
+          Füllt die Sterne aus, klickt nochmal für einen halb gefüllten Stern
         </div>
       </div>
     ),
@@ -663,7 +663,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
           </div>
         </div>
         <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
-          Füllt die Sterne aus, Doppelklick für halbgefüllt
+          Füllt die Sterne aus, klickt nochmal für einen halb gefüllten Stern
         </div>
       </div>
     ),
