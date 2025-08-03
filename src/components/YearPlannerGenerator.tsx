@@ -1030,6 +1030,7 @@ const Slide: React.FC<SlideProps> = ({
 
 export default function YearPlannerGenerator() {
   const [currentSlide, setCurrentSlide] = useState(() => {
+    if (typeof window === 'undefined') return 0;
     try {
       const saved = localStorage.getItem('yearPlanner-currentSlide');
       return saved ? parseInt(saved, 10) : 0;
@@ -1044,6 +1045,7 @@ export default function YearPlannerGenerator() {
 
   // State for all textarea values with localStorage persistence
   const [textareaValues, setTextareaValues] = useState<{[key: string]: string}>(() => {
+    if (typeof window === 'undefined') return {};
     try {
       const saved = localStorage.getItem('yearPlanner-textareas');
       return saved ? JSON.parse(saved) : {};
@@ -1054,6 +1056,7 @@ export default function YearPlannerGenerator() {
 
   // State for star ratings with localStorage persistence
   const [starRatings, setStarRatings] = useState<{[key: string]: number}>(() => {
+    if (typeof window === 'undefined') return {};
     try {
       const saved = localStorage.getItem('yearPlanner-starRatings');
       return saved ? JSON.parse(saved) : {};
@@ -1064,6 +1067,7 @@ export default function YearPlannerGenerator() {
 
   // State for dragged emojis with localStorage persistence
   const [draggedEmojis, setDraggedEmojis] = useState<Array<{id: string, emoji: string, label: string, x: number, y: number}>>(() => {
+    if (typeof window === 'undefined') return [];
     try {
       const saved = localStorage.getItem('yearPlanner-draggedEmojis');
       return saved ? JSON.parse(saved) : [];
