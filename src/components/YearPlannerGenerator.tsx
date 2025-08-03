@@ -317,15 +317,15 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 2,
     label: { number: "01", text: "The past year" },
     content: (
-      <div className="h-full flex flex-col justify-between">
-        <div className="w-full flex-1 flex items-center justify-center mb-6">
+      <div className="flex flex-col h-full">
+        <div className="flex-1 flex items-center justify-center min-h-0">
           <img 
             src="/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png" 
             alt="Past year graph" 
             className="max-w-full max-h-full object-contain"
           />
         </div>
-        <div className="space-y-6">
+        <div className="space-y-4 mt-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <EmojiIcon emoji="❤️" label="Beziehung" />
