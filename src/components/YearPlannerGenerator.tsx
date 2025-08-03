@@ -16,26 +16,38 @@ const StarRating: React.FC<StarRatingProps> = ({
 
   const handleClick = (starIndex: number) => {
     if (!readonly) {
-      const currentStarValue = Math.max(0, Math.min(1, rating - starIndex + 1));
-      
-      // Cycle through: 0 → 0.33 → 0.5 → 0.75 → 1 → 0
-      let nextValue;
-      if (currentStarValue === 0) {
-        nextValue = 0.33;
-      } else if (currentStarValue <= 0.33) {
-        nextValue = 0.5;
-      } else if (currentStarValue <= 0.5) {
-        nextValue = 0.75;
-      } else if (currentStarValue <= 0.75) {
-        nextValue = 1;
+      // If clicking on a star that represents the current rating level
+      if (Math.ceil(rating) === starIndex) {
+        // Cycle through fractional values for this star
+        const baseValue = starIndex - 1;
+        const currentFraction = rating - baseValue;
+        
+        if (currentFraction >= 0.99) {
+          // From full to 1/3
+          setRating(baseValue + 0.33);
+          onChange?.(baseValue + 0.33);
+        } else if (currentFraction >= 0.3 && currentFraction < 0.4) {
+          // From 1/3 to 1/2
+          setRating(baseValue + 0.5);
+          onChange?.(baseValue + 0.5);
+        } else if (currentFraction >= 0.45 && currentFraction < 0.55) {
+          // From 1/2 to 3/4
+          setRating(baseValue + 0.75);
+          onChange?.(baseValue + 0.75);
+        } else if (currentFraction >= 0.7 && currentFraction < 0.8) {
+          // From 3/4 back to full
+          setRating(starIndex);
+          onChange?.(starIndex);
+        } else {
+          // Default to full
+          setRating(starIndex);
+          onChange?.(starIndex);
+        }
       } else {
-        nextValue = 0;
+        // Clicking a different star - set to full value
+        setRating(starIndex);
+        onChange?.(starIndex);
       }
-      
-      // Calculate the new rating
-      const newRating = nextValue === 0 ? starIndex - 1 : starIndex - 1 + nextValue;
-      setRating(Math.max(0, newRating));
-      onChange?.(Math.max(0, newRating));
     }
   };
 
