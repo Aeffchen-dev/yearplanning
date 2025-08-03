@@ -160,22 +160,63 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
   <div className="relative w-full h-[310px] my-8">
     {/* Axes */}
     <svg className="absolute inset-0 w-full h-full">
-      {/* Horizontal line */}
-      <path
-        d="M0.812554 154.84C0.709031 154.943 0.709031 155.111 0.812554 155.215L2.49956 156.902C2.60309 157.005 2.77093 157.005 2.87446 156.902C2.97798 156.798 2.97798 156.63 2.87446 156.527L1.37489 155.027L2.87446 153.528C2.97798 153.424 2.97798 153.256 2.87446 153.153C2.77093 153.049 2.60309 153.049 2.49956 153.153L0.812554 154.84ZM307.099 155.215C307.203 155.111 307.203 154.943 307.099 154.84L305.412 153.153C305.309 153.049 305.141 153.049 305.037 153.153C304.934 153.256 304.934 153.424 305.037 153.528L306.537 155.027L305.037 156.527C304.934 156.63 304.934 156.798 305.037 156.902C305.141 157.005 305.309 157.005 305.412 156.902L307.099 155.215ZM1 155.027H306.912V154.762H1V155.027Z"
-        fill="white"
+      {/* Horizontal line (X-axis) - fills container width */}
+      <line
+        x1="0"
+        y1="50%"
+        x2="100%"
+        y2="50%"
+        stroke="white"
+        strokeWidth="1"
+        markerEnd="url(#arrowhead-right)"
       />
-      {/* Vertical line */}
-      <path
-        d="M155.143 0.312554C155.04 0.209031 154.872 0.209031 154.768 0.312554L153.081 1.99956C152.978 2.10309 152.978 2.27093 153.081 2.37446C153.185 2.47798 153.353 2.47798 153.456 2.37446L154.956 0.874891L156.455 2.37446C156.559 2.47798 156.727 2.47798 156.83 2.37446C156.934 2.27093 156.934 2.10309 156.83 1.99956L155.143 0.312554ZM154.768 309.599C154.872 309.703 155.04 309.703 155.143 309.599L156.83 307.912C156.934 307.809 156.934 307.641 156.83 307.537C156.727 307.434 156.559 307.434 156.455 307.537L154.956 309.037L153.456 307.537C153.353 307.434 153.185 307.434 153.081 307.537C152.978 307.641 152.978 307.809 153.081 307.912L154.768 309.599ZM154.956 0.5V309.412H155.221V0.5H154.956Z"
-        fill="white"
+      {/* Vertical line (Y-axis) - centered horizontally */}
+      <line
+        x1="50%"
+        y1="0"
+        x2="50%"
+        y2="100%"
+        stroke="white"
+        strokeWidth="1"
+        markerEnd="url(#arrowhead-up)"
       />
+      
+      {/* Arrow markers */}
+      <defs>
+        <marker
+          id="arrowhead-right"
+          markerWidth="10"
+          markerHeight="7"
+          refX="9"
+          refY="3.5"
+          orient="auto"
+        >
+          <polygon
+            points="0 0, 10 3.5, 0 7"
+            fill="white"
+          />
+        </marker>
+        <marker
+          id="arrowhead-up"
+          markerWidth="7"
+          markerHeight="10"
+          refX="3.5"
+          refY="1"
+          orient="auto"
+        >
+          <polygon
+            points="0 10, 3.5 0, 7 10"
+            fill="white"
+          />
+        </marker>
+      </defs>
     </svg>
 
     {/* Labels */}
     {type === "past-year" ? (
       <>
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial">
+        {/* Y-axis labels - 8px right from y-axis */}
+        <div className="absolute left-1/2 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial" style={{ marginLeft: '8px' }}>
           Nicht im Fokus
           <br />
           Wenig Zeit
@@ -185,7 +226,8 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
           <br />
           Viel Zeit
         </div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-20 text-center font-arial">
+        {/* X-axis labels - 8px below x-axis */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-20 text-center font-arial" style={{ marginTop: '8px' }}>
           Hat mich erfüllt
         </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
@@ -194,13 +236,15 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
       </>
     ) : (
       <>
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial">
+        {/* Y-axis labels - 8px right from y-axis */}
+        <div className="absolute left-1/2 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial" style={{ marginLeft: '8px' }}>
           Schwer umsetzbar
         </div>
         <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-14 text-right font-arial">
           Einfach umsetzbar
         </div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-18 text-center font-arial">
+        {/* X-axis labels - 8px below x-axis */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-18 text-center font-arial" style={{ marginTop: '8px' }}>
           Hoher Impact
         </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-22 text-center font-arial">
