@@ -406,20 +406,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Find the container div that holds the image and emojis (the relative positioned parent)
-    const imageContainer = containerRef.current?.closest('.flex-1') as HTMLElement;
-    if (!imageContainer) return;
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
     
-    const containerRect = imageContainer.getBoundingClientRect();
-    const emojiSize = 48; // 48px = w-12 h-12
-    
-    // Calculate position relative to the container
-    const newX = e.clientX - containerRect.left - dragStart.x;
-    const newY = e.clientY - containerRect.top - dragStart.y;
-    
-    // Apply boundaries within the container
-    const constrainedX = Math.max(0, Math.min(containerRect.width - emojiSize, newX));
-    const constrainedY = Math.max(0, Math.min(containerRect.height - emojiSize, newY));
+    // Simple boundaries - keep within a reasonable area
+    const constrainedX = Math.max(-50, Math.min(400, newX));
+    const constrainedY = Math.max(-50, Math.min(300, newY));
     
     setPosition({ x: constrainedX, y: constrainedY });
     onDrag(id, constrainedX, constrainedY);
