@@ -611,8 +611,20 @@ export default function YearPlannerGenerator() {
       {/* Fixed Footer */}
       <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-4 pb-4">
         <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial text-white">
-          <div className="flex-1">Relationship by design</div>
-          <div className="hidden sm:block">Feedback geben</div>
+          <a 
+            href="https://relationshipbydesign.de/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex-1 hover:underline"
+          >
+            Relationship by design
+          </a>
+          <a 
+            href="mailto:hello@relationshipbydesign.de?subject=Feedback Year Planning"
+            className="hidden sm:block hover:underline"
+          >
+            Feedback geben
+          </a>
         </div>
       </div>
 
