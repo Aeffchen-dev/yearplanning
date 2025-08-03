@@ -361,18 +361,18 @@ const FocusAreasSection: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col gap-4">
+    <div className="h-full flex flex-col gap-4">
       {[1, 2, 3, 4, 5].map((i, index) => (
         <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
-          <div className="p-4 flex-1 min-h-0">
+          <div className="p-4 flex-1 min-h-0 flex flex-col">
             <textarea
               placeholder="Fokus"
               value={focusAreas[index]}
               onChange={(e) => handleFocusChange(index, e.target.value)}
-              className={`w-full h-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+              className={`w-full flex-1 bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
             />
           </div>
-          <div className="px-4 pb-2 flex justify-end">
+          <div className="px-4 pb-2 flex justify-end flex-shrink-0">
             <StarRating starColor="black" />
           </div>
         </div>
@@ -780,11 +780,13 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     label: { number: "03", text: "The new year" },
     content: (
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="text-white text-sm font-arial mb-4 flex-shrink-0">
+        <div className="text-white text-sm font-arial mb-3 flex-shrink-0">
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
         </div>
-        <FocusAreasSection />
+        <div className="flex-1 min-h-0">
+          <FocusAreasSection />
+        </div>
       </div>
     ),
   },
