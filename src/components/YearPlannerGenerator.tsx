@@ -597,7 +597,7 @@ export default function YearPlannerGenerator() {
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative">
       {/* Fixed Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 w-full px-[156px] pt-[156px]">
+      <div className="absolute top-0 left-0 right-0 z-20" style={{ paddingTop: '156px', paddingLeft: '156px', paddingRight: '156px' }}>
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
           <h1 className="responsive-title font-bold italic leading-[120%] font-kokoro text-white">
             Year Planning
@@ -609,7 +609,7 @@ export default function YearPlannerGenerator() {
       </div>
 
       {/* Fixed Footer */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-[156px] pb-[156px]">
+      <div className="absolute bottom-0 left-0 right-0 z-20" style={{ paddingBottom: '156px', paddingLeft: '156px', paddingRight: '156px' }}>
         <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial text-white">
           <div className="flex-1">Relationship by design</div>
           <div className="hidden sm:block">Feedback geben</div>
