@@ -1029,7 +1029,14 @@ const Slide: React.FC<SlideProps> = ({
 );
 
 export default function YearPlannerGenerator() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(() => {
+    try {
+      const saved = localStorage.getItem('yearPlanner-currentSlide');
+      return saved ? parseInt(saved, 10) : 0;
+    } catch {
+      return 0;
+    }
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
@@ -1075,6 +1082,11 @@ export default function YearPlannerGenerator() {
     const newRatings = { ...starRatings, [key]: value };
     setStarRatings(newRatings);
     localStorage.setItem('yearPlanner-starRatings', JSON.stringify(newRatings));
+  };
+
+  const updateCurrentSlide = (slideIndex: number) => {
+    setCurrentSlide(slideIndex);
+    localStorage.setItem('yearPlanner-currentSlide', slideIndex.toString());
   };
 
   const updateDraggedEmojis = (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => {
@@ -1148,15 +1160,19 @@ export default function YearPlannerGenerator() {
   }, [textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis]);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slidesArray.length);
+    if (currentSlide < slidesArray.length - 1) {
+      updateCurrentSlide(currentSlide + 1);
+    }
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slidesArray.length) % slidesArray.length);
+    if (currentSlide > 0) {
+      updateCurrentSlide(currentSlide - 1);
+    }
   };
 
   const goToSlide = (index: number) => {
-    setCurrentSlide(index);
+    updateCurrentSlide(index);
   };
 
   // Touch/Mouse handlers
@@ -1176,10 +1192,10 @@ export default function YearPlannerGenerator() {
     setIsDragging(false);
 
     if (Math.abs(translateX) > 100) {
-      if (translateX > 0) {
-        prevSlide();
-      } else {
-        nextSlide();
+      if (translateX > 0 && currentSlide > 0) {
+        updateCurrentSlide(currentSlide - 1);
+      } else if (translateX < 0 && currentSlide < slidesArray.length - 1) {
+        updateCurrentSlide(currentSlide + 1);
       }
     }
     setTranslateX(0);
