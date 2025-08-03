@@ -76,13 +76,12 @@ const YearPlannerGenerator = () => {
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between',
-        marginBottom: '20px',
-        fontSize: '18px'
+        marginBottom: '20px'
       }}>
         <span style={{ 
-          fontWeight: '400',
+          fontSize: '18px',
           color: '#000',
-          minWidth: '200px'
+          fontWeight: '400'
         }}>
           {aspect}
         </span>
@@ -93,11 +92,9 @@ const YearPlannerGenerator = () => {
               size={24}
               style={{
                 cursor: 'pointer',
-                fill: star <= rating ? '#ffd700' : 
-                      star - 0.5 === rating ? '#ffd700' : 'transparent',
-                color: star <= rating ? '#ffd700' : 
-                       star - 0.5 === rating ? '#ffd700' : '#ddd',
-                stroke: '#ddd',
+                fill: star <= rating ? '#ffd700' : 'transparent',
+                color: star <= rating ? '#ffd700' : '#ccc',
+                stroke: '#ccc',
                 strokeWidth: 1
               }}
               onClick={() => handleStarClick(aspect, star)}
@@ -110,185 +107,232 @@ const YearPlannerGenerator = () => {
   };
 
   const renderSlide = () => {
-    const containerStyle = {
-      maxWidth: '800px',
-      margin: '0 auto',
-      padding: '40px 60px',
-      textAlign: 'center' as const,
-      fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif'
-    };
-
-    const headerStyle = {
-      fontSize: '14px',
-      color: '#666',
-      marginBottom: '20px',
-      fontWeight: '400'
-    };
-
-    const titleStyle = {
-      fontSize: '64px',
-      fontWeight: '700',
-      margin: '0 0 20px 0',
-      lineHeight: '1.1',
-      color: '#000'
-    };
-
-    const slideNumberStyle = {
-      fontSize: '20px',
-      color: '#666',
-      margin: '0 0 40px 0',
-      fontWeight: '400'
-    };
-
-    const sectionTitleStyle = {
-      fontSize: '32px',
-      fontWeight: '600',
-      margin: '0 0 30px 0',
-      color: '#000'
-    };
-
-    const descriptionStyle = {
-      fontSize: '18px',
-      color: '#000',
-      margin: '0 0 20px 0',
-      lineHeight: '1.5',
-      fontWeight: '400'
-    };
-
-    const footerStyle = {
-      fontSize: '14px',
-      color: '#999',
-      marginTop: '60px'
-    };
-
     switch (currentSlide) {
       case 1:
         return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>1 / {totalSlides}</p>
-            <h2 style={{ ...sectionTitleStyle, fontSize: '40px' }}>01 The past year</h2>
-            <p style={descriptionStyle}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '40px',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Hello world project
+            </div>
+            
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: '800',
+              margin: '0 0 20px 0',
+              color: '#000',
+              lineHeight: '0.9'
+            }}>
+              Year Planning
+            </h1>
+            
+            <div style={{
+              fontSize: '20px',
+              color: '#666',
+              marginBottom: '40px'
+            }}>
+              1 / {totalSlides}
+            </div>
+            
+            <div style={{
+              fontSize: '48px',
+              fontWeight: '700',
+              color: '#000',
+              marginBottom: '30px'
+            }}>
+              01The past year
+            </div>
+            
+            <div style={{
+              fontSize: '18px',
+              color: '#000',
+              lineHeight: '1.6',
+              maxWidth: '600px',
+              marginBottom: '20px'
+            }}>
               Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.
-            </p>
-            <p style={{ ...descriptionStyle, fontSize: '14px', color: '#666' }}>
+            </div>
+            
+            <div style={{
+              fontSize: '14px',
+              color: '#666'
+            }}>
               Swipe um weiter zu navigieren
-            </p>
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+            </div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              fontSize: '14px',
+              color: '#999',
+              textAlign: 'center'
+            }}>
+              <div>Relationship by design</div>
+              <div>Feedback geben</div>
             </div>
           </div>
         );
 
       case 2:
         return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>2 / {totalSlides}</p>
-            <h2 style={sectionTitleStyle}>01 The past year</h2>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '40px'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Hello world project
+            </div>
             
-            <div style={{ margin: '40px 0' }}>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr auto auto auto 1fr',
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: '800',
+              margin: '0 0 20px 0',
+              color: '#000',
+              lineHeight: '0.9'
+            }}>
+              Year Planning
+            </h1>
+            
+            <div style={{
+              fontSize: '20px',
+              color: '#666',
+              marginBottom: '40px'
+            }}>
+              2 / {totalSlides}
+            </div>
+            
+            <div style={{
+              fontSize: '36px',
+              fontWeight: '700',
+              color: '#000',
+              marginBottom: '40px'
+            }}>
+              01The past year
+            </div>
+            
+            {/* Graph section */}
+            <div style={{ position: 'relative', marginBottom: '40px' }}>
+              {/* Top labels */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-                gap: '20px',
-                marginBottom: '20px',
+                width: '500px',
+                marginBottom: '10px',
                 fontSize: '14px',
-                fontWeight: '500'
+                fontWeight: '600'
               }}>
-                <div></div>
+                <div style={{ width: '60px' }}></div>
                 <div>Nicht im Fokus</div>
-                <div style={{ width: '400px' }}></div>
                 <div>Im Fokus</div>
-                <div></div>
+                <div style={{ width: '60px' }}></div>
               </div>
               
-              <div style={{ position: 'relative' }}>
-                <div style={{ 
-                  position: 'absolute',
-                  left: '-80px',
-                  top: '50%',
-                  transform: 'translateY(-50%) rotate(-90deg)',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}>
-                  Viel Zeit
-                </div>
-                
-                <div 
-                  ref={graphRef}
-                  style={{
-                    width: '400px',
-                    height: '300px',
-                    border: '2px solid #000',
-                    backgroundColor: '#fff',
-                    margin: '0 auto',
-                    position: 'relative',
-                    cursor: 'crosshair'
-                  }}
-                  onClick={(e) => {
-                    if (emojiPositions.length === 0) {
-                      handleEmojiDrop('❤️', 'Beziehung', e);
-                    }
-                  }}
-                >
-                  {emojiPositions.map((pos, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        position: 'absolute',
-                        fontSize: '24px',
-                        cursor: 'move',
-                        left: `${pos.x}%`,
-                        top: `${pos.y}%`,
-                        transform: 'translate(-50%, -50%)'
-                      }}
-                      title={pos.label}
-                    >
-                      {pos.emoji}
-                    </div>
-                  ))}
-                </div>
-                
-                <div style={{ 
-                  position: 'absolute',
-                  right: '-80px',
-                  top: '50%',
-                  transform: 'translateY(-50%) rotate(90deg)',
-                  fontSize: '14px',
-                  fontWeight: '500'
-                }}>
-                  Wenig Zeit
-                </div>
-              </div>
-              
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr auto auto auto 1fr',
-                alignItems: 'center',
-                gap: '20px',
-                marginTop: '20px',
+              {/* Left label */}
+              <div style={{
+                position: 'absolute',
+                left: '-80px',
+                top: '50%',
+                transform: 'translateY(-50%) rotate(-90deg)',
                 fontSize: '14px',
-                fontWeight: '500'
+                fontWeight: '600'
               }}>
-                <div></div>
+                Viel Zeit
+              </div>
+              
+              {/* Right label */}
+              <div style={{
+                position: 'absolute',
+                right: '-80px',
+                top: '50%',
+                transform: 'translateY(-50%) rotate(90deg)',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}>
+                Wenig Zeit
+              </div>
+              
+              {/* Graph */}
+              <div 
+                ref={graphRef}
+                style={{
+                  width: '500px',
+                  height: '300px',
+                  border: '2px solid #000',
+                  backgroundColor: '#fff',
+                  position: 'relative',
+                  cursor: 'crosshair'
+                }}
+                onClick={(e) => {
+                  if (emojiPositions.length === 0) {
+                    handleEmojiDrop('❤️', 'Beziehung', e);
+                  }
+                }}
+              >
+                {emojiPositions.map((pos, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      position: 'absolute',
+                      fontSize: '24px',
+                      cursor: 'move',
+                      left: `${pos.x}%`,
+                      top: `${pos.y}%`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    title={pos.label}
+                  >
+                    {pos.emoji}
+                  </div>
+                ))}
+              </div>
+              
+              {/* Bottom labels */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '500px',
+                marginTop: '10px',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}>
+                <div style={{ width: '60px' }}></div>
                 <div>Hat mich belastet</div>
-                <div style={{ width: '400px' }}></div>
                 <div>Hat mich erfüllt</div>
-                <div></div>
+                <div style={{ width: '60px' }}></div>
               </div>
             </div>
-
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(2, 1fr)', 
-              gap: '15px', 
-              maxWidth: '400px', 
-              margin: '40px auto'
+            
+            {/* Emoji buttons */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '15px',
+              marginBottom: '20px'
             }}>
               {emojis.map((item) => (
                 <div
@@ -297,211 +341,397 @@ const YearPlannerGenerator = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
-                    padding: '15px',
+                    padding: '15px 20px',
                     border: '1px solid #ddd',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     backgroundColor: '#fff',
-                    fontSize: '14px',
-                    transition: 'background-color 0.2s'
+                    fontSize: '16px',
+                    minWidth: '150px'
                   }}
                   onClick={(e) => handleEmojiDrop(item.emoji, item.label, e)}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}
                 >
                   <span style={{ fontSize: '24px' }}>{item.emoji}</span>
                   <span>{item.label}</span>
                 </div>
               ))}
             </div>
-
-            <p style={{ fontSize: '14px', color: '#666', margin: '20px 0 0 0' }}>
-              Platziert die Emojis auf dem Graphen
-            </p>
             
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              textAlign: 'center'
+            }}>
+              Platziert die Emojis auf dem Graphen
+            </div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              fontSize: '14px',
+              color: '#999',
+              textAlign: 'center'
+            }}>
+              <div>Relationship by design</div>
+              <div>Feedback geben</div>
             </div>
           </div>
         );
 
       case 3:
         return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>3 / {totalSlides}</p>
-            <h2 style={sectionTitleStyle}>01 The past year</h2>
-            
-            <div style={{ textAlign: 'left', maxWidth: '500px', margin: '40px auto' }}>
-              <div style={{ marginBottom: '30px' }}>
-                <div style={{ fontSize: '18px', fontWeight: '500', marginBottom: '10px' }}>
-                  Worauf seid ihr stolz?
-                </div>
-                <textarea
-                  style={{
-                    width: '100%',
-                    minHeight: '80px',
-                    padding: '15px',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    fontSize: '16px',
-                    fontFamily: 'inherit',
-                    resize: 'vertical'
-                  }}
-                  value={textInputs['slide3_proud'] || ''}
-                  onChange={(e) => setTextInputs({...textInputs, 'slide3_proud': e.target.value})}
-                />
-              </div>
-              
-              <div style={{ marginBottom: '30px' }}>
-                <div style={{ fontSize: '18px', fontWeight: '500', marginBottom: '10px' }}>
-                  Wofür seid ihr dankbar?
-                </div>
-                <textarea
-                  style={{
-                    width: '100%',
-                    minHeight: '80px',
-                    padding: '15px',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    fontSize: '16px',
-                    fontFamily: 'inherit',
-                    resize: 'vertical'
-                  }}
-                  value={textInputs['slide3_grateful'] || ''}
-                  onChange={(e) => setTextInputs({...textInputs, 'slide3_grateful': e.target.value})}
-                />
-              </div>
-              
-              <div style={{ marginBottom: '30px' }}>
-                <div style={{ fontSize: '18px', fontWeight: '500', marginBottom: '10px' }}>
-                  Was wollt ihr nächstes Jahr besser machen?
-                </div>
-                <textarea
-                  style={{
-                    width: '100%',
-                    minHeight: '80px',
-                    padding: '15px',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    fontSize: '16px',
-                    fontFamily: 'inherit',
-                    resize: 'vertical'
-                  }}
-                  value={textInputs['slide3_improve'] || ''}
-                  onChange={(e) => setTextInputs({...textInputs, 'slide3_improve': e.target.value})}
-                />
-              </div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '40px'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Hello world project
             </div>
             
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: '800',
+              margin: '0 0 20px 0',
+              color: '#000',
+              lineHeight: '0.9'
+            }}>
+              Year Planning
+            </h1>
+            
+            <div style={{
+              fontSize: '20px',
+              color: '#666',
+              marginBottom: '40px'
+            }}>
+              3 / {totalSlides}
+            </div>
+            
+            <div style={{
+              fontSize: '36px',
+              fontWeight: '700',
+              color: '#000',
+              marginBottom: '40px'
+            }}>
+              01The past year
+            </div>
+            
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '40px',
+              fontSize: '18px',
+              color: '#000'
+            }}>
+              <div>Worauf seid ihr stolz?</div>
+              <div>Wofür seid ihr dankbar?</div>
+              <div>Was wollt ihr nächstes Jahr besser machen?</div>
+            </div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              fontSize: '14px',
+              color: '#999',
+              textAlign: 'center'
+            }}>
+              <div>Relationship by design</div>
+              <div>Feedback geben</div>
             </div>
           </div>
         );
 
       case 4:
         return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>4 / {totalSlides}</p>
-            <h2 style={sectionTitleStyle}>02 Health Check</h2>
-            <p style={descriptionStyle}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '40px',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Hello world project
+            </div>
+            
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: '800',
+              margin: '0 0 20px 0',
+              color: '#000',
+              lineHeight: '0.9'
+            }}>
+              Year Planning
+            </h1>
+            
+            <div style={{
+              fontSize: '20px',
+              color: '#666',
+              marginBottom: '40px'
+            }}>
+              4 / {totalSlides}
+            </div>
+            
+            <div style={{
+              fontSize: '36px',
+              fontWeight: '700',
+              color: '#000',
+              marginBottom: '30px'
+            }}>
+              02Health Check
+            </div>
+            
+            <div style={{
+              fontSize: '18px',
+              color: '#000',
+              lineHeight: '1.6',
+              maxWidth: '600px'
+            }}>
               Schaut auf eure Beziehung: Was läuft gut? Was braucht mehr Achtsamkeit?
-            </p>
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+            </div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              fontSize: '14px',
+              color: '#999',
+              textAlign: 'center'
+            }}>
+              <div>Relationship by design</div>
+              <div>Feedback geben</div>
             </div>
           </div>
         );
 
       case 5:
         return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>5 / {totalSlides}</p>
-            <h2 style={sectionTitleStyle}>02 Health Check</h2>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '40px'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Hello world project
+            </div>
             
-            <div style={{ maxWidth: '500px', margin: '40px auto', textAlign: 'left' }}>
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: '800',
+              margin: '0 0 20px 0',
+              color: '#000',
+              lineHeight: '0.9'
+            }}>
+              Year Planning
+            </h1>
+            
+            <div style={{
+              fontSize: '20px',
+              color: '#666',
+              marginBottom: '40px'
+            }}>
+              5 / {totalSlides}
+            </div>
+            
+            <div style={{
+              fontSize: '36px',
+              fontWeight: '700',
+              color: '#000',
+              marginBottom: '40px'
+            }}>
+              02Health Check
+            </div>
+            
+            <div style={{ minWidth: '500px' }}>
               {relationshipAspects.slice(0, 4).map((aspect) => (
                 <StarRatingComponent key={aspect} aspect={aspect} />
               ))}
-              <p style={{ textAlign: 'center', fontSize: '14px', color: '#666', marginTop: '30px' }}>
-                Füllt die Sterne aus, Doppelklick für halbgefüllt
-              </p>
             </div>
             
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginTop: '20px'
+            }}>
+              Füllt die Sterne aus, Doppelklick für halbgefüllt
+            </div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              fontSize: '14px',
+              color: '#999',
+              textAlign: 'center'
+            }}>
+              <div>Relationship by design</div>
+              <div>Feedback geben</div>
             </div>
           </div>
         );
 
       case 6:
         return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>6 / {totalSlides}</p>
-            <h2 style={sectionTitleStyle}>02 Health Check</h2>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '40px'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Hello world project
+            </div>
             
-            <div style={{ maxWidth: '500px', margin: '40px auto', textAlign: 'left' }}>
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: '800',
+              margin: '0 0 20px 0',
+              color: '#000',
+              lineHeight: '0.9'
+            }}>
+              Year Planning
+            </h1>
+            
+            <div style={{
+              fontSize: '20px',
+              color: '#666',
+              marginBottom: '40px'
+            }}>
+              6 / {totalSlides}
+            </div>
+            
+            <div style={{
+              fontSize: '36px',
+              fontWeight: '700',
+              color: '#000',
+              marginBottom: '40px'
+            }}>
+              02Health Check
+            </div>
+            
+            <div style={{ minWidth: '500px' }}>
               {relationshipAspects.slice(4, 8).map((aspect) => (
                 <StarRatingComponent key={aspect} aspect={aspect} />
               ))}
-              <p style={{ textAlign: 'center', fontSize: '14px', color: '#666', marginTop: '30px' }}>
-                Füllt die Sterne aus, Doppelklick für halbgefüllt
-              </p>
             </div>
             
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginTop: '20px'
+            }}>
+              Füllt die Sterne aus, Doppelklick für halbgefüllt
             </div>
-          </div>
-        );
-
-      case 24:
-        return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>24 / {totalSlides}</p>
-            <h2 style={sectionTitleStyle}>Finally</h2>
-            <div style={{ margin: '40px 0' }}>
-              <p style={{ fontSize: '32px', margin: '0 0 20px 0' }}>Es ist geschafft 🎉</p>
-              <p style={{ fontSize: '20px', margin: '0' }}>Stoßt auf euch an und habt ein geiles Jahr ihr Süßen!</p>
-            </div>
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              fontSize: '14px',
+              color: '#999',
+              textAlign: 'center'
+            }}>
+              <div>Relationship by design</div>
+              <div>Feedback geben</div>
             </div>
           </div>
         );
 
       default:
-        // For other slides, use a simple layout
         return (
-          <div style={containerStyle}>
-            <div style={headerStyle}>Hello world project</div>
-            <h1 style={titleStyle}>Year Planning</h1>
-            <p style={slideNumberStyle}>{currentSlide} / {totalSlides}</p>
-            <h2 style={sectionTitleStyle}>
-              {currentSlide <= 3 ? '01 The past year' :
-               currentSlide <= 11 ? '03 The new year' :
-               currentSlide <= 23 ? '04 Plan and terminate' : 'Finally'}
-            </h2>
-            <p style={descriptionStyle}>Content for slide {currentSlide}</p>
-            <div style={footerStyle}>
-              <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-              <p style={{ margin: '0' }}>Feedback geben</p>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+            padding: '40px',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#666',
+              marginBottom: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Hello world project
+            </div>
+            
+            <h1 style={{
+              fontSize: '80px',
+              fontWeight: '800',
+              margin: '0 0 20px 0',
+              color: '#000',
+              lineHeight: '0.9'
+            }}>
+              Year Planning
+            </h1>
+            
+            <div style={{
+              fontSize: '20px',
+              color: '#666',
+              marginBottom: '40px'
+            }}>
+              {currentSlide} / {totalSlides}
+            </div>
+            
+            <div style={{
+              fontSize: '36px',
+              fontWeight: '700',
+              color: '#000',
+              marginBottom: '30px'
+            }}>
+              Slide {currentSlide}
+            </div>
+            
+            <div style={{
+              fontSize: '18px',
+              color: '#000'
+            }}>
+              Content coming soon...
+            </div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              fontSize: '14px',
+              color: '#999',
+              textAlign: 'center'
+            }}>
+              <div>Relationship by design</div>
+              <div>Feedback geben</div>
             </div>
           </div>
         );
@@ -524,67 +754,57 @@ const YearPlannerGenerator = () => {
     <div style={{ 
       minHeight: '100vh', 
       backgroundColor: '#fff',
-      fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif'
+      fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      position: 'relative'
     }}>
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-          {renderSlide()}
-        </div>
-
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          padding: '20px 40px',
-          borderTop: '1px solid #eee'
-        }}>
-          <button 
-            onClick={prevSlide}
-            disabled={currentSlide === 1}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '10px 20px',
-              border: '1px solid #ddd',
-              borderRadius: '6px',
-              backgroundColor: currentSlide === 1 ? '#f5f5f5' : '#fff',
-              color: currentSlide === 1 ? '#999' : '#000',
-              cursor: currentSlide === 1 ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-          >
-            <ChevronLeft size={16} />
-            <span>Zurück</span>
-          </button>
-          
-          <div style={{ fontSize: '14px', color: '#666' }}>
-            Swipe um weiter zu navigieren
-          </div>
-          
-          <button 
-            onClick={nextSlide}
-            disabled={currentSlide === totalSlides}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '10px 20px',
-              border: '1px solid #ddd',
-              borderRadius: '6px',
-              backgroundColor: currentSlide === totalSlides ? '#f5f5f5' : '#fff',
-              color: currentSlide === totalSlides ? '#999' : '#000',
-              cursor: currentSlide === totalSlides ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-          >
-            <span>Weiter</span>
-            <ChevronRight size={16} />
-          </button>
-        </div>
-      </div>
+      {renderSlide()}
+      
+      {/* Navigation - only show on non-first and non-last slides for clean look */}
+      {currentSlide > 1 && (
+        <button 
+          onClick={prevSlide}
+          style={{
+            position: 'fixed',
+            left: '40px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'rgba(0, 0, 0, 0.1)',
+            border: 'none',
+            borderRadius: '50%',
+            width: '50px',
+            height: '50px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <ChevronLeft size={24} color="#000" />
+        </button>
+      )}
+      
+      {currentSlide < totalSlides && (
+        <button 
+          onClick={nextSlide}
+          style={{
+            position: 'fixed',
+            right: '40px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'rgba(0, 0, 0, 0.1)',
+            border: 'none',
+            borderRadius: '50%',
+            width: '50px',
+            height: '50px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <ChevronRight size={24} color="#000" />
+        </button>
+      )}
     </div>
   );
 };
