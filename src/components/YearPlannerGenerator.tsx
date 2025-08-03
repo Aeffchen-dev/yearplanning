@@ -361,15 +361,15 @@ const FocusAreasSection: React.FC = () => {
   };
 
   return (
-    <div className="space-y-3 flex-1">
+    <div className="space-y-3 flex-1 flex flex-col">
       {[1, 2, 3, 4, 5].map((i, index) => (
-        <div key={i} className="bg-[#FFE299] flex flex-col">
-          <div className="p-4">
+        <div key={i} className="bg-[#FFE299] flex flex-col flex-1">
+          <div className="p-4 flex-1">
             <textarea
               placeholder="Fokus"
               value={focusAreas[index]}
               onChange={(e) => handleFocusChange(index, e.target.value)}
-              className={`w-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[40px]`}
+              className={`w-full h-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%]`}
             />
           </div>
           <div className="px-4 pb-4 flex justify-end">
@@ -903,8 +903,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : slide.id === 2 || slide.id === 13 ? (
-          // Slide 2 (draggable emojis) and Slide 13 (image) - no scrolling
+        ) : slide.id === 2 || slide.id === 11 || slide.id === 13 ? (
+          // Slide 2 (draggable emojis), Slide 11 (focus areas), and Slide 13 (image) - no scrolling
           <>
             <div className="mb-4 md:mb-6">
               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-black font-kokoro leading-[100%]">
