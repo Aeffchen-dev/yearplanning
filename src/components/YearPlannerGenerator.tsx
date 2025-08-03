@@ -317,7 +317,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 2,
     label: { number: "01", text: "The past year" },
     content: (
-      <div className="flex flex-col h-full gap-4">
+      <div className="flex flex-col h-full gap-8">
         <div className="flex-1 flex items-center justify-center min-h-0">
           <div className="w-full h-full flex items-center justify-center">
             <img 
