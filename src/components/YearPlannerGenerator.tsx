@@ -597,22 +597,26 @@ export default function YearPlannerGenerator() {
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative">
       {/* Fixed Header */}
-      <div className="absolute top-0 left-0 right-0 z-20" style={{ paddingTop: '156px', paddingLeft: '156px', paddingRight: '156px' }}>
-        <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
-          <h1 className="responsive-title font-bold italic leading-[120%] font-kokoro text-white">
-            Year Planning
-          </h1>
-          <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
-            {currentSlide + 1} / 24
+      <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-center">
+        <div className="w-full max-w-[500px] responsive-main-padding">
+          <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
+            <h1 className="responsive-title font-bold italic leading-[120%] font-kokoro text-white">
+              Year Planning
+            </h1>
+            <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
+              {currentSlide + 1} / 24
+            </div>
           </div>
         </div>
       </div>
 
       {/* Fixed Footer */}
-      <div className="absolute bottom-0 left-0 right-0 z-20" style={{ paddingBottom: '156px', paddingLeft: '156px', paddingRight: '156px' }}>
-        <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial text-white">
-          <div className="flex-1">Relationship by design</div>
-          <div className="hidden sm:block">Feedback geben</div>
+      <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-center">
+        <div className="w-full max-w-[500px] responsive-main-padding">
+          <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial text-white">
+            <div className="flex-1">Relationship by design</div>
+            <div className="hidden sm:block">Feedback geben</div>
+          </div>
         </div>
       </div>
 
