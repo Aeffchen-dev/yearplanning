@@ -599,7 +599,7 @@ export default function YearPlannerGenerator() {
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-4">
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
-          <h1 className="responsive-title font-bold italic leading-[120%] font-kokoro text-white">
+          <h1 className="text-[28px] font-bold italic leading-[120%] font-kokoro text-white">
             Year Planning
           </h1>
           <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
