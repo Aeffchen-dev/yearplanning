@@ -775,21 +775,54 @@ export default function YearPlannerGenerator() {
       if (e.key === "ArrowRight") nextSlide();
     };
 
-    // iOS keyboard handling to prevent page position issues
-    const handleFocusIn = () => {
-      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
+    // Mobile keyboard handling to prevent page position issues
+    const handleFocusIn = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        // Store current scroll position
+        const scrollY = window.scrollY;
+        
+        // For iOS devices
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+          document.body.style.position = 'fixed';
+          document.body.style.top = `-${scrollY}px`;
+          document.body.style.width = '100%';
+        }
+        
+        // For Android devices and other mobile browsers
+        if (/Android/.test(navigator.userAgent)) {
+          // Prevent viewport meta tag changes that can cause issues
+          const viewport = document.querySelector('meta[name="viewport"]');
+          if (viewport) {
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, user-scalable=no');
+          }
+        }
       }
     };
 
-    const handleFocusOut = () => {
-      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        document.body.style.position = '';
-        document.body.style.width = '';
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-        }, 100);
+    const handleFocusOut = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        // For iOS devices
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+          const scrollY = document.body.style.top;
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          
+          // Restore scroll position
+          if (scrollY) {
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+          }
+        }
+        
+        // For Android devices
+        if (/Android/.test(navigator.userAgent)) {
+          // Small delay to ensure keyboard is fully closed
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 150);
+        }
       }
     };
 
