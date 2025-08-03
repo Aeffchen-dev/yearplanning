@@ -699,12 +699,14 @@ export default function YearPlannerGenerator() {
       {/* Slider container */}
       <div
         ref={sliderRef}
-        className="flex h-full transition-transform duration-300 ease-out mx-4"
+        className="flex h-full transition-transform duration-300 ease-out"
         style={{
           transform: `translateX(calc(-${currentSlide * (100 / slides.length)}% + ${translateX}px))`,
-          width: `calc(${slides.length * 100}% - 32px)`,
+          width: `${slides.length * 100}vw`,
           paddingTop: '72px',
-          paddingBottom: '72px'
+          paddingBottom: '72px',
+          paddingLeft: '16px',
+          paddingRight: '16px'
         }}
         onTouchStart={(e) => handleStart(e.touches[0].clientX)}
         onTouchMove={(e) => handleMove(e.touches[0].clientX)}
