@@ -423,7 +423,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     
     // Calculate boundaries relative to the card - adjusted for proper top/bottom bounds
     const constrainedX = Math.max(-cardRect.width/2 + emojiSize/2, Math.min(cardRect.width/2 - emojiSize/2, newX));
-    const constrainedY = Math.max(-cardRect.height/2 + 80, Math.min(cardRect.height/2 - 80, newY));
+    const constrainedY = Math.max(-cardRect.height/2 + 60, Math.min(cardRect.height/2 - 40, newY));
     
     setPosition({ x: constrainedX, y: constrainedY });
     onDrag(id, constrainedX, constrainedY);
