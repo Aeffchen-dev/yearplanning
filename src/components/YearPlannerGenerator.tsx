@@ -17,7 +17,6 @@ const YearPlannerGenerator = () => {
   const [emojiPositions, setEmojiPositions] = useState<EmojiPosition[]>([]);
   const [starRatings, setStarRatings] = useState<StarRating>({});
   const [textInputs, setTextInputs] = useState<{[key: string]: string}>({});
-  const [showWarning, setShowWarning] = useState(true);
   const graphRef = useRef<HTMLDivElement>(null);
 
   const totalSlides = 24;
@@ -41,89 +40,6 @@ const YearPlannerGenerator = () => {
     'Konfliktbewältigung',
     'Freiheit, Unabhängigkeit'
   ];
-
-  if (showWarning) {
-    return (
-      <div style={{ 
-        minHeight: '100vh', 
-        backgroundColor: '#3f3f46', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        fontFamily: 'system-ui, -apple-system, sans-serif'
-      }}>
-        <div style={{ 
-          backgroundColor: '#27272a', 
-          color: 'white', 
-          padding: '32px', 
-          borderRadius: '8px', 
-          maxWidth: '448px', 
-          textAlign: 'center' 
-        }}>
-          <div style={{ marginBottom: '16px' }}>
-            <div style={{ 
-              width: '48px', 
-              height: '48px', 
-              backgroundColor: '#7c3aed', 
-              borderRadius: '8px', 
-              margin: '0 auto 16px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center' 
-            }}>
-              <span style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>B</span>
-            </div>
-          </div>
-          <h2 style={{ 
-            fontSize: '20px', 
-            fontWeight: '600', 
-            marginBottom: '8px',
-            margin: '0 0 8px 0'
-          }}>
-            You are previewing user-generated content built with{' '}
-            <span style={{ color: '#a855f7' }}>Builder.io</span>
-          </h2>
-          <p style={{ 
-            color: '#d1d5db', 
-            marginBottom: '16px', 
-            fontSize: '14px',
-            margin: '0 0 16px 0'
-          }}>
-            Please use caution when viewing, as it may include unverified or potentially unsafe material
-          </p>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            gap: '8px', 
-            marginBottom: '12px' 
-          }}>
-            <input type="checkbox" id="dont-show" style={{ borderRadius: '2px' }} />
-            <label htmlFor="dont-show" style={{ fontSize: '14px', color: '#d1d5db' }}>
-              Don't show this message again
-            </label>
-          </div>
-          <button 
-            style={{ 
-              backgroundColor: '#7c3aed', 
-              color: 'white', 
-              padding: '8px 24px', 
-              borderRadius: '4px', 
-              border: 'none', 
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-            onClick={() => setShowWarning(false)}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#6d28d9'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#7c3aed'}
-          >
-            Show Content
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   const handleEmojiDrop = (emoji: string, label: string, event: React.MouseEvent) => {
     if (!graphRef.current) return;
