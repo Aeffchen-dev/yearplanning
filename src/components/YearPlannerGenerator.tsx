@@ -70,7 +70,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        className="w-full h-full bg-transparent text-[#B29F71] placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[80px]"
+        className={`w-full h-full bg-transparent ${value ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[80px]`}
         rows={rows}
       />
     </div>
@@ -392,19 +392,24 @@ slides.push(
           hat dieser Bereich jeweils?
         </div>
         <div className="space-y-3 flex-1">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="bg-[#FFE299] flex flex-col">
-              <div className="p-4">
-                <textarea
-                  placeholder="Fokus"
-                  className="w-full bg-transparent text-[#B29F71] placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[40px]"
-                />
+          {[1, 2, 3, 4, 5].map((i) => {
+            const [value, setValue] = useState("");
+            return (
+              <div key={i} className="bg-[#FFE299] flex flex-col">
+                <div className="p-4">
+                  <textarea
+                    placeholder="Fokus"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    className={`w-full bg-transparent ${value ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[40px]`}
+                  />
+                </div>
+                <div className="px-4 pb-4 flex justify-end">
+                  <StarRating />
+                </div>
               </div>
-              <div className="px-4 pb-4 flex justify-end">
-                <StarRating />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     ),
@@ -583,15 +588,41 @@ export default function YearPlannerGenerator() {
     setTranslateX(0);
   };
 
-  // Keyboard navigation
+  // Keyboard navigation and iOS keyboard handling
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") prevSlide();
       if (e.key === "ArrowRight") nextSlide();
     };
 
+    // iOS keyboard handling to prevent page position issues
+    const handleFocusIn = () => {
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+      }
+    };
+
+    const handleFocusOut = () => {
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        document.body.style.position = '';
+        document.body.style.width = '';
+        // Small delay to ensure keyboard is fully closed
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 100);
+      }
+    };
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("focusin", handleFocusIn);
+    document.addEventListener("focusout", handleFocusOut);
+    
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("focusin", handleFocusIn);
+      document.removeEventListener("focusout", handleFocusOut);
+    };
   }, []);
 
   return (
