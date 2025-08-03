@@ -13,6 +13,7 @@ const StarRating: React.FC<StarRatingProps> = ({
 }) => {
   const [rating, setRating] = useState(value);
   const [hoverRating, setHoverRating] = useState(0);
+  const componentId = useRef(Math.random().toString(36).substr(2, 9)).current;
 
   useEffect(() => {
     setRating(value);
@@ -67,6 +68,7 @@ const StarRating: React.FC<StarRatingProps> = ({
       {[1, 2, 3, 4, 5].map((starIndex) => {
         const fillLevel = getStarFill(starIndex);
         const fillPercentage = fillLevel * 100;
+        const clipId = `clip-${componentId}-${starIndex}`;
         
         return (
           <button
@@ -91,14 +93,14 @@ const StarRating: React.FC<StarRatingProps> = ({
               {fillLevel > 0 && (
                 <g>
                   <defs>
-                    <clipPath id={`clip-${starIndex}`}>
+                    <clipPath id={clipId}>
                       <rect x="0" y="0" width={`${fillPercentage}%`} height="100%" />
                     </clipPath>
                   </defs>
                   <path
                     d={starPath}
                     fill="currentColor"
-                    clipPath={`url(#clip-${starIndex})`}
+                    clipPath={`url(#${clipId})`}
                   />
                 </g>
               )}
