@@ -1,11 +1,18 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+
 console.log('App.tsx loading');
 
 const App = () => {
-  console.log('App component rendering');
+  console.log('App component rendering with routing');
   return (
-    <div style={{ width: '100vw', height: '100vh', backgroundColor: 'purple', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <h1 style={{ color: 'white', fontSize: '32px' }}>App component working</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
