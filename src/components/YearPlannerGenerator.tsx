@@ -586,8 +586,32 @@ const Slide: React.FC<SlideProps> = ({
           aria-label="Next slide"
         />
 
-        {[1, 4, 8, 12, 24].includes(slide.id) ? (
-          // Special layout for title slides
+        {slide.id === 1 ? (
+          // Special layout for slide 1 - center pill & title, bottom content
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="mb-[24px]">
+                <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
+                  {slide.label.number}
+                  {slide.label.text && (
+                    <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
+                  )}
+                </div>
+              </div>
+              {slide.title && (
+                <div className="font-arial whitespace-pre-line text-[32px] leading-[120%] text-left">
+                  {slide.title}
+                </div>
+              )}
+            </div>
+            {slide.content && (
+              <div className="mt-auto">
+                {slide.content}
+              </div>
+            )}
+          </div>
+        ) : [4, 8, 12, 24].includes(slide.id) ? (
+          // Special layout for other title slides
           <div className="flex-1 flex flex-col justify-center">
             <div className="mb-[24px]">
               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
