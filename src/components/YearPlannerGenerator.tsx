@@ -14,6 +14,11 @@ const StarRating: React.FC<StarRatingProps> = ({
   const [rating, setRating] = useState(value);
   const [hover, setHover] = useState(0);
 
+  // Sync rating with value prop changes
+  useEffect(() => {
+    setRating(value);
+  }, [value]);
+
   const handleClick = (starIndex: number) => {
     if (readonly) return;
     
