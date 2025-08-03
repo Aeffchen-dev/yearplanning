@@ -4,12 +4,14 @@ interface StarRatingProps {
   value?: number;
   onChange?: (value: number) => void;
   readonly?: boolean;
+  starColor?: string;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({
   value = 0,
   onChange,
   readonly = false,
+  starColor = "white",
 }) => {
   const [rating, setRating] = useState(value);
   const [hoverRating, setHoverRating] = useState(0);
@@ -74,7 +76,8 @@ const StarRating: React.FC<StarRatingProps> = ({
           <button
             key={starIndex}
             type="button"
-            className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer transition-colors duration-200"
+            className={`w-8 h-8 md:w-10 md:h-10 cursor-pointer transition-colors duration-200`}
+            style={{ color: starColor }}
             onClick={() => handleClick(starIndex)}
             onMouseEnter={() => handleMouseEnter(starIndex)}
             onMouseLeave={handleMouseLeave}
@@ -370,7 +373,7 @@ const FocusAreasSection: React.FC = () => {
             />
           </div>
           <div className="px-4 pb-4 flex justify-end">
-            <StarRating />
+            <StarRating starColor="black" />
           </div>
         </div>
       ))}
