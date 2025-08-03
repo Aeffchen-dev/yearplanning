@@ -421,7 +421,7 @@ slides.push(
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
         </div>
-        <FocusAreasSection />
+        <div className="text-white">Focus areas will go here</div>
       </div>
     ),
   },
@@ -555,6 +555,7 @@ const Slide: React.FC<SlideProps> = ({
 );
 
 export default function YearPlannerGenerator() {
+  console.log('YearPlannerGenerator rendering', slides.length, 'slides');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
