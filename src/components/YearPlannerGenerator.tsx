@@ -52,18 +52,21 @@ const StarRating: React.FC<StarRatingProps> = ({
     const currentRating = hoverRating > 0 ? hoverRating : rating;
     
     if (currentRating >= starIndex) {
-      return 100; // Full star
+      return 1; // Full star
     } else if (currentRating > starIndex - 1) {
       const fraction = currentRating - (starIndex - 1);
-      return Math.round(fraction * 100);
+      return fraction;
     }
     return 0; // Empty star
   };
 
+  const starPath = "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z";
+
   return (
     <div className="flex gap-1 md:gap-3">
       {[1, 2, 3, 4, 5].map((starIndex) => {
-        const fillPercentage = getStarFill(starIndex);
+        const fillLevel = getStarFill(starIndex);
+        const fillPercentage = fillLevel * 100;
         
         return (
           <button
@@ -76,27 +79,28 @@ const StarRating: React.FC<StarRatingProps> = ({
             disabled={readonly}
           >
             <svg viewBox="0 0 24 24" className="w-full h-full">
-              <defs>
-                <clipPath id={`star-clip-${starIndex}`}>
-                  <rect x="0" y="0" width={`${fillPercentage}%`} height="100%" />
-                </clipPath>
-              </defs>
-              
-              {/* Star outline */}
+              {/* Empty star (outline) */}
               <path
-                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                d={starPath}
                 stroke="currentColor"
                 strokeWidth="1"
                 fill="none"
               />
               
-              {/* Star fill */}
-              {fillPercentage > 0 && (
-                <path
-                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                  fill="currentColor"
-                  clipPath={`url(#star-clip-${starIndex})`}
-                />
+              {/* Filled star */}
+              {fillLevel > 0 && (
+                <g>
+                  <defs>
+                    <clipPath id={`clip-${starIndex}`}>
+                      <rect x="0" y="0" width={`${fillPercentage}%`} height="100%" />
+                    </clipPath>
+                  </defs>
+                  <path
+                    d={starPath}
+                    fill="currentColor"
+                    clipPath={`url(#clip-${starIndex})`}
+                  />
+                </g>
               )}
             </svg>
           </button>
