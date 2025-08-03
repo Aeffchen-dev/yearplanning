@@ -361,18 +361,18 @@ const FocusAreasSection: React.FC = () => {
   };
 
   return (
-    <div className="space-y-3 flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col gap-2">
       {[1, 2, 3, 4, 5].map((i, index) => (
-        <div key={i} className="bg-[#FFE299] flex flex-col flex-1">
-          <div className="p-4 flex-1">
+        <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
+          <div className="p-3 flex-1 min-h-0">
             <textarea
               placeholder="Fokus"
               value={focusAreas[index]}
               onChange={(e) => handleFocusChange(index, e.target.value)}
-              className={`w-full h-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%]`}
+              className={`w-full h-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-sm leading-[120%]`}
             />
           </div>
-          <div className="px-4 pb-4 flex justify-end">
+          <div className="px-3 pb-2 flex justify-end">
             <StarRating starColor="black" />
           </div>
         </div>
