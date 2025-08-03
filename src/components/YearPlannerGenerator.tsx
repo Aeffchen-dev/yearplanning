@@ -797,21 +797,21 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 13,
     label: { number: "04", text: "Plan and terminate" },
     content: (
-      <div className="space-y-6 flex-1">
-        <div className="text-white text-base font-arial">
+      <div className="flex-1 flex flex-col h-full">
+        <div className="text-white text-base font-arial mb-4 flex-shrink-0">
           Nehmt euch ein Blatt Papier und ordnet eure Ziele auf dem Graphen ein.
           Ihr könnt wenige große bzw. mehrere kleine Ziele festlegen. Ihr
           solltet nur die Ziele angehen, die einen hohen Impact haben und
           einfach umsetzbar sind.
         </div>
-        <div className="flex-1 flex items-center justify-center min-h-0">
+        <div className="flex-1 flex items-center justify-center min-h-0 mb-4">
           <img 
             src="/lovable-uploads/20b3daee-a65a-46df-9f4e-7fb1cd871631.png" 
             alt="Goals planning graph" 
             className="max-w-full max-h-full w-auto h-auto object-contain"
           />
         </div>
-        <button className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors">
+        <button className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0">
           Vorlage herunterladen
         </button>
       </div>
