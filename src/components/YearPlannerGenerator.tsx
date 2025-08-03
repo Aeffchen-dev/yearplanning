@@ -484,7 +484,10 @@ interface SlideWithDraggableEmojisProps {
   updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void;
 }
 
-const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({ draggedEmojis, updateDraggedEmojis }) => {
+const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({ 
+  draggedEmojis = [], 
+  updateDraggedEmojis 
+}) => {
   const [draggedEmojiId, setDraggedEmojiId] = useState<string | null>(null);
 
   const handleStartDrag = (emoji: string, label: string) => {
