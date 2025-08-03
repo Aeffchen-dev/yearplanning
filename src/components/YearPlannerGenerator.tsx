@@ -615,13 +615,13 @@ export default function YearPlannerGenerator() {
             href="https://relationshipbydesign.de/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex-1 hover:underline"
+            className="flex-1"
           >
             Relationship by design
           </a>
           <a 
             href="mailto:hello@relationshipbydesign.de?subject=Feedback Year Planning"
-            className="hidden sm:block hover:underline"
+            className="hidden sm:block"
           >
             Feedback geben
           </a>
