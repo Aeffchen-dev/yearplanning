@@ -586,22 +586,44 @@ const Slide: React.FC<SlideProps> = ({
           aria-label="Next slide"
         />
 
-        <div className={`${[1, 4, 8, 12, 24].includes(slide.id) ? 'mb-[24px]' : 'mb-4 md:mb-6'}`}>
-          <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
-            {slide.label.number}
-            {slide.label.text && (
-              <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
+        {[1, 4, 8, 12, 24].includes(slide.id) ? (
+          // Special layout for title slides
+          <div className="flex-1 flex flex-col justify-center">
+            <div className="mb-[24px]">
+              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
+                {slide.label.number}
+                {slide.label.text && (
+                  <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
+                )}
+              </div>
+            </div>
+            {slide.title && (
+              <div className="font-arial whitespace-pre-line text-[32px] leading-[120%] text-left">
+                {slide.title}
+              </div>
             )}
           </div>
-        </div>
+        ) : (
+          // Regular layout for other slides
+          <>
+            <div className="mb-4 md:mb-6">
+              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
+                {slide.label.number}
+                {slide.label.text && (
+                  <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
+                )}
+              </div>
+            </div>
 
-        {slide.title && (
-          <div className={`font-arial whitespace-pre-line ${[1, 4, 8, 12, 24].includes(slide.id) ? 'text-[32px] leading-[120%] text-left flex-1 flex items-center' : 'responsive-subtitle leading-[120%] mb-6 md:mb-10'}`}>
-            {slide.title}
-          </div>
+            {slide.title && (
+              <div className="font-arial whitespace-pre-line responsive-subtitle leading-[120%] mb-6 md:mb-10">
+                {slide.title}
+              </div>
+            )}
+            
+            <div className="flex-1 flex flex-col min-h-0">{slide.content}</div>
+          </>
         )}
-
-        <div className={`${slide.title && [1, 4, 8, 12, 24].includes(slide.id) ? '' : 'flex-1 flex flex-col min-h-0'}`}>{slide.content}</div>
       </div>
     </div>
   </div>
