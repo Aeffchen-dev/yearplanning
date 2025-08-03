@@ -162,42 +162,27 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
     <svg className="absolute inset-0 w-full h-full">
       {/* Horizontal line (X-axis) - fills container width */}
       <line
-        x1="32"
+        x1="0"
         y1="50%"
-        x2="calc(100% - 32px)"
+        x2="100%"
         y2="50%"
         stroke="white"
         strokeWidth="1"
-        markerStart="url(#arrowhead-left)"
         markerEnd="url(#arrowhead-right)"
       />
-      {/* Vertical line (Y-axis) - centered horizontally with padding */}
+      {/* Vertical line (Y-axis) - centered horizontally */}
       <line
         x1="50%"
-        y1="32"
+        y1="0"
         x2="50%"
-        y2="calc(100% - 32px)"
+        y2="100%"
         stroke="white"
         strokeWidth="1"
-        markerStart="url(#arrowhead-up)"
-        markerEnd="url(#arrowhead-down)"
+        markerEnd="url(#arrowhead-up)"
       />
       
       {/* Arrow markers */}
       <defs>
-        <marker
-          id="arrowhead-left"
-          markerWidth="10"
-          markerHeight="7"
-          refX="1"
-          refY="3.5"
-          orient="auto"
-        >
-          <polygon
-            points="10 0, 0 3.5, 10 7"
-            fill="white"
-          />
-        </marker>
         <marker
           id="arrowhead-right"
           markerWidth="10"
@@ -224,67 +209,50 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
             fill="white"
           />
         </marker>
-        <marker
-          id="arrowhead-down"
-          markerWidth="7"
-          markerHeight="10"
-          refX="3.5"
-          refY="9"
-          orient="auto"
-        >
-          <polygon
-            points="0 0, 3.5 10, 7 0"
-            fill="white"
-          />
-        </marker>
       </defs>
     </svg>
 
     {/* Labels */}
     {type === "past-year" ? (
       <>
-        {/* Left Y-axis label */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 font-arial text-left">
+        {/* Y-axis labels - 8px right from y-axis */}
+        <div className="absolute left-1/2 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial" style={{ marginLeft: '8px' }}>
           Nicht im Fokus
           <br />
           Wenig Zeit
         </div>
-        {/* Right Y-axis label */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 text-right font-arial">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-12 text-right font-arial">
           Im Fokus
           <br />
           Viel Zeit
         </div>
-        {/* Top X-axis label - above the line */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
+        {/* X-axis labels - 8px below x-axis */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-20 text-center font-arial" style={{ marginTop: '8px' }}>
           Hat mich erfüllt
         </div>
-        {/* Bottom X-axis label - below the line */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial" style={{ marginTop: '8px' }}>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
           Hat mich belastet
         </div>
       </>
     ) : (
       <>
-        {/* Left Y-axis label */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 font-arial text-left">
+        {/* Y-axis labels - 8px right from y-axis */}
+        <div className="absolute left-1/2 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial" style={{ marginLeft: '8px' }}>
           Schwer umsetzbar
         </div>
-        {/* Right Y-axis label */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 text-right font-arial">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-14 text-right font-arial">
           Einfach umsetzbar
         </div>
-        {/* Top X-axis label - above the line */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
+        {/* X-axis labels - 8px below x-axis */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-18 text-center font-arial" style={{ marginTop: '8px' }}>
           Hoher Impact
         </div>
-        {/* Bottom X-axis label - below the line */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial" style={{ marginTop: '8px' }}>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-22 text-center font-arial">
           Niedriger Impact
         </div>
         {/* Highlighted quadrant */}
-        <div className="absolute top-8 left-1/2 w-[45%] h-[40%] bg-white bg-opacity-5"></div>
-        <div className="absolute top-16 left-[62%] text-white text-opacity-30 text-xs text-center w-20 leading-tight font-arial">
+        <div className="absolute top-4 left-1/2 w-[153px] h-[132px] bg-white bg-opacity-5"></div>
+        <div className="absolute top-20 left-1/2 translate-x-11 text-white text-opacity-30 text-xs text-center w-16 leading-tight font-arial">
           diese Ziele geht ihr an
         </div>
       </>
