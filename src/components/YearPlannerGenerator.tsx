@@ -27,9 +27,10 @@ const StarRating: React.FC<StarRatingProps> = ({
       
       let newValue;
       if (currentFraction >= 0.9) newValue = baseValue + 0.33; // 1.0 -> 0.33
-      else if (currentFraction >= 0.45) newValue = baseValue + 0.6; // 0.5 -> 0.6  
-      else if (currentFraction >= 0.25) newValue = baseValue + 0.5; // 0.33 -> 0.5
-      else newValue = starIndex; // < 0.25 -> 1.0
+      else if (currentFraction >= 0.6) newValue = baseValue + 1.0; // 0.75 -> 1.0  
+      else if (currentFraction >= 0.4) newValue = baseValue + 0.75; // 0.5 -> 0.75
+      else if (currentFraction >= 0.2) newValue = baseValue + 0.5; // 0.33 -> 0.5
+      else newValue = starIndex; // 0 -> 1.0
       
       setRating(newValue);
       onChange?.(newValue);
