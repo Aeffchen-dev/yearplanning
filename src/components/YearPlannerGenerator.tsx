@@ -411,12 +411,19 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
+    // Get the card container bounds
+    const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
+    if (!cardElement) return;
+    
+    const cardRect = cardElement.getBoundingClientRect();
+    const emojiSize = 48; // 48px = w-12 h-12
+    
     const newX = e.clientX - dragStart.x;
     const newY = e.clientY - dragStart.y;
     
-    // Simple boundaries - keep within a reasonable area
-    const constrainedX = Math.max(-50, Math.min(400, newX));
-    const constrainedY = Math.max(-50, Math.min(300, newY));
+    // Calculate boundaries relative to the card
+    const constrainedX = Math.max(-cardRect.width/2 + emojiSize/2, Math.min(cardRect.width/2 - emojiSize/2, newX));
+    const constrainedY = Math.max(-cardRect.height/2 + emojiSize, Math.min(cardRect.height/2 - emojiSize + 8, newY));
     
     setPosition({ x: constrainedX, y: constrainedY });
     onDrag(id, constrainedX, constrainedY);
