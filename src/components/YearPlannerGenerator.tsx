@@ -12,7 +12,7 @@ const StarRating: React.FC<StarRatingProps> = ({
   readonly = false,
 }) => {
   const [rating, setRating] = useState(value);
-  const [hover, setHover] = useState(0);
+  const [hoveredStar, setHoveredStar] = useState(0);
 
   // Sync rating with value prop changes
   useEffect(() => {
@@ -22,7 +22,7 @@ const StarRating: React.FC<StarRatingProps> = ({
   const handleClick = (starIndex: number) => {
     if (readonly) return;
     
-    // Simple logic: if clicking on same level, cycle fractions
+    // If clicking on same star, cycle through fractions
     const currentStarLevel = Math.ceil(rating);
     
     if (currentStarLevel === starIndex) {
@@ -32,8 +32,8 @@ const StarRating: React.FC<StarRatingProps> = ({
       
       let newValue;
       if (currentFraction >= 0.9) newValue = baseValue + 0.33; // 1.0 -> 0.33
-      else if (currentFraction >= 0.6) newValue = baseValue + 1.0; // 0.75 -> 1.0  
-      else if (currentFraction >= 0.4) newValue = baseValue + 0.75; // 0.5 -> 0.75
+      else if (currentFraction >= 0.6) newValue = baseValue + 1.0; // 0.6 -> 1.0  
+      else if (currentFraction >= 0.4) newValue = baseValue + 0.6; // 0.5 -> 0.6
       else if (currentFraction >= 0.2) newValue = baseValue + 0.5; // 0.33 -> 0.5
       else newValue = starIndex; // 0 -> 1.0
       
@@ -46,48 +46,79 @@ const StarRating: React.FC<StarRatingProps> = ({
     }
   };
 
+  const handleMouseEnter = (starIndex: number) => {
+    if (!readonly) {
+      setHoveredStar(starIndex);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!readonly) {
+      setHoveredStar(0);
+    }
+  };
+
+  const renderStar = (starIndex: number) => {
+    // Determine if this star should be filled based on hover or rating
+    const currentValue = hoveredStar > 0 ? hoveredStar : rating;
+    const isHovered = hoveredStar > 0;
+    
+    // Calculate fill percentage for this star
+    let fillPercentage = 0;
+    
+    if (currentValue >= starIndex) {
+      // Full star
+      fillPercentage = 100;
+    } else if (currentValue > starIndex - 1) {
+      // Partial star
+      const partial = currentValue - (starIndex - 1);
+      fillPercentage = Math.round(partial * 100);
+    }
+
+    // Use different opacity for hover vs actual rating
+    const opacity = isHovered ? 0.7 : 1;
+
+    return (
+      <button
+        key={starIndex}
+        className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer transition-all duration-200 hover:scale-110"
+        onClick={() => handleClick(starIndex)}
+        onMouseEnter={() => handleMouseEnter(starIndex)}
+        onMouseLeave={handleMouseLeave}
+        disabled={readonly}
+        style={{ opacity }}
+      >
+        <svg viewBox="0 0 24 24" className="w-full h-full">
+          <defs>
+            <clipPath id={`star-clip-${starIndex}`}>
+              <rect x="0" y="0" width={`${fillPercentage}%`} height="100%" />
+            </clipPath>
+          </defs>
+          
+          {/* Star outline */}
+          <path
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+            stroke="currentColor"
+            strokeWidth="1"
+            fill="none"
+          />
+          
+          {/* Star fill */}
+          {fillPercentage > 0 && (
+            <path
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+              fill="currentColor"
+              clipPath={`url(#star-clip-${starIndex})`}
+            />
+          )}
+        </svg>
+      </button>
+    );
+  };
+
   return (
     <div className="flex gap-1 md:gap-3">
-      {[1, 2, 3, 4, 5].map((star) => {
-        // Use hover value if hovering, otherwise use rating
-        const displayValue = hover > 0 ? hover : rating;
-        const starFill = Math.max(0, Math.min(1, displayValue - star + 1));
-        const fillPercentage = Math.round(starFill * 100);
-        
-        return (
-          <button
-            key={star}
-            className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer transition-colors duration-200"
-            onClick={() => handleClick(star)}
-            onMouseEnter={() => !readonly && setHover(star)}
-            onMouseLeave={() => !readonly && setHover(0)}
-            disabled={readonly}
-          >
-            <svg viewBox="0 0 24 24" className="w-full h-full">
-              <defs>
-                <clipPath id={`star-clip-${star}`}>
-                  <rect x="0" y="0" width={`${fillPercentage}%`} height="100%" />
-                </clipPath>
-              </defs>
-              
-              {/* Star outline */}
-              <path
-                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                stroke="currentColor"
-                strokeWidth="1"
-                fill="none"
-              />
-              
-              {/* Star fill */}
-              <path
-                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                fill={fillPercentage > 0 ? "currentColor" : "none"}
-                clipPath={fillPercentage > 0 ? `url(#star-clip-${star})` : undefined}
-              />
-            </svg>
-          </button>
-        );
-      })}
+      {[1, 2, 3, 4, 5].map(renderStar)}
     </div>
   );
 };
