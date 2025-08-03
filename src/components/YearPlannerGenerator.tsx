@@ -118,6 +118,7 @@ interface TextAreaProps {
   onChange?: (value: string) => void;
   className?: string;
   rows?: number;
+  fillHeight?: boolean;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -126,15 +127,16 @@ const TextArea: React.FC<TextAreaProps> = ({
   onChange,
   className = "",
   rows = 4,
+  fillHeight = false,
 }) => {
   return (
-    <div className={`bg-[#FFE299] p-4 flex-1 ${className}`}>
+    <div className={`bg-[#FFE299] p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
       <textarea
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        className={`w-full h-full bg-transparent ${value ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[80px]`}
-        rows={rows}
+        className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent ${value ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
+        rows={fillHeight ? undefined : rows}
       />
     </div>
   );
@@ -551,8 +553,8 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 3,
     label: { number: "01", text: "The past year" },
     content: (
-      <div className="space-y-4 flex-1">
-        <div className="flex-1">
+      <div className="space-y-4 flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Worauf seid ihr stolz?
           </div>
@@ -560,9 +562,10 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir sind stolz auf ..." 
             value={textareaValues['slide3-proud'] || ''}
             onChange={(value) => updateTextareaValue('slide3-proud', value)}
+            fillHeight={true}
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Wofür seid ihr dankbar?
           </div>
@@ -570,9 +573,10 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir sind dankbar für ..." 
             value={textareaValues['slide3-grateful'] || ''}
             onChange={(value) => updateTextareaValue('slide3-grateful', value)}
+            fillHeight={true}
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr nächstes Jahr besser machen?
           </div>
@@ -580,6 +584,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir nehmen uns vor ..." 
             value={textareaValues['slide3-improve'] || ''}
             onChange={(value) => updateTextareaValue('slide3-improve', value)}
+            fillHeight={true}
           />
         </div>
       </div>
@@ -668,8 +673,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
         </div>
         <TextArea
           placeholder="Unsere Erkenntnisse"
-          className="flex-1"
-          rows={12}
+          fillHeight={true}
           value={textareaValues['slide7-insights'] || ''}
           onChange={(value) => updateTextareaValue('slide7-insights', value)}
         />
@@ -688,8 +692,8 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 9,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="space-y-4 flex-1">
-        <div className="flex-1">
+      <div className="space-y-4 flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Was wollen wir neu initiieren?
           </div>
@@ -697,9 +701,10 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir starten mit ..." 
             value={textareaValues['slide9-initiate'] || ''}
             onChange={(value) => updateTextareaValue('slide9-initiate', value)}
+            fillHeight={true}
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Womit wollen wir aufhören, weil es uns nicht gut tut?
           </div>
@@ -707,9 +712,10 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir stoppen ..." 
             value={textareaValues['slide9-stop'] || ''}
             onChange={(value) => updateTextareaValue('slide9-stop', value)}
+            fillHeight={true}
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr weiter machen?
           </div>
@@ -717,6 +723,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir machen weiter mit ..." 
             value={textareaValues['slide9-continue'] || ''}
             onChange={(value) => updateTextareaValue('slide9-continue', value)}
+            fillHeight={true}
           />
         </div>
       </div>
@@ -727,8 +734,8 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 10,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="space-y-4 flex-1">
-        <div className="flex-1">
+      <div className="space-y-4 flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Was wollen wir bis Jahresende geschafft haben?
           </div>
@@ -736,9 +743,10 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir schaffen ..." 
             value={textareaValues['slide10-achieve'] || ''}
             onChange={(value) => updateTextareaValue('slide10-achieve', value)}
+            fillHeight={true}
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Welches Ziel nehmen wir aus dem letzten Jahr mit?
           </div>
@@ -746,9 +754,10 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Wir nehmen mit ..." 
             value={textareaValues['slide10-carry'] || ''}
             onChange={(value) => updateTextareaValue('slide10-carry', value)}
+            fillHeight={true}
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           <div className="text-white text-base mb-4 font-arial">
             Welche Projekte nehmen wir uns vor?
           </div>
@@ -756,6 +765,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
             placeholder="Unsere Projekte ..." 
             value={textareaValues['slide10-projects'] || ''}
             onChange={(value) => updateTextareaValue('slide10-projects', value)}
+            fillHeight={true}
           />
         </div>
       </div>
@@ -934,20 +944,21 @@ export default function YearPlannerGenerator() {
         id: i,
         label: { number: "04", text: "Plan and terminate" },
         content: (
-          <div className="space-y-6 flex-1">
+          <div className="space-y-6 flex-1 flex flex-col">
             <div>
               <div className="text-white text-base mb-2 font-arial">Ziel</div>
               <TextArea 
                 placeholder="Ziel beschreiben" 
                 value={textareaValues[`slide${i}-goal`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-goal`, value)}
+                fillHeight={true}
               />
             </div>
             <div className="flex items-center gap-2">
               <div className="text-white text-base flex-1 font-arial">Prio</div>
               <StarRating />
             </div>
-            <div>
+            <div className="flex-1 flex flex-col">
               <div className="text-white text-base mb-2 font-arial">
                 Wie messen wir den Erfolg?
               </div>
@@ -955,9 +966,10 @@ export default function YearPlannerGenerator() {
                 placeholder="So messen wir ..." 
                 value={textareaValues[`slide${i}-measure`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-measure`, value)}
+                fillHeight={true}
               />
             </div>
-            <div>
+            <div className="flex-1 flex flex-col">
               <div className="text-white text-base mb-2 font-arial">
                 Wie gehen wir es Schritt für Schritt an?
               </div>
@@ -965,6 +977,7 @@ export default function YearPlannerGenerator() {
                 placeholder="Diese Schritte machen wir, um es zu erreichen" 
                 value={textareaValues[`slide${i}-steps`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-steps`, value)}
+                fillHeight={true}
               />
             </div>
           </div>
