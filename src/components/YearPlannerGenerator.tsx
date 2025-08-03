@@ -586,8 +586,8 @@ const Slide: React.FC<SlideProps> = ({
           aria-label="Next slide"
         />
 
-        <div className="mb-4 md:mb-6">
-          <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
+        <div className={`${[1, 4, 8, 12, 24].includes(slide.id) ? 'mb-6' : 'mb-4 md:mb-6'}`}>
+          <div className={`inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%] ${[1, 4, 8, 12, 24].includes(slide.id) ? '' : ''}`}>
             {slide.label.number}
             {slide.label.text && (
               <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
@@ -596,7 +596,7 @@ const Slide: React.FC<SlideProps> = ({
         </div>
 
         {slide.title && (
-          <div className={`font-arial whitespace-pre-line ${[1, 4, 8, 12, 24].includes(slide.id) ? 'text-[32px] leading-[120%] text-center flex-1 flex items-center justify-center' : 'responsive-subtitle leading-[120%] mb-6 md:mb-10'}`}>
+          <div className={`font-arial whitespace-pre-line ${[1, 4, 8, 12, 24].includes(slide.id) ? 'text-[32px] leading-[120%] text-left flex-1 flex items-center' : 'responsive-subtitle leading-[120%] mb-6 md:mb-10'}`}>
             {slide.title}
           </div>
         )}
