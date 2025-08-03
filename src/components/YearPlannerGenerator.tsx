@@ -1,812 +1,478 @@
-import React, { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface EmojiPosition {
-  emoji: string;
-  x: number;
-  y: number;
-  label: string;
+interface StarRatingProps {
+  value?: number;
+  onChange?: (value: number) => void;
+  readonly?: boolean;
 }
 
-interface StarRating {
-  [key: string]: number;
-}
+const StarRating: React.FC<StarRatingProps> = ({
+  value = 0,
+  onChange,
+  readonly = false,
+}) => {
+  const [rating, setRating] = useState(value);
+  const [hover, setHover] = useState(0);
 
-const YearPlannerGenerator = () => {
-  const [currentSlide, setCurrentSlide] = useState(1);
-  const [emojiPositions, setEmojiPositions] = useState<EmojiPosition[]>([]);
-  const [starRatings, setStarRatings] = useState<StarRating>({});
-  const [textInputs, setTextInputs] = useState<{[key: string]: string}>({});
-  const graphRef = useRef<HTMLDivElement>(null);
-
-  const totalSlides = 24;
-
-  const emojis = [
-    { emoji: '❤️', label: 'Beziehung' },
-    { emoji: '👯‍♀️', label: 'Freunde' },
-    { emoji: '🐶', label: 'Kalle' },
-    { emoji: '🤸', label: 'Hobbies' },
-    { emoji: '🫀', label: 'Gesundheit' },
-    { emoji: '👩‍💻', label: 'Beruf' }
-  ];
-
-  const relationshipAspects = [
-    'Sexualität',
-    'Emotionale Verbundenheit', 
-    'Kommunikation',
-    'Vertrauen',
-    'Gemeinsame Zeit',
-    'Zusammen gelacht',
-    'Konfliktbewältigung',
-    'Freiheit, Unabhängigkeit'
-  ];
-
-  const handleEmojiDrop = (emoji: string, label: string, event: React.MouseEvent) => {
-    if (!graphRef.current) return;
-    
-    const rect = graphRef.current.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-    
-    setEmojiPositions(prev => [
-      ...prev.filter(pos => pos.emoji !== emoji),
-      { emoji, x, y, label }
-    ]);
-  };
-
-  const handleStarClick = (aspect: string, rating: number) => {
-    setStarRatings(prev => ({
-      ...prev,
-      [aspect]: rating
-    }));
-  };
-
-  const handleStarDoubleClick = (aspect: string, rating: number) => {
-    setStarRatings(prev => ({
-      ...prev,
-      [aspect]: rating - 0.5
-    }));
-  };
-
-  const StarRatingComponent = ({ aspect }: { aspect: string }) => {
-    const rating = starRatings[aspect] || 0;
-    
-    return (
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        marginBottom: '20px'
-      }}>
-        <span style={{ 
-          fontSize: '18px',
-          color: '#000',
-          fontWeight: '400'
-        }}>
-          {aspect}
-        </span>
-        <div style={{ display: 'flex', gap: '4px' }}>
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              size={24}
-              style={{
-                cursor: 'pointer',
-                fill: star <= rating ? '#ffd700' : 'transparent',
-                color: star <= rating ? '#ffd700' : '#ccc',
-                stroke: '#ccc',
-                strokeWidth: 1
-              }}
-              onClick={() => handleStarClick(aspect, star)}
-              onDoubleClick={() => handleStarDoubleClick(aspect, star)}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const renderSlide = () => {
-    switch (currentSlide) {
-      case 1:
-        return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '40px',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Hello world project
-            </div>
-            
-            <h1 style={{
-              fontSize: '80px',
-              fontWeight: '800',
-              margin: '0 0 20px 0',
-              color: '#000',
-              lineHeight: '0.9'
-            }}>
-              Year Planning
-            </h1>
-            
-            <div style={{
-              fontSize: '20px',
-              color: '#666',
-              marginBottom: '40px'
-            }}>
-              1 / {totalSlides}
-            </div>
-            
-            <div style={{
-              fontSize: '48px',
-              fontWeight: '700',
-              color: '#000',
-              marginBottom: '30px'
-            }}>
-              01The past year
-            </div>
-            
-            <div style={{
-              fontSize: '18px',
-              color: '#000',
-              lineHeight: '1.6',
-              maxWidth: '600px',
-              marginBottom: '20px'
-            }}>
-              Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.
-            </div>
-            
-            <div style={{
-              fontSize: '14px',
-              color: '#666'
-            }}>
-              Swipe um weiter zu navigieren
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              fontSize: '14px',
-              color: '#999',
-              textAlign: 'center'
-            }}>
-              <div>Relationship by design</div>
-              <div>Feedback geben</div>
-            </div>
-          </div>
-        );
-
-      case 2:
-        return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '40px'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Hello world project
-            </div>
-            
-            <h1 style={{
-              fontSize: '80px',
-              fontWeight: '800',
-              margin: '0 0 20px 0',
-              color: '#000',
-              lineHeight: '0.9'
-            }}>
-              Year Planning
-            </h1>
-            
-            <div style={{
-              fontSize: '20px',
-              color: '#666',
-              marginBottom: '40px'
-            }}>
-              2 / {totalSlides}
-            </div>
-            
-            <div style={{
-              fontSize: '36px',
-              fontWeight: '700',
-              color: '#000',
-              marginBottom: '40px'
-            }}>
-              01The past year
-            </div>
-            
-            {/* Graph section */}
-            <div style={{ position: 'relative', marginBottom: '40px' }}>
-              {/* Top labels */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '500px',
-                marginBottom: '10px',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                <div style={{ width: '60px' }}></div>
-                <div>Nicht im Fokus</div>
-                <div>Im Fokus</div>
-                <div style={{ width: '60px' }}></div>
-              </div>
-              
-              {/* Left label */}
-              <div style={{
-                position: 'absolute',
-                left: '-80px',
-                top: '50%',
-                transform: 'translateY(-50%) rotate(-90deg)',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                Viel Zeit
-              </div>
-              
-              {/* Right label */}
-              <div style={{
-                position: 'absolute',
-                right: '-80px',
-                top: '50%',
-                transform: 'translateY(-50%) rotate(90deg)',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                Wenig Zeit
-              </div>
-              
-              {/* Graph */}
-              <div 
-                ref={graphRef}
-                style={{
-                  width: '500px',
-                  height: '300px',
-                  border: '2px solid #000',
-                  backgroundColor: '#fff',
-                  position: 'relative',
-                  cursor: 'crosshair'
-                }}
-                onClick={(e) => {
-                  if (emojiPositions.length === 0) {
-                    handleEmojiDrop('❤️', 'Beziehung', e);
-                  }
-                }}
-              >
-                {emojiPositions.map((pos, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      position: 'absolute',
-                      fontSize: '24px',
-                      cursor: 'move',
-                      left: `${pos.x}%`,
-                      top: `${pos.y}%`,
-                      transform: 'translate(-50%, -50%)'
-                    }}
-                    title={pos.label}
-                  >
-                    {pos.emoji}
-                  </div>
-                ))}
-              </div>
-              
-              {/* Bottom labels */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '500px',
-                marginTop: '10px',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                <div style={{ width: '60px' }}></div>
-                <div>Hat mich belastet</div>
-                <div>Hat mich erfüllt</div>
-                <div style={{ width: '60px' }}></div>
-              </div>
-            </div>
-            
-            {/* Emoji buttons */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '15px',
-              marginBottom: '20px'
-            }}>
-              {emojis.map((item) => (
-                <div
-                  key={item.emoji}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '15px 20px',
-                    border: '1px solid #ddd',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    backgroundColor: '#fff',
-                    fontSize: '16px',
-                    minWidth: '150px'
-                  }}
-                  onClick={(e) => handleEmojiDrop(item.emoji, item.label, e)}
-                >
-                  <span style={{ fontSize: '24px' }}>{item.emoji}</span>
-                  <span>{item.label}</span>
-                </div>
-              ))}
-            </div>
-            
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              textAlign: 'center'
-            }}>
-              Platziert die Emojis auf dem Graphen
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              fontSize: '14px',
-              color: '#999',
-              textAlign: 'center'
-            }}>
-              <div>Relationship by design</div>
-              <div>Feedback geben</div>
-            </div>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '40px'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Hello world project
-            </div>
-            
-            <h1 style={{
-              fontSize: '80px',
-              fontWeight: '800',
-              margin: '0 0 20px 0',
-              color: '#000',
-              lineHeight: '0.9'
-            }}>
-              Year Planning
-            </h1>
-            
-            <div style={{
-              fontSize: '20px',
-              color: '#666',
-              marginBottom: '40px'
-            }}>
-              3 / {totalSlides}
-            </div>
-            
-            <div style={{
-              fontSize: '36px',
-              fontWeight: '700',
-              color: '#000',
-              marginBottom: '40px'
-            }}>
-              01The past year
-            </div>
-            
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '40px',
-              fontSize: '18px',
-              color: '#000'
-            }}>
-              <div>Worauf seid ihr stolz?</div>
-              <div>Wofür seid ihr dankbar?</div>
-              <div>Was wollt ihr nächstes Jahr besser machen?</div>
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              fontSize: '14px',
-              color: '#999',
-              textAlign: 'center'
-            }}>
-              <div>Relationship by design</div>
-              <div>Feedback geben</div>
-            </div>
-          </div>
-        );
-
-      case 4:
-        return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '40px',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Hello world project
-            </div>
-            
-            <h1 style={{
-              fontSize: '80px',
-              fontWeight: '800',
-              margin: '0 0 20px 0',
-              color: '#000',
-              lineHeight: '0.9'
-            }}>
-              Year Planning
-            </h1>
-            
-            <div style={{
-              fontSize: '20px',
-              color: '#666',
-              marginBottom: '40px'
-            }}>
-              4 / {totalSlides}
-            </div>
-            
-            <div style={{
-              fontSize: '36px',
-              fontWeight: '700',
-              color: '#000',
-              marginBottom: '30px'
-            }}>
-              02Health Check
-            </div>
-            
-            <div style={{
-              fontSize: '18px',
-              color: '#000',
-              lineHeight: '1.6',
-              maxWidth: '600px'
-            }}>
-              Schaut auf eure Beziehung: Was läuft gut? Was braucht mehr Achtsamkeit?
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              fontSize: '14px',
-              color: '#999',
-              textAlign: 'center'
-            }}>
-              <div>Relationship by design</div>
-              <div>Feedback geben</div>
-            </div>
-          </div>
-        );
-
-      case 5:
-        return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '40px'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Hello world project
-            </div>
-            
-            <h1 style={{
-              fontSize: '80px',
-              fontWeight: '800',
-              margin: '0 0 20px 0',
-              color: '#000',
-              lineHeight: '0.9'
-            }}>
-              Year Planning
-            </h1>
-            
-            <div style={{
-              fontSize: '20px',
-              color: '#666',
-              marginBottom: '40px'
-            }}>
-              5 / {totalSlides}
-            </div>
-            
-            <div style={{
-              fontSize: '36px',
-              fontWeight: '700',
-              color: '#000',
-              marginBottom: '40px'
-            }}>
-              02Health Check
-            </div>
-            
-            <div style={{ minWidth: '500px' }}>
-              {relationshipAspects.slice(0, 4).map((aspect) => (
-                <StarRatingComponent key={aspect} aspect={aspect} />
-              ))}
-            </div>
-            
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginTop: '20px'
-            }}>
-              Füllt die Sterne aus, Doppelklick für halbgefüllt
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              fontSize: '14px',
-              color: '#999',
-              textAlign: 'center'
-            }}>
-              <div>Relationship by design</div>
-              <div>Feedback geben</div>
-            </div>
-          </div>
-        );
-
-      case 6:
-        return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '40px'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Hello world project
-            </div>
-            
-            <h1 style={{
-              fontSize: '80px',
-              fontWeight: '800',
-              margin: '0 0 20px 0',
-              color: '#000',
-              lineHeight: '0.9'
-            }}>
-              Year Planning
-            </h1>
-            
-            <div style={{
-              fontSize: '20px',
-              color: '#666',
-              marginBottom: '40px'
-            }}>
-              6 / {totalSlides}
-            </div>
-            
-            <div style={{
-              fontSize: '36px',
-              fontWeight: '700',
-              color: '#000',
-              marginBottom: '40px'
-            }}>
-              02Health Check
-            </div>
-            
-            <div style={{ minWidth: '500px' }}>
-              {relationshipAspects.slice(4, 8).map((aspect) => (
-                <StarRatingComponent key={aspect} aspect={aspect} />
-              ))}
-            </div>
-            
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginTop: '20px'
-            }}>
-              Füllt die Sterne aus, Doppelklick für halbgefüllt
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              fontSize: '14px',
-              color: '#999',
-              textAlign: 'center'
-            }}>
-              <div>Relationship by design</div>
-              <div>Feedback geben</div>
-            </div>
-          </div>
-        );
-
-      default:
-        return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '40px',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#666',
-              marginBottom: '20px',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Hello world project
-            </div>
-            
-            <h1 style={{
-              fontSize: '80px',
-              fontWeight: '800',
-              margin: '0 0 20px 0',
-              color: '#000',
-              lineHeight: '0.9'
-            }}>
-              Year Planning
-            </h1>
-            
-            <div style={{
-              fontSize: '20px',
-              color: '#666',
-              marginBottom: '40px'
-            }}>
-              {currentSlide} / {totalSlides}
-            </div>
-            
-            <div style={{
-              fontSize: '36px',
-              fontWeight: '700',
-              color: '#000',
-              marginBottom: '30px'
-            }}>
-              Slide {currentSlide}
-            </div>
-            
-            <div style={{
-              fontSize: '18px',
-              color: '#000'
-            }}>
-              Content coming soon...
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              fontSize: '14px',
-              color: '#999',
-              textAlign: 'center'
-            }}>
-              <div>Relationship by design</div>
-              <div>Feedback geben</div>
-            </div>
-          </div>
-        );
-    }
-  };
-
-  const nextSlide = () => {
-    if (currentSlide < totalSlides) {
-      setCurrentSlide(currentSlide + 1);
-    }
-  };
-
-  const prevSlide = () => {
-    if (currentSlide > 1) {
-      setCurrentSlide(currentSlide - 1);
+  const handleClick = (newRating: number) => {
+    if (!readonly) {
+      setRating(newRating);
+      onChange?.(newRating);
     }
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      backgroundColor: '#fff',
-      fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      position: 'relative'
-    }}>
-      {renderSlide()}
-      
-      {/* Navigation - only show on non-first and non-last slides for clean look */}
-      {currentSlide > 1 && (
-        <button 
-          onClick={prevSlide}
-          style={{
-            position: 'fixed',
-            left: '40px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: 'rgba(0, 0, 0, 0.1)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
+    <div className="flex gap-1 md:gap-3">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          className={`w-8 h-8 md:w-10 md:h-10 transition-all duration-200 ${
+            star <= (hover || rating) ? "text-white" : "text-white"
+          } ${!readonly ? "hover:scale-110 cursor-pointer" : "cursor-default"}`}
+          onMouseEnter={() => !readonly && setHover(star)}
+          onMouseLeave={() => !readonly && setHover(0)}
+          onClick={() => handleClick(star)}
+          disabled={readonly}
         >
-          <ChevronLeft size={24} color="#000" />
+          <svg viewBox="0 0 45 43" className="w-full h-full">
+            <path
+              d="M22.5 2L27.8 15.8L43 17.1L32.3 26.8L35.6 42L22.5 34.3L9.4 42L12.7 26.8L2 17.1L17.2 15.8L22.5 2Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill={star <= (hover || rating) ? "currentColor" : "none"}
+            />
+          </svg>
         </button>
-      )}
-      
-      {currentSlide < totalSlides && (
-        <button 
-          onClick={nextSlide}
-          style={{
-            position: 'fixed',
-            right: '40px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: 'rgba(0, 0, 0, 0.1)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <ChevronRight size={24} color="#000" />
-        </button>
-      )}
+      ))}
     </div>
   );
 };
 
-export default YearPlannerGenerator;
+interface TextAreaProps {
+  placeholder: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  className?: string;
+  rows?: number;
+}
+
+const TextArea: React.FC<TextAreaProps> = ({
+  placeholder,
+  value = "",
+  onChange,
+  className = "",
+  rows = 4,
+}) => {
+  return (
+    <div className={`bg-[#FFE299] p-4 flex-1 ${className}`}>
+      <textarea
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
+        className="w-full h-full bg-transparent text-[#B29F71] placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[80px]"
+        rows={rows}
+      />
+    </div>
+  );
+};
+
+interface EmojiIconProps {
+  emoji: string;
+  label: string;
+}
+
+const EmojiIcon: React.FC<EmojiIconProps> = ({ emoji, label }) => (
+  <div className="flex items-center gap-2">
+    <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center">
+      <span className="text-2xl">{emoji}</span>
+    </div>
+    <span className="text-white text-base font-arial flex-1">{label}</span>
+  </div>
+);
+
+const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
+  type,
+}) => (
+  <div className="relative w-full h-[310px] my-8">
+    {/* Axes */}
+    <svg className="absolute inset-0 w-full h-full">
+      {/* Horizontal line */}
+      <path
+        d="M0.812554 154.84C0.709031 154.943 0.709031 155.111 0.812554 155.215L2.49956 156.902C2.60309 157.005 2.77093 157.005 2.87446 156.902C2.97798 156.798 2.97798 156.63 2.87446 156.527L1.37489 155.027L2.87446 153.528C2.97798 153.424 2.97798 153.256 2.87446 153.153C2.77093 153.049 2.60309 153.049 2.49956 153.153L0.812554 154.84ZM307.099 155.215C307.203 155.111 307.203 154.943 307.099 154.84L305.412 153.153C305.309 153.049 305.141 153.049 305.037 153.153C304.934 153.256 304.934 153.424 305.037 153.528L306.537 155.027L305.037 156.527C304.934 156.63 304.934 156.798 305.037 156.902C305.141 157.005 305.309 157.005 305.412 156.902L307.099 155.215ZM1 155.027H306.912V154.762H1V155.027Z"
+        fill="white"
+      />
+      {/* Vertical line */}
+      <path
+        d="M155.143 0.312554C155.04 0.209031 154.872 0.209031 154.768 0.312554L153.081 1.99956C152.978 2.10309 152.978 2.27093 153.081 2.37446C153.185 2.47798 153.353 2.47798 153.456 2.37446L154.956 0.874891L156.455 2.37446C156.559 2.47798 156.727 2.47798 156.83 2.37446C156.934 2.27093 156.934 2.10309 156.83 1.99956L155.143 0.312554ZM154.768 309.599C154.872 309.703 155.04 309.703 155.143 309.599L156.83 307.912C156.934 307.809 156.934 307.641 156.83 307.537C156.727 307.434 156.559 307.434 156.455 307.537L154.956 309.037L153.456 307.537C153.353 307.434 153.185 307.434 153.081 307.537C152.978 307.641 152.978 307.809 153.081 307.912L154.768 309.599ZM154.956 0.5V309.412H155.221V0.5H154.956Z"
+        fill="white"
+      />
+    </svg>
+
+    {/* Labels */}
+    {type === "past-year" ? (
+      <>
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial">
+          Nicht im Fokus
+          <br />
+          Wenig Zeit
+        </div>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-12 text-right font-arial">
+          Im Fokus
+          <br />
+          Viel Zeit
+        </div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-20 text-center font-arial">
+          Hat mich erfüllt
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
+          Hat mich belastet
+        </div>
+      </>
+    ) : (
+      <>
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial">
+          Schwer umsetzbar
+        </div>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-14 text-right font-arial">
+          Einfach umsetzbar
+        </div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-18 text-center font-arial">
+          Hoher Impact
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-22 text-center font-arial">
+          Niedriger Impact
+        </div>
+        {/* Highlighted quadrant */}
+        <div className="absolute top-4 left-1/2 w-[153px] h-[132px] bg-white bg-opacity-5"></div>
+        <div className="absolute top-20 left-1/2 translate-x-11 text-white text-opacity-30 text-xs text-center w-16 leading-tight font-arial">
+          diese Ziele geht ihr an
+        </div>
+      </>
+    )}
+  </div>
+);
+
+interface SlideData {
+  id: number;
+  label: { number: string; text: string };
+  title?: string;
+  content?: React.ReactNode;
+}
+
+const slides: SlideData[] = [
+  // Slide 1
+  {
+    id: 1,
+    label: { number: "01", text: "The past year" },
+    title:
+      "Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.",
+    content: (
+      <div className="flex-1 flex flex-col justify-center">
+        <div className="text-center text-white text-xs font-arial">
+          Swipe um weiter zu navigieren
+        </div>
+      </div>
+    ),
+  },
+  // Slide 2
+  {
+    id: 2,
+    label: { number: "01", text: "The past year" },
+    content: (
+      <div className="space-y-8 flex-1">
+        <GraphComponent type="past-year" />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <EmojiIcon emoji="❤️" label="Beziehung" />
+            <EmojiIcon emoji="👯‍♀️" label="Freunde" />
+            <EmojiIcon emoji="🐶" label="Kalle" />
+          </div>
+          <div className="space-y-2">
+            <EmojiIcon emoji="🤸" label="Hobbies" />
+            <EmojiIcon emoji="🫀" label="Gesundheit" />
+            <EmojiIcon emoji="👩‍💻" label="Beruf" />
+          </div>
+        </div>
+        <div className="text-center text-white text-xs font-arial">
+          Platziert die Emojis auf dem Graphen
+        </div>
+      </div>
+    ),
+  },
+  // Slide 3
+  {
+    id: 3,
+    label: { number: "01", text: "The past year" },
+    content: (
+      <div className="space-y-4 flex-1">
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Worauf seid ihr stolz?
+          </div>
+          <TextArea placeholder="Wir sind stolz auf ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Wofür seid ihr dankbar?
+          </div>
+          <TextArea placeholder="Wir sind dankbar für ..." />
+        </div>
+        <div className="flex-1">
+          <div className="text-white text-base mb-4 font-arial">
+            Was wollt ihr nächstes Jahr besser machen?
+          </div>
+          <TextArea placeholder="Wir nehmen uns vor ..." />
+        </div>
+      </div>
+    ),
+  },
+  // Slide 4
+  {
+    id: 4,
+    label: { number: "02", text: "Health Check" },
+    title:
+      "Schaut auf eure Beziehung: Was läuft gut? Was braucht mehr Achtsamkeit?",
+  },
+  // Slide 5
+  {
+    id: 5,
+    label: { number: "02", text: "Health Check" },
+    content: (
+      <div className="space-y-8 flex-1">
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">Sexualität</div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Emotionale Verbundenheit
+          </div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">Kommunikation</div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">Vertrauen</div>
+          <StarRating />
+        </div>
+        <div className="text-center text-white text-xs font-arial mt-auto">
+          Füllt die Sterne aus, Doppelklick für halbgefüllt
+        </div>
+      </div>
+    ),
+  },
+  // Slide 6
+  {
+    id: 6,
+    label: { number: "02", text: "Health Check" },
+    content: (
+      <div className="space-y-8 flex-1">
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">Gemeinsame Zeit</div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Zusammen gelacht
+          </div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Konfliktbewältigung
+          </div>
+          <StarRating />
+        </div>
+        <div className="space-y-2">
+          <div className="text-white text-base font-arial">
+            Freiheit, Unabhängigkeit
+          </div>
+          <StarRating />
+        </div>
+        <div className="text-center text-white text-xs font-arial mt-auto">
+          Füllt die Sterne aus, Doppelklick für halbgefüllt
+        </div>
+      </div>
+    ),
+  },
+];
+
+// Generate more slides (simplified for demonstration)
+for (let i = 7; i <= 24; i++) {
+  slides.push({
+    id: i,
+    label: { number: i <= 7 ? "01" : i <= 11 ? "02" : i <= 17 ? "03" : "04", text: i <= 7 ? "The past year" : i <= 11 ? "Health Check" : i <= 17 ? "The new year" : "Plan and terminate" },
+    title: `Slide ${i} - Content coming soon...`,
+  });
+}
+
+interface SlideProps {
+  slide: SlideData;
+  isActive: boolean;
+  onPrevSlide: () => void;
+  onNextSlide: () => void;
+  currentSlide: number;
+  totalSlides: number;
+}
+
+const Slide: React.FC<SlideProps> = ({
+  slide,
+  isActive,
+  onPrevSlide,
+  onNextSlide,
+  currentSlide,
+  totalSlides,
+}) => (
+  <div className="w-full h-full flex items-center justify-center bg-black text-white select-none">
+    <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
+      {/* Header */}
+      <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
+        <h1 className="responsive-title font-bold italic leading-[120%] font-serif">
+          Year Planning
+        </h1>
+        <div className="flex-1 text-right text-sm md:text-base font-arial">
+          {slide.id} / 24
+        </div>
+      </div>
+
+      {/* Card */}
+      <div className="flex-1 bg-[#161616] rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 relative">
+        {/* Left click zone */}
+        <button
+          onClick={onPrevSlide}
+          className="absolute left-0 top-0 w-8 h-full z-10 cursor-pointer"
+          disabled={currentSlide === 0}
+          aria-label="Previous slide"
+        />
+
+        {/* Right click zone */}
+        <button
+          onClick={onNextSlide}
+          className="absolute right-0 top-0 w-8 h-full z-10 cursor-pointer"
+          disabled={currentSlide === totalSlides - 1}
+          aria-label="Next slide"
+        />
+
+        {/* Label */}
+        <div className="mb-4 md:mb-6">
+          <div className="inline-flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 border border-white rounded-full text-xs md:text-sm font-black font-serif">
+            {slide.label.number}
+            {slide.label.text && (
+              <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
+            )}
+          </div>
+        </div>
+
+        {/* Title */}
+        {slide.title && (
+          <div className="responsive-subtitle leading-[120%] mb-6 md:mb-10 font-arial whitespace-pre-line">
+            {slide.title}
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="flex-1 flex flex-col min-h-0">{slide.content}</div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-4 text-xs md:text-base font-arial">
+        <div className="flex-1">Relationship by design</div>
+        <div className="hidden sm:block">Feedback geben</div>
+      </div>
+    </div>
+  </div>
+);
+
+export default function YearPlannerGenerator() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  // Touch/Mouse handlers
+  const handleStart = (clientX: number) => {
+    setIsDragging(true);
+    setStartX(clientX);
+  };
+
+  const handleMove = (clientX: number) => {
+    if (!isDragging) return;
+    const diff = clientX - startX;
+    setTranslateX(diff);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    if (Math.abs(translateX) > 100) {
+      if (translateX > 0) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
+    }
+    setTranslateX(0);
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") prevSlide();
+      if (e.key === "ArrowRight") nextSlide();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  return (
+    <div className="w-full h-screen bg-black overflow-hidden relative">
+      {/* Slider container */}
+      <div
+        ref={sliderRef}
+        className="flex h-full transition-transform duration-300 ease-out"
+        style={{
+          transform: `translateX(calc(-${currentSlide * (100 / slides.length)}% + ${translateX}px))`,
+          width: `${slides.length * 100}%`,
+        }}
+        onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+        onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+        onTouchEnd={handleEnd}
+      >
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className="w-full h-full flex-shrink-0"
+            style={{ width: `${100 / slides.length}%` }}
+          >
+            <Slide
+              slide={slide}
+              isActive={index === currentSlide}
+              onPrevSlide={prevSlide}
+              onNextSlide={nextSlide}
+              currentSlide={currentSlide}
+              totalSlides={slides.length}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
