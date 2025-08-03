@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 
 interface StarRatingProps {
   value?: number;
@@ -153,6 +153,69 @@ const EmojiIcon: React.FC<EmojiIconProps> = ({ emoji, label }) => (
     <span className="text-white text-base font-arial flex-1">{label}</span>
   </div>
 );
+
+interface DraggableEmojiProps {
+  emoji: string;
+  label: string;
+  initialX?: number;
+  initialY?: number;
+}
+
+const DraggableEmoji: React.FC<DraggableEmojiProps> = ({ emoji, label, initialX = 0, initialY = 0 }) => {
+  const [position, setPosition] = useState({ x: initialX, y: initialY });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const emojiRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+    e.preventDefault();
+  };
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
+    
+    setPosition({ x: newX, y: newY });
+  }, [isDragging, dragStart]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  return (
+    <div
+      ref={emojiRef}
+      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-10 ${isDragging ? 'opacity-75' : ''}`}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: isDragging ? 'none' : 'transform 0.1s ease'
+      }}
+      onMouseDown={handleMouseDown}
+      title={label}
+    >
+      <span className="text-2xl pointer-events-none">{emoji}</span>
+    </div>
+  );
+};
 
 const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
   type,
@@ -318,7 +381,7 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     label: { number: "01", text: "The past year" },
     content: (
       <div className="flex flex-col h-full gap-8">
-        <div className="flex-1 flex items-center justify-center min-h-0">
+        <div className="flex-1 flex items-center justify-center min-h-0 relative">
           <div className="w-full h-full flex items-center justify-center">
             <img 
               src="/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png" 
@@ -326,20 +389,15 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
               className="max-w-full max-h-full object-contain"
             />
           </div>
+          {/* Draggable emojis positioned over the image */}
+          <DraggableEmoji emoji="❤️" label="Beziehung" initialX={20} initialY={20} />
+          <DraggableEmoji emoji="👯‍♀️" label="Freunde" initialX={60} initialY={20} />
+          <DraggableEmoji emoji="🐶" label="Kalle" initialX={100} initialY={20} />
+          <DraggableEmoji emoji="🤸" label="Hobbies" initialX={140} initialY={20} />
+          <DraggableEmoji emoji="🫀" label="Gesundheit" initialX={180} initialY={20} />
+          <DraggableEmoji emoji="👩‍💻" label="Beruf" initialX={220} initialY={20} />
         </div>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <EmojiIcon emoji="❤️" label="Beziehung" />
-              <EmojiIcon emoji="👯‍♀️" label="Freunde" />
-              <EmojiIcon emoji="🐶" label="Kalle" />
-            </div>
-            <div className="space-y-2">
-              <EmojiIcon emoji="🤸" label="Hobbies" />
-              <EmojiIcon emoji="🫀" label="Gesundheit" />
-              <EmojiIcon emoji="👩‍💻" label="Beruf" />
-            </div>
-          </div>
           <div className="text-center text-white text-sm font-arial">
             Platziert die Emojis auf dem Graphen
           </div>
