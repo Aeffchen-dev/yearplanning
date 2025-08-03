@@ -404,38 +404,24 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging || !containerRef.current) return;
+    if (!isDragging) return;
     
-    // Get the image container (the direct parent of the emoji)
-    const imageContainer = containerRef.current.parentElement;
-    if (!imageContainer) return;
+    const deltaX = e.clientX - dragStart.x;
+    const deltaY = e.clientY - dragStart.y;
     
-    const containerRect = imageContainer.getBoundingClientRect();
-    const emojiSize = 48; // 48px = w-12 h-12
+    // Apply boundaries - keep emoji within reasonable bounds
+    const maxX = 300; // Adjust based on card width
+    const maxY = 200; // Adjust based on card height
+    const minX = -50;
+    const minY = -50;
     
-    // Calculate new position relative to the viewport
-    let newX = e.clientX - dragStart.x;
-    let newY = e.clientY - dragStart.y;
+    const newX = Math.max(minX, Math.min(maxX, position.x + deltaX));
+    const newY = Math.max(minY, Math.min(maxY, position.y + deltaY));
     
-    // Convert to relative position within the container
-    const relativeToContainer = {
-      x: newX - containerRect.left,
-      y: newY - containerRect.top
-    };
-    
-    // Apply boundaries - keep emoji within the image container bounds
-    const minX = 0;
-    const maxX = containerRect.width - emojiSize;
-    const minY = 0;
-    const maxY = containerRect.height - emojiSize;
-    
-    // Constrain the relative position
-    relativeToContainer.x = Math.max(minX, Math.min(maxX, relativeToContainer.x));
-    relativeToContainer.y = Math.max(minY, Math.min(maxY, relativeToContainer.y));
-    
-    setPosition({ x: relativeToContainer.x, y: relativeToContainer.y });
-    onDrag(id, relativeToContainer.x, relativeToContainer.y);
-  }, [isDragging, dragStart, id, onDrag]);
+    setPosition({ x: newX, y: newY });
+    onDrag(id, newX, newY);
+    setDragStart({ x: e.clientX, y: e.clientY });
+  }, [isDragging, dragStart, position, id, onDrag]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
