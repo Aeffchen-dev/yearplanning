@@ -75,29 +75,33 @@ const YearPlannerGenerator = () => {
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
-        gap: '8px', 
-        marginBottom: '16px' 
+        justifyContent: 'space-between',
+        padding: '16px 20px',
+        backgroundColor: '#f8fafc',
+        borderRadius: '12px',
+        marginBottom: '12px',
+        border: '1px solid #e2e8f0'
       }}>
         <span style={{ 
           fontSize: '14px', 
           fontWeight: '500', 
-          width: '192px', 
-          textAlign: 'left' 
+          color: '#374151',
+          flex: 1
         }}>
           {aspect}
         </span>
-        <div style={{ display: 'flex', gap: '4px' }}>
+        <div style={{ display: 'flex', gap: '6px' }}>
           {[1, 2, 3, 4, 5].map((star) => (
             <Star
               key={star}
-              size={24}
+              size={20}
               style={{
                 cursor: 'pointer',
-                transition: 'color 0.2s',
-                fill: star <= rating ? '#facc15' : 
-                      star - 0.5 === rating ? '#facc15' : 'transparent',
-                color: star <= rating ? '#facc15' : 
-                       star - 0.5 === rating ? '#facc15' : '#d1d5db'
+                transition: 'all 0.2s ease',
+                fill: star <= rating ? '#f59e0b' : 
+                      star - 0.5 === rating ? '#f59e0b' : 'transparent',
+                color: star <= rating ? '#f59e0b' : 
+                       star - 0.5 === rating ? '#f59e0b' : '#cbd5e1'
               }}
               onClick={() => handleStarClick(aspect, star)}
               onDoubleClick={() => handleStarDoubleClick(aspect, star)}
@@ -111,60 +115,87 @@ const YearPlannerGenerator = () => {
   const renderSlide = () => {
     const baseStyle = {
       textAlign: 'center' as const,
-      padding: '0 20px'
+      padding: '0 40px',
+      maxWidth: '600px',
+      margin: '0 auto'
     };
 
     const headerStyle = {
-      marginBottom: '16px',
-      fontSize: '14px',
-      color: '#6b7280'
+      marginBottom: '8px',
+      fontSize: '12px',
+      color: '#64748b',
+      fontWeight: '400',
+      letterSpacing: '0.5px',
+      textTransform: 'uppercase' as const
     };
 
     const titleStyle = {
-      fontSize: '60px',
-      fontWeight: 'bold',
-      marginBottom: '16px',
-      margin: '0 0 16px 0',
-      lineHeight: '1'
+      fontSize: '48px',
+      fontWeight: '700',
+      marginBottom: '8px',
+      margin: '0 0 8px 0',
+      lineHeight: '1.1',
+      color: '#0f172a',
+      letterSpacing: '-0.025em'
     };
 
     const slideCountStyle = {
-      fontSize: '18px',
-      color: '#6b7280',
-      marginBottom: '32px',
-      margin: '0 0 32px 0'
+      fontSize: '16px',
+      color: '#64748b',
+      marginBottom: '40px',
+      margin: '0 0 40px 0',
+      fontWeight: '500'
     };
 
     const sectionTitleStyle = {
-      fontSize: '24px',
+      fontSize: '28px',
       fontWeight: '600',
-      margin: '0 0 16px 0'
+      margin: '0 0 24px 0',
+      color: '#1e293b',
+      letterSpacing: '-0.025em'
     };
 
     const footerStyle = {
-      fontSize: '14px',
-      color: '#9ca3af',
-      marginTop: '32px'
+      fontSize: '12px',
+      color: '#94a3b8',
+      marginTop: '48px'
     };
 
     const textAreaStyle = {
       width: '100%',
-      minHeight: '120px',
-      padding: '12px',
-      border: '1px solid #d1d5db',
-      borderRadius: '8px',
-      fontSize: '16px',
-      marginBottom: '16px',
-      resize: 'vertical' as const
+      minHeight: '100px',
+      padding: '16px',
+      border: '1px solid #e2e8f0',
+      borderRadius: '12px',
+      fontSize: '14px',
+      marginBottom: '24px',
+      resize: 'vertical' as const,
+      fontFamily: 'inherit',
+      backgroundColor: '#f8fafc',
+      transition: 'all 0.2s ease',
+      outline: 'none'
     };
 
     const inputStyle = {
       width: '100%',
-      padding: '12px',
-      border: '1px solid #d1d5db',
-      borderRadius: '8px',
-      fontSize: '16px',
-      marginBottom: '16px'
+      padding: '16px',
+      border: '1px solid #e2e8f0',
+      borderRadius: '12px',
+      fontSize: '14px',
+      marginBottom: '24px',
+      fontFamily: 'inherit',
+      backgroundColor: '#f8fafc',
+      transition: 'all 0.2s ease',
+      outline: 'none'
+    };
+
+    const labelStyle = {
+      display: 'block',
+      marginBottom: '8px',
+      fontWeight: '500',
+      fontSize: '14px',
+      color: '#374151',
+      textAlign: 'left' as const
     };
 
     switch (currentSlide) {
@@ -291,7 +322,7 @@ const YearPlannerGenerator = () => {
             <h2 style={sectionTitleStyle}>01 The past year</h2>
             <div style={{ marginBottom: '32px', textAlign: 'left', maxWidth: '600px', margin: '0 auto 32px' }}>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Worauf seid ihr stolz?</label>
+                <label style={labelStyle}>Worauf seid ihr stolz?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide3_proud'] || ''}
@@ -299,7 +330,7 @@ const YearPlannerGenerator = () => {
                 />
               </div>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Wofür seid ihr dankbar?</label>
+                <label style={labelStyle}>Wofür seid ihr dankbar?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide3_grateful'] || ''}
@@ -307,7 +338,7 @@ const YearPlannerGenerator = () => {
                 />
               </div>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Was wollt ihr nächstes Jahr besser machen?</label>
+                <label style={labelStyle}>Was wollt ihr nächstes Jahr besser machen?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide3_improve'] || ''}
@@ -426,7 +457,7 @@ const YearPlannerGenerator = () => {
             <h2 style={sectionTitleStyle}>03 The new year</h2>
             <div style={{ marginBottom: '32px', textAlign: 'left', maxWidth: '600px', margin: '0 auto 32px' }}>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Was wollen wir neu initiieren?</label>
+                <label style={labelStyle}>Was wollen wir neu initiieren?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide9_initiate'] || ''}
@@ -434,7 +465,7 @@ const YearPlannerGenerator = () => {
                 />
               </div>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Womit wollen wir aufhören, weil es uns nicht gut tut?</label>
+                <label style={labelStyle}>Womit wollen wir aufhören, weil es uns nicht gut tut?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide9_stop'] || ''}
@@ -442,7 +473,7 @@ const YearPlannerGenerator = () => {
                 />
               </div>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Was wollt ihr weiter machen?</label>
+                <label style={labelStyle}>Was wollt ihr weiter machen?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide9_continue'] || ''}
@@ -466,7 +497,7 @@ const YearPlannerGenerator = () => {
             <h2 style={sectionTitleStyle}>03 The new year</h2>
             <div style={{ marginBottom: '32px', textAlign: 'left', maxWidth: '600px', margin: '0 auto 32px' }}>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Was wollen wir bis Jahresende geschafft haben?</label>
+                <label style={labelStyle}>Was wollen wir bis Jahresende geschafft haben?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide10_accomplish'] || ''}
@@ -474,7 +505,7 @@ const YearPlannerGenerator = () => {
                 />
               </div>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Welches Ziel nehmen wir aus dem letzten Jahr mit?</label>
+                <label style={labelStyle}>Welches Ziel nehmen wir aus dem letzten Jahr mit?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide10_carry_over'] || ''}
@@ -482,7 +513,7 @@ const YearPlannerGenerator = () => {
                 />
               </div>
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Welche Projekte nehmen wir uns vor?</label>
+                <label style={labelStyle}>Welche Projekte nehmen wir uns vor?</label>
                 <textarea
                   style={textAreaStyle}
                   value={textInputs['slide10_projects'] || ''}
@@ -615,7 +646,7 @@ const YearPlannerGenerator = () => {
               <h2 style={sectionTitleStyle}>04 Plan and terminate</h2>
               <div style={{ marginBottom: '32px', textAlign: 'left', maxWidth: '600px', margin: '0 auto 32px' }}>
                 <div style={{ marginBottom: '24px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Ziel</label>
+                  <label style={labelStyle}>Ziel</label>
                   <input
                     type="text"
                     style={inputStyle}
@@ -624,7 +655,7 @@ const YearPlannerGenerator = () => {
                   />
                 </div>
                 <div style={{ marginBottom: '24px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Prio</label>
+                  <label style={labelStyle}>Prio</label>
                   <select
                     style={inputStyle}
                     value={textInputs[`slide${currentSlide}_prio`] || ''}
@@ -637,7 +668,7 @@ const YearPlannerGenerator = () => {
                   </select>
                 </div>
                 <div style={{ marginBottom: '24px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Wie messen wir den Erfolg?</label>
+                  <label style={labelStyle}>Wie messen wir den Erfolg?</label>
                   <textarea
                     style={textAreaStyle}
                     value={textInputs[`slide${currentSlide}_success`] || ''}
@@ -645,7 +676,7 @@ const YearPlannerGenerator = () => {
                   />
                 </div>
                 <div style={{ marginBottom: '24px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Wie gehen wir es Schritt für Schritt an?</label>
+                  <label style={labelStyle}>Wie gehen wir es Schritt für Schritt an?</label>
                   <textarea
                     style={textAreaStyle}
                     value={textInputs[`slide${currentSlide}_steps`] || ''}
@@ -714,15 +745,19 @@ const YearPlannerGenerator = () => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: 'white',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
+      backgroundColor: '#f8fafc',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      color: '#1e293b'
     }}>
       <div style={{ 
-        maxWidth: '1024px', 
+        maxWidth: '800px', 
         margin: '0 auto', 
-        padding: '48px 16px'
+        padding: '40px 20px',
+        backgroundColor: 'white',
+        minHeight: '100vh',
+        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.05)'
       }}>
-        <div style={{ marginBottom: '48px' }}>
+        <div style={{ marginBottom: '60px' }}>
           {renderSlide()}
         </div>
 
@@ -730,7 +765,8 @@ const YearPlannerGenerator = () => {
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
-          padding: '0 20px'
+          borderTop: '1px solid #e2e8f0',
+          paddingTop: '24px'
         }}>
           <button 
             onClick={prevSlide}
@@ -738,31 +774,39 @@ const YearPlannerGenerator = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              padding: '8px 16px',
-              border: '1px solid #d1d5db',
-              borderRadius: '6px',
-              backgroundColor: 'white',
+              gap: '6px',
+              padding: '10px 16px',
+              border: 'none',
+              borderRadius: '8px',
+              backgroundColor: currentSlide === 1 ? '#f1f5f9' : '#3b82f6',
+              color: currentSlide === 1 ? '#94a3b8' : 'white',
               cursor: currentSlide === 1 ? 'not-allowed' : 'pointer',
-              opacity: currentSlide === 1 ? 0.5 : 1,
-              fontSize: '14px'
-            }}
-            onMouseOver={(e) => {
-              if (currentSlide !== 1) e.currentTarget.style.backgroundColor = '#f9fafb';
-            }}
-            onMouseOut={(e) => {
-              if (currentSlide !== 1) e.currentTarget.style.backgroundColor = 'white';
+              fontSize: '14px',
+              fontWeight: '500',
+              transition: 'all 0.2s ease'
             }}
           >
             <ChevronLeft size={16} />
-            <span>Previous</span>
+            <span>Zurück</span>
           </button>
           
-          <div style={{ 
-            fontSize: '14px', 
-            color: '#6b7280' 
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
           }}>
-            Swipe um weiter zu navigieren
+            {Array.from({ length: totalSlides }, (_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: currentSlide === i + 1 ? '#3b82f6' : '#e2e8f0',
+                  transition: 'all 0.2s ease'
+                }}
+              />
+            ))}
           </div>
           
           <button 
@@ -771,35 +815,21 @@ const YearPlannerGenerator = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              padding: '8px 16px',
-              border: '1px solid #d1d5db',
-              borderRadius: '6px',
-              backgroundColor: 'white',
+              gap: '6px',
+              padding: '10px 16px',
+              border: 'none',
+              borderRadius: '8px',
+              backgroundColor: currentSlide === totalSlides ? '#f1f5f9' : '#3b82f6',
+              color: currentSlide === totalSlides ? '#94a3b8' : 'white',
               cursor: currentSlide === totalSlides ? 'not-allowed' : 'pointer',
-              opacity: currentSlide === totalSlides ? 0.5 : 1,
-              fontSize: '14px'
-            }}
-            onMouseOver={(e) => {
-              if (currentSlide !== totalSlides) e.currentTarget.style.backgroundColor = '#f9fafb';
-            }}
-            onMouseOut={(e) => {
-              if (currentSlide !== totalSlides) e.currentTarget.style.backgroundColor = 'white';
+              fontSize: '14px',
+              fontWeight: '500',
+              transition: 'all 0.2s ease'
             }}
           >
-            <span>Next</span>
+            <span>Weiter</span>
             <ChevronRight size={16} />
           </button>
-        </div>
-
-        <div style={{ 
-          marginTop: '48px', 
-          textAlign: 'center', 
-          fontSize: '14px', 
-          color: '#9ca3af' 
-        }}>
-          <p style={{ margin: '0 0 4px 0' }}>Relationship by design</p>
-          <p style={{ margin: '0' }}>Feedback geben</p>
         </div>
       </div>
     </div>
