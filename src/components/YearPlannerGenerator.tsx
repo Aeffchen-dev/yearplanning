@@ -12,78 +12,69 @@ const StarRating: React.FC<StarRatingProps> = ({
   readonly = false,
 }) => {
   const [rating, setRating] = useState(value);
-  const [hover, setHover] = useState(0);
 
   const handleClick = (starIndex: number) => {
-    if (!readonly) {
-      // If clicking on the last filled star, cycle through fractions
-      if (Math.ceil(rating) === starIndex) {
-        const wholeStars = Math.floor(rating);
-        const fraction = rating - wholeStars;
-        
-        if (fraction === 0) {
-          // From full to 1/3
-          setRating(wholeStars + 0.33);
-          onChange?.(wholeStars + 0.33);
-        } else if (Math.abs(fraction - 0.33) < 0.1) {
-          // From 1/3 to 1/2
-          setRating(wholeStars + 0.5);
-          onChange?.(wholeStars + 0.5);
-        } else if (Math.abs(fraction - 0.5) < 0.1) {
-          // From 1/2 to 3/4
-          setRating(wholeStars + 0.75);
-          onChange?.(wholeStars + 0.75);
-        } else if (Math.abs(fraction - 0.75) < 0.1) {
-          // From 3/4 to full
-          setRating(starIndex);
-          onChange?.(starIndex);
-        } else {
-          // Default case - set to 1/3
-          setRating(wholeStars + 0.33);
-          onChange?.(wholeStars + 0.33);
-        }
-      } else {
-        // Clicking a different star - set to full value
-        setRating(starIndex);
-        onChange?.(starIndex);
-      }
+    if (readonly) return;
+    
+    // Simple logic: if clicking on same level, cycle fractions
+    const currentStarLevel = Math.ceil(rating);
+    
+    if (currentStarLevel === starIndex) {
+      // Cycle through fractions for current star
+      const baseValue = starIndex - 1;
+      const currentFraction = rating - baseValue;
+      
+      let newValue;
+      if (currentFraction >= 0.9) newValue = baseValue + 0.33; // 1.0 -> 0.33
+      else if (currentFraction >= 0.6) newValue = baseValue + 1.0; // 0.75 -> 1.0  
+      else if (currentFraction >= 0.4) newValue = baseValue + 0.75; // 0.5 -> 0.75
+      else if (currentFraction >= 0.2) newValue = baseValue + 0.5; // 0.33 -> 0.5
+      else newValue = starIndex; // 0 -> 1.0
+      
+      setRating(newValue);
+      onChange?.(newValue);
+    } else {
+      // Clicking different star - set to that star value
+      setRating(starIndex);
+      onChange?.(starIndex);
     }
   };
 
   return (
     <div className="flex gap-1 md:gap-3">
       {[1, 2, 3, 4, 5].map((star) => {
-        const starValue = Math.max(0, Math.min(1, (hover || rating) - star + 1));
-        const percentage = Math.round(starValue * 100);
+        // Calculate how much of this star should be filled
+        const starFill = Math.max(0, Math.min(1, rating - star + 1));
+        const fillPercentage = Math.round(starFill * 100);
         
         return (
           <button
             key={star}
-            className={`w-8 h-8 md:w-10 md:h-10 transition-colors duration-200 text-white ${!readonly ? "cursor-pointer" : "cursor-default"}`}
-            onMouseEnter={() => !readonly && setHover(star)}
-            onMouseLeave={() => !readonly && setHover(0)}
+            className="w-8 h-8 md:w-10 md:h-10 text-white cursor-pointer"
             onClick={() => handleClick(star)}
             disabled={readonly}
           >
-            <svg viewBox="0 0 45 43" className="w-full h-full">
+            <svg viewBox="0 0 24 24" className="w-full h-full">
               <defs>
-                <clipPath id={`clip-${star}`}>
-                  <rect x="0" y="0" width={`${percentage}%`} height="100%" />
+                <clipPath id={`star-clip-${star}`}>
+                  <rect x="0" y="0" width={`${fillPercentage}%`} height="100%" />
                 </clipPath>
               </defs>
-              {/* Outline star */}
+              
+              {/* Star outline */}
               <path
-                d="M22.5 2L27.8 15.8L43 17.1L32.3 26.8L35.6 42L22.5 34.3L9.4 42L12.7 26.8L2 17.1L17.2 15.8L22.5 2Z"
+                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1"
                 fill="none"
               />
-              {/* Filled portion */}
-              {percentage > 0 && (
+              
+              {/* Star fill */}
+              {fillPercentage > 0 && (
                 <path
-                  d="M22.5 2L27.8 15.8L43 17.1L32.3 26.8L35.6 42L22.5 34.3L9.4 42L12.7 26.8L2 17.1L17.2 15.8L22.5 2Z"
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
                   fill="currentColor"
-                  clipPath={`url(#clip-${star})`}
+                  clipPath={`url(#star-clip-${star})`}
                 />
               )}
             </svg>
