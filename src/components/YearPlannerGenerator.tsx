@@ -404,26 +404,22 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging || !containerRef.current) return;
+    if (!isDragging) return;
     
-    // Get the card container (look for the parent with Card styling)
-    const cardElement = containerRef.current.closest('.bg-card, [class*="card"]') as HTMLElement;
-    if (!cardElement) return;
+    // Find the container div that holds the image and emojis (the relative positioned parent)
+    const imageContainer = containerRef.current?.closest('.flex-1') as HTMLElement;
+    if (!imageContainer) return;
     
-    const cardRect = cardElement.getBoundingClientRect();
+    const containerRect = imageContainer.getBoundingClientRect();
     const emojiSize = 48; // 48px = w-12 h-12
     
-    // Calculate new position relative to the card
-    const newX = e.clientX - dragStart.x;
-    const newY = e.clientY - dragStart.y;
+    // Calculate position relative to the container
+    const newX = e.clientX - containerRect.left - dragStart.x;
+    const newY = e.clientY - containerRect.top - dragStart.y;
     
-    // Convert to position relative to card
-    const relativeX = newX - cardRect.left;
-    const relativeY = newY - cardRect.top;
-    
-    // Apply card boundaries
-    const constrainedX = Math.max(0, Math.min(cardRect.width - emojiSize, relativeX));
-    const constrainedY = Math.max(0, Math.min(cardRect.height - emojiSize, relativeY));
+    // Apply boundaries within the container
+    const constrainedX = Math.max(0, Math.min(containerRect.width - emojiSize, newX));
+    const constrainedY = Math.max(0, Math.min(containerRect.height - emojiSize, newY));
     
     setPosition({ x: constrainedX, y: constrainedY });
     onDrag(id, constrainedX, constrainedY);
