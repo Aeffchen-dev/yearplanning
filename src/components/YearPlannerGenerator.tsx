@@ -586,8 +586,8 @@ const Slide: React.FC<SlideProps> = ({
           aria-label="Next slide"
         />
 
-        <div className={`${[1, 4, 8, 12, 24].includes(slide.id) ? 'mb-6' : 'mb-4 md:mb-6'}`}>
-          <div className={`inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%] ${[1, 4, 8, 12, 24].includes(slide.id) ? '' : ''}`}>
+        <div className={`${[1, 4, 8, 12, 24].includes(slide.id) ? 'mb-[24px]' : 'mb-4 md:mb-6'}`}>
+          <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs md:text-sm font-black font-kokoro leading-[100%]">
             {slide.label.number}
             {slide.label.text && (
               <span className="ml-1 hidden sm:inline">{slide.label.text}</span>
