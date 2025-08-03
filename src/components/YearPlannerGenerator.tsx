@@ -779,8 +779,8 @@ const slides = (textareaValues: {[key: string]: string}, updateTextareaValue: (k
     id: 11,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="space-y-6 flex-1">
-        <div className="text-white text-base font-arial">
+      <div className="flex-1 flex flex-col min-h-0">
+        <div className="text-white text-sm font-arial mb-4 flex-shrink-0">
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
         </div>
