@@ -153,6 +153,36 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
   </div>
 );
 
+const FocusAreasSection: React.FC = () => {
+  const [focusAreas, setFocusAreas] = useState(Array(5).fill(""));
+
+  const handleFocusChange = (index: number, value: string) => {
+    const newFocusAreas = [...focusAreas];
+    newFocusAreas[index] = value;
+    setFocusAreas(newFocusAreas);
+  };
+
+  return (
+    <div className="space-y-3 flex-1">
+      {[1, 2, 3, 4, 5].map((i, index) => (
+        <div key={i} className="bg-[#FFE299] flex flex-col">
+          <div className="p-4">
+            <textarea
+              placeholder="Fokus"
+              value={focusAreas[index]}
+              onChange={(e) => handleFocusChange(index, e.target.value)}
+              className={`w-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[40px]`}
+            />
+          </div>
+          <div className="px-4 pb-4 flex justify-end">
+            <StarRating />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 interface SlideData {
   id: number;
   label: { number: string; text: string };
@@ -391,26 +421,7 @@ slides.push(
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
         </div>
-        <div className="space-y-3 flex-1">
-          {[1, 2, 3, 4, 5].map((i) => {
-            const [value, setValue] = useState("");
-            return (
-              <div key={i} className="bg-[#FFE299] flex flex-col">
-                <div className="p-4">
-                  <textarea
-                    placeholder="Fokus"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className={`w-full bg-transparent ${value ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] min-h-[40px]`}
-                  />
-                </div>
-                <div className="px-4 pb-4 flex justify-end">
-                  <StarRating />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <FocusAreasSection />
       </div>
     ),
   },
