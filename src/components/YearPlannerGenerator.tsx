@@ -15,12 +15,16 @@ interface StarRating {
 }
 
 const YearPlannerGenerator = () => {
+  console.log('YearPlannerGenerator component loading...');
+  
   const [currentSlide, setCurrentSlide] = useState(1);
   const [emojiPositions, setEmojiPositions] = useState<EmojiPosition[]>([]);
   const [starRatings, setStarRatings] = useState<StarRating>({});
   const [textInputs, setTextInputs] = useState<{[key: string]: string}>({});
   const [showBuilderWarning, setShowBuilderWarning] = useState(true);
   const graphRef = useRef<HTMLDivElement>(null);
+  
+  console.log('Current slide:', currentSlide, 'Show warning:', showBuilderWarning);
 
   const totalSlides = 24;
 
@@ -385,6 +389,8 @@ const YearPlannerGenerator = () => {
     }
   };
 
+  console.log('Rendering component, showBuilderWarning:', showBuilderWarning);
+  
   if (showBuilderWarning) {
     return (
       <div className="min-h-screen bg-gray-800 flex items-center justify-center">
@@ -409,7 +415,10 @@ const YearPlannerGenerator = () => {
           </div>
           <Button 
             className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2"
-            onClick={() => setShowBuilderWarning(false)}
+            onClick={() => {
+              console.log('Show Content button clicked');
+              setShowBuilderWarning(false);
+            }}
           >
             Show Content
           </Button>
