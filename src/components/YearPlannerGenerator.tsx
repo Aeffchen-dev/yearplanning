@@ -162,97 +162,69 @@ const GraphComponent: React.FC<{ type: "past-year" | "goals" }> = ({
     <svg className="absolute inset-0 w-full h-full">
       {/* Horizontal line (X-axis) - fills container width */}
       <line
-        x1="0"
+        x1="32"
         y1="50%"
-        x2="100%"
+        x2="calc(100% - 32px)"
         y2="50%"
         stroke="white"
         strokeWidth="1"
-        markerEnd="url(#arrowhead-right)"
       />
-      {/* Vertical line (Y-axis) - centered horizontally */}
+      {/* Vertical line (Y-axis) - centered horizontally with padding */}
       <line
         x1="50%"
-        y1="0"
+        y1="32"
         x2="50%"
-        y2="100%"
+        y2="calc(100% - 32px)"
         stroke="white"
         strokeWidth="1"
-        markerEnd="url(#arrowhead-up)"
       />
-      
-      {/* Arrow markers */}
-      <defs>
-        <marker
-          id="arrowhead-right"
-          markerWidth="10"
-          markerHeight="7"
-          refX="9"
-          refY="3.5"
-          orient="auto"
-        >
-          <polygon
-            points="0 0, 10 3.5, 0 7"
-            fill="white"
-          />
-        </marker>
-        <marker
-          id="arrowhead-up"
-          markerWidth="7"
-          markerHeight="10"
-          refX="3.5"
-          refY="1"
-          orient="auto"
-        >
-          <polygon
-            points="0 10, 3.5 0, 7 10"
-            fill="white"
-          />
-        </marker>
-      </defs>
     </svg>
 
     {/* Labels */}
     {type === "past-year" ? (
       <>
-        {/* Y-axis labels - 8px right from y-axis */}
-        <div className="absolute left-1/2 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial" style={{ marginLeft: '8px' }}>
+        {/* Left Y-axis label */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 font-arial text-left">
           Nicht im Fokus
           <br />
           Wenig Zeit
         </div>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-12 text-right font-arial">
+        {/* Right Y-axis label */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 text-right font-arial">
           Im Fokus
           <br />
           Viel Zeit
         </div>
-        {/* X-axis labels - 8px below x-axis */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-20 text-center font-arial" style={{ marginTop: '8px' }}>
+        {/* Top X-axis label */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
           Hat mich erfüllt
         </div>
+        {/* Bottom X-axis label */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
           Hat mich belastet
         </div>
       </>
     ) : (
       <>
-        {/* Y-axis labels - 8px right from y-axis */}
-        <div className="absolute left-1/2 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-20 font-arial" style={{ marginLeft: '8px' }}>
+        {/* Left Y-axis label */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 font-arial text-left">
           Schwer umsetzbar
         </div>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-14 text-right font-arial">
+        {/* Right Y-axis label */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white text-xs leading-tight w-24 text-right font-arial">
           Einfach umsetzbar
         </div>
-        {/* X-axis labels - 8px below x-axis */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-xs w-18 text-center font-arial" style={{ marginTop: '8px' }}>
+        {/* Top X-axis label */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
           Hoher Impact
         </div>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-22 text-center font-arial">
+        {/* Bottom X-axis label */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-white text-xs w-24 text-center font-arial">
           Niedriger Impact
         </div>
         {/* Highlighted quadrant */}
-        <div className="absolute top-4 left-1/2 w-[153px] h-[132px] bg-white bg-opacity-5"></div>
-        <div className="absolute top-20 left-1/2 translate-x-11 text-white text-opacity-30 text-xs text-center w-16 leading-tight font-arial">
+        <div className="absolute top-8 left-1/2 w-[45%] h-[40%] bg-white bg-opacity-5"></div>
+        <div className="absolute top-16 left-[62%] text-white text-opacity-30 text-xs text-center w-20 leading-tight font-arial">
           diese Ziele geht ihr an
         </div>
       </>
