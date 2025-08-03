@@ -16,32 +16,31 @@ const StarRating: React.FC<StarRatingProps> = ({
 
   const handleClick = (starIndex: number) => {
     if (!readonly) {
-      // If clicking on a star that represents the current rating level
+      // If clicking on the last filled star, cycle through fractions
       if (Math.ceil(rating) === starIndex) {
-        // Cycle through fractional values for this star
-        const baseValue = starIndex - 1;
-        const currentFraction = rating - baseValue;
+        const wholeStars = Math.floor(rating);
+        const fraction = rating - wholeStars;
         
-        if (currentFraction >= 0.99) {
+        if (fraction === 0) {
           // From full to 1/3
-          setRating(baseValue + 0.33);
-          onChange?.(baseValue + 0.33);
-        } else if (currentFraction >= 0.3 && currentFraction < 0.4) {
+          setRating(wholeStars + 0.33);
+          onChange?.(wholeStars + 0.33);
+        } else if (Math.abs(fraction - 0.33) < 0.1) {
           // From 1/3 to 1/2
-          setRating(baseValue + 0.5);
-          onChange?.(baseValue + 0.5);
-        } else if (currentFraction >= 0.45 && currentFraction < 0.55) {
+          setRating(wholeStars + 0.5);
+          onChange?.(wholeStars + 0.5);
+        } else if (Math.abs(fraction - 0.5) < 0.1) {
           // From 1/2 to 3/4
-          setRating(baseValue + 0.75);
-          onChange?.(baseValue + 0.75);
-        } else if (currentFraction >= 0.7 && currentFraction < 0.8) {
-          // From 3/4 back to full
+          setRating(wholeStars + 0.75);
+          onChange?.(wholeStars + 0.75);
+        } else if (Math.abs(fraction - 0.75) < 0.1) {
+          // From 3/4 to full
           setRating(starIndex);
           onChange?.(starIndex);
         } else {
-          // Default to full
-          setRating(starIndex);
-          onChange?.(starIndex);
+          // Default case - set to 1/3
+          setRating(wholeStars + 0.33);
+          onChange?.(wholeStars + 0.33);
         }
       } else {
         // Clicking a different star - set to full value
@@ -51,19 +50,11 @@ const StarRating: React.FC<StarRatingProps> = ({
     }
   };
 
-  const handleDoubleClick = (starIndex: number) => {
-    if (!readonly) {
-      // Double click sets to full value
-      setRating(starIndex);
-      onChange?.(starIndex);
-    }
-  };
-
   return (
     <div className="flex gap-1 md:gap-3">
       {[1, 2, 3, 4, 5].map((star) => {
-        const currentValue = hover || rating;
-        const fillAmount = Math.max(0, Math.min(1, currentValue - star + 1));
+        const starValue = Math.max(0, Math.min(1, (hover || rating) - star + 1));
+        const percentage = Math.round(starValue * 100);
         
         return (
           <button
@@ -72,22 +63,29 @@ const StarRating: React.FC<StarRatingProps> = ({
             onMouseEnter={() => !readonly && setHover(star)}
             onMouseLeave={() => !readonly && setHover(0)}
             onClick={() => handleClick(star)}
-            onDoubleClick={() => handleDoubleClick(star)}
             disabled={readonly}
           >
             <svg viewBox="0 0 45 43" className="w-full h-full">
               <defs>
-                <linearGradient id={`starGradient-${star}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset={`${fillAmount * 100}%`} stopColor="currentColor" />
-                  <stop offset={`${fillAmount * 100}%`} stopColor="transparent" />
-                </linearGradient>
+                <clipPath id={`clip-${star}`}>
+                  <rect x="0" y="0" width={`${percentage}%`} height="100%" />
+                </clipPath>
               </defs>
+              {/* Outline star */}
               <path
                 d="M22.5 2L27.8 15.8L43 17.1L32.3 26.8L35.6 42L22.5 34.3L9.4 42L12.7 26.8L2 17.1L17.2 15.8L22.5 2Z"
                 stroke="currentColor"
                 strokeWidth="2"
-                fill={fillAmount > 0 ? `url(#starGradient-${star})` : "none"}
+                fill="none"
               />
+              {/* Filled portion */}
+              {percentage > 0 && (
+                <path
+                  d="M22.5 2L27.8 15.8L43 17.1L32.3 26.8L35.6 42L22.5 34.3L9.4 42L12.7 26.8L2 17.1L17.2 15.8L22.5 2Z"
+                  fill="currentColor"
+                  clipPath={`url(#clip-${star})`}
+                />
+              )}
             </svg>
           </button>
         );
