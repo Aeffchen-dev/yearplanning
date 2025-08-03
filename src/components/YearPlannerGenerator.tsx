@@ -361,10 +361,10 @@ const FocusAreasSection: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col gap-1">
+    <div className="flex-1 flex flex-col gap-4">
       {[1, 2, 3, 4, 5].map((i, index) => (
         <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
-          <div className="p-2 flex-1 min-h-0">
+          <div className="p-4 flex-1 min-h-0">
             <textarea
               placeholder="Fokus"
               value={focusAreas[index]}
@@ -372,7 +372,7 @@ const FocusAreasSection: React.FC = () => {
               className={`w-full h-full bg-transparent ${focusAreas[index] ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
             />
           </div>
-          <div className="px-2 pb-1 flex justify-end">
+          <div className="px-4 pb-2 flex justify-end">
             <StarRating starColor="black" />
           </div>
         </div>
