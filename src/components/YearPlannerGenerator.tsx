@@ -392,7 +392,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#8B7355]'} placeholder-[#8B7355] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
               />
             </div>
             <div className="px-4 pb-1 flex justify-end flex-shrink-0">
