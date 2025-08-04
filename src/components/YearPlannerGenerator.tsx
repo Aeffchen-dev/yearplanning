@@ -379,7 +379,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col gap-4">
+    <div className="h-full flex flex-col gap-2">
       {[1, 2, 3, 4, 5].map((i, index) => {
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
@@ -387,15 +387,15 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
         
         return (
           <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
-            <div className="p-4 flex-1 min-h-0 flex flex-col">
+            <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
               <textarea
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#8B7355]'} placeholder-[#8B7355] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
               />
             </div>
-            <div className="px-4 pb-2 flex justify-end flex-shrink-0">
+            <div className="px-4 pb-1 flex justify-end flex-shrink-0">
               <StarRating 
                 starColor="black" 
                 value={starRatings[starKey] || 0}
