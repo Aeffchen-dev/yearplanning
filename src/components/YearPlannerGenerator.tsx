@@ -171,8 +171,18 @@ const DraggableEmojiIcon: React.FC<DraggableEmojiIconProps> = ({ emoji, label, o
     onStartDrag(emoji, label);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    onStartDrag(emoji, label);
+  };
+
   return (
-    <div className="flex items-center gap-2 cursor-pointer select-none" onMouseDown={handleMouseDown}>
+    <div 
+      className="flex items-center gap-2 cursor-pointer select-none" 
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
+      style={{ touchAction: 'none' }}
+    >
       <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
         <span className="text-2xl pointer-events-none">{emoji}</span>
       </div>
@@ -426,6 +436,17 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     e.stopPropagation();
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    const touch = e.touches[0];
+    setDragStart({
+      x: touch.clientX - position.x,
+      y: touch.clientY - position.y
+    });
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
@@ -447,6 +468,28 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     onDrag(id, constrainedX, constrainedY);
   }, [isDragging, dragStart, id, onDrag]);
 
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDragging) return;
+    
+    // Get the card container bounds
+    const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
+    if (!cardElement) return;
+    
+    const cardRect = cardElement.getBoundingClientRect();
+    const emojiSize = 48; // 48px = w-12 h-12
+    
+    const touch = e.touches[0];
+    const newX = touch.clientX - dragStart.x;
+    const newY = touch.clientY - dragStart.y;
+    
+    // Calculate boundaries relative to the card - adjusted for proper top/bottom bounds
+    const constrainedX = Math.max(-cardRect.width/2 + emojiSize/2, Math.min(cardRect.width/2 - emojiSize/2, newX));
+    const constrainedY = Math.max(-cardRect.height/2 + 75, Math.min(cardRect.height/2 - 10, newY));
+    
+    setPosition({ x: constrainedX, y: constrainedY });
+    onDrag(id, constrainedX, constrainedY);
+  }, [isDragging, dragStart, id, onDrag]);
+
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
   }, []);
@@ -455,13 +498,17 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleMouseUp);
       
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleMouseUp);
       };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [isDragging, handleMouseMove, handleTouchMove, handleMouseUp]);
 
   return (
     <div
@@ -469,9 +516,11 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 ${isDragging ? 'opacity-75' : ''}`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
-        transition: isDragging ? 'none' : 'transform 0.1s ease'
+        transition: isDragging ? 'none' : 'transform 0.1s ease',
+        touchAction: 'none'
       }}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       title={label}
     >
       <span className="text-2xl pointer-events-none">{emoji}</span>
@@ -1283,7 +1332,7 @@ export default function YearPlannerGenerator() {
   }, []);
 
   return (
-    <div className="w-full h-dvh bg-black overflow-hidden relative" style={{ touchAction: 'pan-x pinch-zoom', overscrollBehavior: 'none' }}>
+    <div className="w-full h-dvh bg-black overflow-hidden relative" style={{ touchAction: 'pan-x', overscrollBehavior: 'none' }}>
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-2 md:pt-4">
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
