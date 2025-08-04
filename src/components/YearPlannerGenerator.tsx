@@ -990,7 +990,7 @@ const Slide: React.FC<SlideProps> = ({
           <div className="flex-1 flex flex-col">
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-[24px]">
-              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-black font-kokoro leading-[100%]">
+              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
                   <span className="ml-1">{slide.label.text}</span>
@@ -1336,7 +1336,7 @@ export default function YearPlannerGenerator() {
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-2 md:pt-4">
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
-          <h1 className="text-[24px] md:text-[28px] font-bold italic leading-[120%] font-kokoro text-white">
+          <h1 className="text-[24px] md:text-[28px] font-bold leading-[120%] font-kokoro text-white">
             Year Planning
           </h1>
           <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
