@@ -1285,9 +1285,9 @@ export default function YearPlannerGenerator() {
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative">
       {/* Fixed Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-4">
-        <div className="flex items-center gap-2 md:gap-4 mb-4">
-          <h1 className="text-[28px] font-bold italic leading-[120%] font-kokoro text-white">
+      <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-2 md:pt-4">
+        <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
+          <h1 className="text-[24px] md:text-[28px] font-bold italic leading-[120%] font-kokoro text-white">
             Year Planning
           </h1>
           <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
@@ -1297,8 +1297,8 @@ export default function YearPlannerGenerator() {
       </div>
 
       {/* Fixed Footer */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-4 pb-4">
-        <div className="flex items-center gap-2 mt-4 text-base font-arial text-white">
+      <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-4 pb-2 md:pb-4">
+        <div className="flex items-center gap-2 mt-2 md:mt-4 text-sm md:text-base font-arial text-white">
           <a 
             href="https://relationshipbydesign.de/" 
             target="_blank" 
@@ -1323,8 +1323,8 @@ export default function YearPlannerGenerator() {
         style={{
           transform: `translateX(calc(-${currentSlide * (100 / slidesArray.length)}% + ${translateX}px))`,
           width: `${slidesArray.length * 100}vw`,
-          paddingTop: '54px',
-          paddingBottom: '54px'
+          paddingTop: '40px',
+          paddingBottom: '40px'
         }}
         onTouchStart={(e) => handleStart(e.touches[0].clientX)}
         onTouchMove={(e) => handleMove(e.touches[0].clientX)}
