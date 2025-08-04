@@ -27,10 +27,7 @@ jobs:
         node-version: '18'
         cache: 'npm'
     - run: npm ci
-    - name: Debug build failure
-      run: |
-        echo "Running npm run build with debug output..."
-        npm run build -- --verbose || echo "Build failed with exit code $?"
+    - run: npm run build
     - uses: actions/upload-pages-artifact@v3
       with:
         path: dist

@@ -1079,23 +1079,31 @@ export default function YearPlannerGenerator() {
   const updateTextareaValue = (key: string, value: string) => {
     const newValues = { ...textareaValues, [key]: value };
     setTextareaValues(newValues);
-    localStorage.setItem('yearPlanner-textareas', JSON.stringify(newValues));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('yearPlanner-textareas', JSON.stringify(newValues));
+    }
   };
 
   const updateStarRating = (key: string, value: number) => {
     const newRatings = { ...starRatings, [key]: value };
     setStarRatings(newRatings);
-    localStorage.setItem('yearPlanner-starRatings', JSON.stringify(newRatings));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('yearPlanner-starRatings', JSON.stringify(newRatings));
+    }
   };
 
   const updateCurrentSlide = (slideIndex: number) => {
     setCurrentSlide(slideIndex);
-    localStorage.setItem('yearPlanner-currentSlide', slideIndex.toString());
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('yearPlanner-currentSlide', slideIndex.toString());
+    }
   };
 
   const updateDraggedEmojis = (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => {
     setDraggedEmojis(emojis);
-    localStorage.setItem('yearPlanner-draggedEmojis', JSON.stringify(emojis));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('yearPlanner-draggedEmojis', JSON.stringify(emojis));
+    }
   };
 
   // Create slides array with state integration
