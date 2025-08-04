@@ -1283,7 +1283,7 @@ export default function YearPlannerGenerator() {
   }, []);
 
   return (
-    <div className="w-full h-dvh bg-black overflow-hidden relative">
+    <div className="w-full h-dvh bg-black overflow-hidden relative" style={{ touchAction: 'pan-x pinch-zoom', overscrollBehavior: 'none' }}>
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-2 md:pt-4">
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
