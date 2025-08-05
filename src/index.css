@@ -104,9 +104,26 @@
 }
 
 @layer utilities {
+  /* Custom Kokoro font */
+  @font-face {
+    font-family: "Kokoro";
+    src: url("/fonts/kokoro-bolditalic-webfont.woff2") format("woff2");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Kokoro";
+    src: url("/fonts/kokoro-bolditalic-webfont.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
   .font-kokoro {
     font-family: "Kokoro", "Times New Roman", serif;
-    font-weight: 400;
+    font-weight: 700;
   }
 
   .font-arial {
