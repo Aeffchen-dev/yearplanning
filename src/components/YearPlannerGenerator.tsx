@@ -136,7 +136,6 @@ interface TextAreaProps {
   className?: string;
   rows?: number;
   fillHeight?: boolean;
-  minHeight?: string;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -146,10 +145,9 @@ const TextArea: React.FC<TextAreaProps> = ({
   className = "",
   rows = 4,
   fillHeight = false,
-  minHeight = "min-h-[120px]",
 }) => {
   return (
-    <div className={`bg-[#FFE299] p-4 ${fillHeight ? `flex-1 flex flex-col ${minHeight}` : 'flex-1'} ${className}`}>
+    <div className={`bg-[#FFE299] p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
       <textarea
         placeholder={placeholder}
         value={value}
@@ -679,7 +677,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Worauf seid ihr stolz?
           </div>
           <TextArea 
@@ -687,11 +685,10 @@ const slides = (
             value={textareaValues['slide3-proud'] || ''}
             onChange={(value) => updateTextareaValue('slide3-proud', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Wofür seid ihr dankbar?
           </div>
           <TextArea 
@@ -699,11 +696,10 @@ const slides = (
             value={textareaValues['slide3-grateful'] || ''}
             onChange={(value) => updateTextareaValue('slide3-grateful', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr nächstes Jahr besser machen?
           </div>
           <TextArea 
@@ -711,7 +707,6 @@ const slides = (
             value={textareaValues['slide3-improve'] || ''}
             onChange={(value) => updateTextareaValue('slide3-improve', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
       </div>
@@ -849,7 +844,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Was wollen wir neu initiieren?
           </div>
           <TextArea 
@@ -857,11 +852,10 @@ const slides = (
             value={textareaValues['slide9-initiate'] || ''}
             onChange={(value) => updateTextareaValue('slide9-initiate', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Womit wollen wir aufhören, weil es uns nicht gut tut?
           </div>
           <TextArea 
@@ -869,11 +863,10 @@ const slides = (
             value={textareaValues['slide9-stop'] || ''}
             onChange={(value) => updateTextareaValue('slide9-stop', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr weiter machen?
           </div>
           <TextArea 
@@ -881,7 +874,6 @@ const slides = (
             value={textareaValues['slide9-continue'] || ''}
             onChange={(value) => updateTextareaValue('slide9-continue', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
       </div>
@@ -894,7 +886,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Was wollen wir bis Jahresende geschafft haben?
           </div>
           <TextArea 
@@ -902,11 +894,10 @@ const slides = (
             value={textareaValues['slide10-achieve'] || ''}
             onChange={(value) => updateTextareaValue('slide10-achieve', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Welches Ziel nehmen wir aus dem letzten Jahr mit?
           </div>
           <TextArea 
@@ -914,11 +905,10 @@ const slides = (
             value={textareaValues['slide10-carry'] || ''}
             onChange={(value) => updateTextareaValue('slide10-carry', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
+          <div className="text-white text-base mb-4 font-arial">
             Welche Projekte nehmen wir uns vor?
           </div>
           <TextArea 
@@ -926,7 +916,6 @@ const slides = (
             value={textareaValues['slide10-projects'] || ''}
             onChange={(value) => updateTextareaValue('slide10-projects', value)}
             fillHeight={true}
-            minHeight="min-h-[120px]"
           />
         </div>
       </div>
@@ -1204,13 +1193,12 @@ export default function YearPlannerGenerator() {
         content: (
           <div className="space-y-6 flex-1 flex flex-col">
             <div>
-              <div className="text-white text-base mb-2 font-arial min-h-[24px] flex items-end">Ziel</div>
+              <div className="text-white text-base mb-2 font-arial">Ziel</div>
               <TextArea 
                 placeholder="Ziel beschreiben" 
                 value={textareaValues[`slide${i}-goal`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-goal`, value)}
                 fillHeight={true}
-                minHeight="min-h-[100px]"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -1221,7 +1209,7 @@ export default function YearPlannerGenerator() {
               />
             </div>
             <div className="flex-1 flex flex-col">
-              <div className="text-white text-base mb-2 font-arial min-h-[48px] flex items-end">
+              <div className="text-white text-base mb-2 font-arial">
                 Wie messen wir den Erfolg?
               </div>
               <TextArea 
@@ -1229,11 +1217,10 @@ export default function YearPlannerGenerator() {
                 value={textareaValues[`slide${i}-measure`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-measure`, value)}
                 fillHeight={true}
-                minHeight="min-h-[140px]"
               />
             </div>
             <div className="flex-1 flex flex-col">
-              <div className="text-white text-base mb-2 font-arial min-h-[48px] flex items-end">
+              <div className="text-white text-base mb-2 font-arial">
                 Wie gehen wir es Schritt für Schritt an?
               </div>
               <TextArea 
@@ -1241,7 +1228,6 @@ export default function YearPlannerGenerator() {
                 value={textareaValues[`slide${i}-steps`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-steps`, value)}
                 fillHeight={true}
-                minHeight="min-h-[140px]"
               />
             </div>
           </div>
