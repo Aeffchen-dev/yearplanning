@@ -180,28 +180,116 @@ interface DraggableEmojiIconProps {
 }
 
 const DraggableEmojiIcon: React.FC<DraggableEmojiIconProps> = ({ emoji, label, onStartDrag }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
+
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
-    onStartDrag(emoji, label);
+    setIsDragging(true);
+    
+    const rect = elementRef.current?.getBoundingClientRect();
+    if (rect) {
+      setDragStart({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+      
+      // Create floating emoji immediately
+      const newId = `${emoji}-${Date.now()}`;
+      setDraggedId(newId);
+      onStartDrag(emoji, label);
+    }
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
-    onStartDrag(emoji, label);
+    setIsDragging(true);
+    
+    const rect = elementRef.current?.getBoundingClientRect();
+    const touch = e.touches[0];
+    if (rect) {
+      setDragStart({
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top
+      });
+      
+      // Create floating emoji immediately
+      const newId = `${emoji}-${Date.now()}`;
+      setDraggedId(newId);
+      onStartDrag(emoji, label);
+    }
   };
 
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
+    setPosition({ x: newX, y: newY });
+  }, [isDragging, dragStart]);
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDragging) return;
+    
+    const touch = e.touches[0];
+    const newX = touch.clientX - dragStart.x;
+    const newY = touch.clientY - dragStart.y;
+    setPosition({ x: newX, y: newY });
+  }, [isDragging, dragStart]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+    setPosition({ x: 0, y: 0 });
+    setDraggedId(null);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleTouchMove, handleMouseUp]);
+
   return (
-    <div 
-      className="flex items-center gap-2 cursor-pointer select-none" 
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
-      style={{ touchAction: 'none' }}
-    >
-      <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
-        <span className="text-2xl pointer-events-none">{emoji}</span>
+    <>
+      <div 
+        ref={elementRef}
+        className="flex items-center gap-2 cursor-grab select-none active:cursor-grabbing" 
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        style={{ touchAction: 'none' }}
+      >
+        <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+          <span className="text-2xl pointer-events-none">{emoji}</span>
+        </div>
+        <span className="text-white text-base font-arial flex-1 pointer-events-none">{label}</span>
       </div>
-      <span className="text-white text-base font-arial flex-1 pointer-events-none">{label}</span>
-    </div>
+      
+      {/* Dragging preview */}
+      {isDragging && (
+        <div
+          className="fixed w-12 h-12 bg-black rounded-full flex items-center justify-center z-50 pointer-events-none"
+          style={{
+            transform: `translate(${position.x}px, ${position.y}px)`,
+            opacity: 0.8
+          }}
+        >
+          <span className="text-2xl">{emoji}</span>
+        </div>
+      )}
+    </>
   );
 };
 
