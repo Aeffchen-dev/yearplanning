@@ -136,6 +136,7 @@ interface TextAreaProps {
   className?: string;
   rows?: number;
   fillHeight?: boolean;
+  minHeight?: string;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -145,9 +146,10 @@ const TextArea: React.FC<TextAreaProps> = ({
   className = "",
   rows = 4,
   fillHeight = false,
+  minHeight = "min-h-[120px]",
 }) => {
   return (
-    <div className={`bg-[#FFE299] p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
+    <div className={`bg-[#FFE299] p-4 ${fillHeight ? `flex-1 flex flex-col ${minHeight}` : 'flex-1'} ${className}`}>
       <textarea
         placeholder={placeholder}
         value={value}
@@ -685,6 +687,7 @@ const slides = (
             value={textareaValues['slide3-proud'] || ''}
             onChange={(value) => updateTextareaValue('slide3-proud', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -696,6 +699,7 @@ const slides = (
             value={textareaValues['slide3-grateful'] || ''}
             onChange={(value) => updateTextareaValue('slide3-grateful', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -707,6 +711,7 @@ const slides = (
             value={textareaValues['slide3-improve'] || ''}
             onChange={(value) => updateTextareaValue('slide3-improve', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
       </div>
@@ -852,6 +857,7 @@ const slides = (
             value={textareaValues['slide9-initiate'] || ''}
             onChange={(value) => updateTextareaValue('slide9-initiate', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -863,6 +869,7 @@ const slides = (
             value={textareaValues['slide9-stop'] || ''}
             onChange={(value) => updateTextareaValue('slide9-stop', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -874,6 +881,7 @@ const slides = (
             value={textareaValues['slide9-continue'] || ''}
             onChange={(value) => updateTextareaValue('slide9-continue', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
       </div>
@@ -894,6 +902,7 @@ const slides = (
             value={textareaValues['slide10-achieve'] || ''}
             onChange={(value) => updateTextareaValue('slide10-achieve', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -905,6 +914,7 @@ const slides = (
             value={textareaValues['slide10-carry'] || ''}
             onChange={(value) => updateTextareaValue('slide10-carry', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -916,6 +926,7 @@ const slides = (
             value={textareaValues['slide10-projects'] || ''}
             onChange={(value) => updateTextareaValue('slide10-projects', value)}
             fillHeight={true}
+            minHeight="min-h-[120px]"
           />
         </div>
       </div>
@@ -1199,6 +1210,7 @@ export default function YearPlannerGenerator() {
                 value={textareaValues[`slide${i}-goal`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-goal`, value)}
                 fillHeight={true}
+                minHeight="min-h-[100px]"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -1217,6 +1229,7 @@ export default function YearPlannerGenerator() {
                 value={textareaValues[`slide${i}-measure`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-measure`, value)}
                 fillHeight={true}
+                minHeight="min-h-[140px]"
               />
             </div>
             <div className="flex-1 flex flex-col">
@@ -1228,6 +1241,7 @@ export default function YearPlannerGenerator() {
                 value={textareaValues[`slide${i}-steps`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-steps`, value)}
                 fillHeight={true}
+                minHeight="min-h-[140px]"
               />
             </div>
           </div>
