@@ -51,6 +51,18 @@ const StarRating: React.FC<StarRatingProps> = ({
     }
   };
 
+  const handleTouchStart = (starIndex: number) => {
+    if (!readonly) {
+      setHoverRating(starIndex);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!readonly) {
+      setHoverRating(0);
+    }
+  };
+
   const getStarFill = (starIndex: number) => {
     const currentRating = hoverRating > 0 ? hoverRating : rating;
     
@@ -77,10 +89,12 @@ const StarRating: React.FC<StarRatingProps> = ({
             key={starIndex}
             type="button"
             className={`${starColor === 'black' ? 'w-6 h-6' : 'w-8 h-8 md:w-10 md:h-10'} cursor-pointer transition-colors duration-200`}
-            style={{ color: starColor }}
+            style={{ color: starColor, touchAction: 'manipulation' }}
             onClick={() => handleClick(starIndex)}
             onMouseEnter={() => handleMouseEnter(starIndex)}
             onMouseLeave={handleMouseLeave}
+            onTouchStart={() => handleTouchStart(starIndex)}
+            onTouchEnd={handleTouchEnd}
             disabled={readonly}
           >
             <svg viewBox="0 0 24 24" className="w-full h-full">
