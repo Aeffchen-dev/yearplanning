@@ -106,7 +106,7 @@
 @layer utilities {
   .font-kokoro {
     font-family: "Kokoro", "Times New Roman", serif;
-    font-weight: 700;
+    font-weight: 400;
   }
 
   .font-arial {
