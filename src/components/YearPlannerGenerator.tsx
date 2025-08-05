@@ -677,7 +677,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
             Worauf seid ihr stolz?
           </div>
           <TextArea 
@@ -688,7 +688,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
             Wofür seid ihr dankbar?
           </div>
           <TextArea 
@@ -699,7 +699,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
             Was wollt ihr nächstes Jahr besser machen?
           </div>
           <TextArea 
@@ -844,7 +844,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
             Was wollen wir neu initiieren?
           </div>
           <TextArea 
@@ -855,7 +855,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
             Womit wollen wir aufhören, weil es uns nicht gut tut?
           </div>
           <TextArea 
@@ -866,7 +866,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
             Was wollt ihr weiter machen?
           </div>
           <TextArea 
@@ -886,7 +886,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
             Was wollen wir bis Jahresende geschafft haben?
           </div>
           <TextArea 
@@ -897,7 +897,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[48px] flex items-end">
             Welches Ziel nehmen wir aus dem letzten Jahr mit?
           </div>
           <TextArea 
@@ -908,7 +908,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-white text-base mb-4 font-arial">
+          <div className="text-white text-base mb-4 font-arial min-h-[24px] flex items-end">
             Welche Projekte nehmen wir uns vor?
           </div>
           <TextArea 
@@ -1193,7 +1193,7 @@ export default function YearPlannerGenerator() {
         content: (
           <div className="space-y-6 flex-1 flex flex-col">
             <div>
-              <div className="text-white text-base mb-2 font-arial">Ziel</div>
+              <div className="text-white text-base mb-2 font-arial min-h-[24px] flex items-end">Ziel</div>
               <TextArea 
                 placeholder="Ziel beschreiben" 
                 value={textareaValues[`slide${i}-goal`] || ''}
@@ -1209,7 +1209,7 @@ export default function YearPlannerGenerator() {
               />
             </div>
             <div className="flex-1 flex flex-col">
-              <div className="text-white text-base mb-2 font-arial">
+              <div className="text-white text-base mb-2 font-arial min-h-[48px] flex items-end">
                 Wie messen wir den Erfolg?
               </div>
               <TextArea 
@@ -1220,7 +1220,7 @@ export default function YearPlannerGenerator() {
               />
             </div>
             <div className="flex-1 flex flex-col">
-              <div className="text-white text-base mb-2 font-arial">
+              <div className="text-white text-base mb-2 font-arial min-h-[48px] flex items-end">
                 Wie gehen wir es Schritt für Schritt an?
               </div>
               <TextArea 
