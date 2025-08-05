@@ -109,7 +109,7 @@
     font-family: "Kokoro";
     src: url("/fonts/kokoro-bolditalic-webfont.woff2") format("woff2");
     font-weight: bold;
-    font-style: italic;
+    font-style: normal;
     font-display: swap;
   }
 
