@@ -472,7 +472,6 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       clearTimeout(longPressTimer);
       setLongPressTimer(null);
     }
-    setShowDeleteTooltip(false);
   };
 
   const handleDelete = () => {
@@ -483,6 +482,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Toggle tooltip if it's showing, otherwise start long press
+    if (showDeleteTooltip) {
+      setShowDeleteTooltip(false);
+      return;
+    }
+    
     startLongPress();
     setIsDragging(true);
     setDragStart({
@@ -494,6 +499,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // Toggle tooltip if it's showing, otherwise start long press
+    if (showDeleteTooltip) {
+      setShowDeleteTooltip(false);
+      return;
+    }
+    
     startLongPress();
     setIsDragging(true);
     const touch = e.touches[0];
@@ -508,7 +519,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Cancel long press if user starts dragging
+    // Cancel long press if user starts dragging (but keep tooltip if showing)
     cancelLongPress();
     
     // Get the card container bounds
@@ -532,7 +543,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isDragging) return;
     
-    // Cancel long press if user starts dragging
+    // Cancel long press if user starts dragging (but keep tooltip if showing)
     cancelLongPress();
     
     // Get the card container bounds
@@ -592,14 +603,14 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       
       {/* Delete tooltip */}
       {showDeleteTooltip && (
-        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30">
+        <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30">
           <button 
             onClick={handleDelete}
-            className="hover:text-gray-200"
+            className="hover:text-gray-300"
           >
             Delete {label}
           </button>
-          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-red-600"></div>
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black"></div>
         </div>
       )}
     </div>
