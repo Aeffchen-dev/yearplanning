@@ -452,6 +452,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
+  const [showDeleteTooltip, setShowDeleteTooltip] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const startLongPress = () => {
@@ -460,7 +461,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
         if (navigator.vibrate) {
           navigator.vibrate(50); // Haptic feedback
         }
-        showDeleteMenu();
+        setShowDeleteTooltip(true);
       }, 500); // 500ms long press
       setLongPressTimer(timer);
     }
@@ -471,12 +472,14 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       clearTimeout(longPressTimer);
       setLongPressTimer(null);
     }
+    setShowDeleteTooltip(false);
   };
 
-  const showDeleteMenu = () => {
-    if (onDelete && confirm(`Delete ${label} emoji?`)) {
+  const handleDelete = () => {
+    if (onDelete) {
       onDelete(id);
     }
+    setShowDeleteTooltip(false);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -586,6 +589,19 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       title={label}
     >
       <span className="text-2xl pointer-events-none">{emoji}</span>
+      
+      {/* Delete tooltip */}
+      {showDeleteTooltip && (
+        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30">
+          <button 
+            onClick={handleDelete}
+            className="hover:text-gray-200"
+          >
+            Delete {label}
+          </button>
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-red-600"></div>
+        </div>
+      )}
     </div>
   );
 };
