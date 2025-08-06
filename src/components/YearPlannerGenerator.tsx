@@ -586,8 +586,20 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
     updateDraggedEmojis(newEmojis);
   };
 
+  const handleReset = () => {
+    updateDraggedEmojis([]);
+  };
+
   return (
-    <div className="flex flex-col h-full gap-8">
+    <div className="flex flex-col h-full gap-8 relative">
+      {/* Reset button in top right corner */}
+      <button
+        onClick={handleReset}
+        className="absolute top-0 right-0 text-white text-sm font-arial underline hover:text-gray-300 transition-colors z-10"
+      >
+        Zurücksetzen
+      </button>
+      
       <div className="flex-1 flex items-center justify-center min-h-0 relative">
         <div className="w-full h-full flex items-center justify-center">
           <img 
