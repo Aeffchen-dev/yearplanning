@@ -1046,7 +1046,7 @@ const slides = (
         </div>
         <div className="flex-1 flex items-center justify-center min-h-0 mb-4">
           <img 
-            src="/images/goals-planning-graph.png" 
+            src="/lovable-uploads/20b3daee-a65a-46df-9f4e-7fb1cd871631.png" 
             alt="Goals planning graph" 
             className="max-w-full max-h-full w-auto h-auto object-contain"
           />
