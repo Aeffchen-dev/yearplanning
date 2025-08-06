@@ -1051,7 +1051,10 @@ const slides = (
             className="max-w-full max-h-full w-auto h-auto object-contain"
           />
         </div>
-        <button className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0">
+        <button 
+          onClick={() => window.open('/Vorlage.pdf', '_blank')}
+          className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0"
+        >
           Vorlage herunterladen
         </button>
       </div>
