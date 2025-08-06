@@ -442,17 +442,45 @@ interface DraggableFloatingEmojiProps {
   initialX: number;
   initialY: number;
   onDrag: (id: string, x: number, y: number) => void;
+  onDelete?: (id: string) => void;
 }
 
 const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({ 
-  id, emoji, label, initialX, initialY, onDrag 
+  id, emoji, label, initialX, initialY, onDrag, onDelete 
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const startLongPress = () => {
+    if (onDelete) {
+      const timer = setTimeout(() => {
+        if (navigator.vibrate) {
+          navigator.vibrate(50); // Haptic feedback
+        }
+        showDeleteMenu();
+      }, 500); // 500ms long press
+      setLongPressTimer(timer);
+    }
+  };
+
+  const cancelLongPress = () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+  };
+
+  const showDeleteMenu = () => {
+    if (onDelete && confirm(`Delete ${label} emoji?`)) {
+      onDelete(id);
+    }
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
+    startLongPress();
     setIsDragging(true);
     setDragStart({
       x: e.clientX - position.x,
@@ -463,6 +491,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    startLongPress();
     setIsDragging(true);
     const touch = e.touches[0];
     setDragStart({
@@ -475,6 +504,9 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
+    
+    // Cancel long press if user starts dragging
+    cancelLongPress();
     
     // Get the card container bounds
     const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
@@ -497,6 +529,9 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isDragging) return;
     
+    // Cancel long press if user starts dragging
+    cancelLongPress();
+    
     // Get the card container bounds
     const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
     if (!cardElement) return;
@@ -517,6 +552,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   }, [isDragging, dragStart, id, onDrag]);
 
   const handleMouseUp = useCallback(() => {
+    cancelLongPress();
     setIsDragging(false);
   }, []);
 
@@ -586,6 +622,11 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
     updateDraggedEmojis(newEmojis);
   };
 
+  const handleDeleteEmoji = (id: string) => {
+    const newEmojis = draggedEmojis.filter(emoji => emoji.id !== id);
+    updateDraggedEmojis(newEmojis);
+  };
+
   const handleReset = () => {
     updateDraggedEmojis([]);
   };
@@ -618,6 +659,7 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
             initialX={emoji.x}
             initialY={emoji.y}
             onDrag={handleEmojiDrag}
+            onDelete={handleDeleteEmoji}
           />
         ))}
       </div>
