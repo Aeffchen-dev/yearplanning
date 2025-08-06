@@ -603,10 +603,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       
       {/* Delete tooltip */}
       {showDeleteTooltip && (
-        <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30">
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30">
           <button 
             onClick={handleDelete}
             className="hover:text-gray-300"
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
           >
             Delete {label}
           </button>
