@@ -610,7 +610,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
           >
-            Delete {label}
+            Entfernen
           </button>
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black"></div>
         </div>
