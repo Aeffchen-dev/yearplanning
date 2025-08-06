@@ -633,10 +633,10 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
 
   return (
     <div className="flex flex-col h-full gap-8 relative">
-      {/* Reset button at top right */}
+      {/* Reset button at the very top of card container */}
       <button
         onClick={handleReset}
-        className="absolute top-0 right-0 text-white text-xs font-arial z-10"
+        className="absolute -top-8 right-0 text-white text-xs font-arial z-10"
       >
         Zurücksetzen
       </button>
