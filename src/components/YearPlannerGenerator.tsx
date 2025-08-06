@@ -665,7 +665,7 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
       {/* Reset button at the very top of card container */}
       <button
         onClick={handleReset}
-        className="absolute top-[-38px] md:-top-10 right-0 text-white text-xs font-arial z-10"
+        className="absolute top-[-37px] md:-top-10 right-0 text-white text-xs font-arial z-10"
       >
         Zurücksetzen
       </button>
