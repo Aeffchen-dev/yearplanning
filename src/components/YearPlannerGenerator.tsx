@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { setItemWithExpiry, getItemWithExpiry, clearExpiredItems } from '@/utils/localStorage';
 
 interface StarRatingProps {
   value?: number;
@@ -1192,14 +1193,15 @@ const Slide: React.FC<SlideProps> = ({
 );
 
 export default function YearPlannerGenerator() {
+  // Clear expired data on component mount
+  useEffect(() => {
+    clearExpiredItems();
+  }, []);
+
   const [currentSlide, setCurrentSlide] = useState(() => {
     if (typeof window === 'undefined') return 0;
-    try {
-      const saved = localStorage.getItem('yearPlanner-currentSlide');
-      return saved ? parseInt(saved, 10) : 0;
-    } catch {
-      return 0;
-    }
+    const saved = getItemWithExpiry('yearPlanner-currentSlide');
+    return saved ? parseInt(saved, 10) : 0;
   });
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -1209,64 +1211,44 @@ export default function YearPlannerGenerator() {
   // State for all textarea values with localStorage persistence
   const [textareaValues, setTextareaValues] = useState<{[key: string]: string}>(() => {
     if (typeof window === 'undefined') return {};
-    try {
-      const saved = localStorage.getItem('yearPlanner-textareas');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
+    const saved = getItemWithExpiry('yearPlanner-textareas');
+    return saved || {};
   });
 
   // State for star ratings with localStorage persistence
   const [starRatings, setStarRatings] = useState<{[key: string]: number}>(() => {
     if (typeof window === 'undefined') return {};
-    try {
-      const saved = localStorage.getItem('yearPlanner-starRatings');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
+    const saved = getItemWithExpiry('yearPlanner-starRatings');
+    return saved || {};
   });
 
   // State for dragged emojis with localStorage persistence
   const [draggedEmojis, setDraggedEmojis] = useState<Array<{id: string, emoji: string, label: string, x: number, y: number}>>(() => {
     if (typeof window === 'undefined') return [];
-    try {
-      const saved = localStorage.getItem('yearPlanner-draggedEmojis');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+    const saved = getItemWithExpiry('yearPlanner-draggedEmojis');
+    return saved || [];
   });
 
   const updateTextareaValue = (key: string, value: string) => {
     const newValues = { ...textareaValues, [key]: value };
     setTextareaValues(newValues);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('yearPlanner-textareas', JSON.stringify(newValues));
-    }
+    setItemWithExpiry('yearPlanner-textareas', newValues);
   };
 
   const updateStarRating = (key: string, value: number) => {
     const newRatings = { ...starRatings, [key]: value };
     setStarRatings(newRatings);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('yearPlanner-starRatings', JSON.stringify(newRatings));
-    }
+    setItemWithExpiry('yearPlanner-starRatings', newRatings);
   };
 
   const updateCurrentSlide = (slideIndex: number) => {
     setCurrentSlide(slideIndex);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('yearPlanner-currentSlide', slideIndex.toString());
-    }
+    setItemWithExpiry('yearPlanner-currentSlide', slideIndex.toString());
   };
 
   const updateDraggedEmojis = (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => {
     setDraggedEmojis(emojis);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('yearPlanner-draggedEmojis', JSON.stringify(emojis));
-    }
+    setItemWithExpiry('yearPlanner-draggedEmojis', emojis);
   };
 
   // Create slides array with state integration
