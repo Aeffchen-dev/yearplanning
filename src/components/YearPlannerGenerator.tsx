@@ -157,8 +157,8 @@ const TextArea: React.FC<TextAreaProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent ${value ? 'text-black' : placeholderColor} placeholder-${placeholderColor.replace('text-', '')} resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
-        style={value ? { color: 'hsl(var(--' + bgColor.replace('bg-', '').replace('-200', '-900') + '))' } : {}}
+        className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
+        style={value ? { color: 'hsl(var(--' + bgColor.replace('bg-', '').replace('-500', '-900') + '))' } : { color: 'hsl(var(--' + placeholderColor.replace('text-', '') + ') / 0.8)' }}
         rows={fillHeight ? undefined : rows}
       />
     </div>
@@ -424,7 +424,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`w-full flex-1 bg-transparent ${focusValue ? '' : 'text-new-year-700'} placeholder-new-year-700 resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+                style={focusValue ? { color: "hsl(var(--new-year-900))" } : { color: "hsl(var(--new-year-900) / 0.8)" }}
+                className="w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]"
               />
             </div>
             <div className="px-4 pb-1 flex justify-end flex-shrink-0">
@@ -730,15 +731,15 @@ interface SlideData {
 const getPostitColor = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "bg-past-year-300";
+      return "bg-past-year-500";
     case "02":
-      return "bg-health-check-300";
+      return "bg-health-check-500";
     case "03":
-      return "bg-new-year-300";
+      return "bg-new-year-500";
     case "04":
-      return "bg-plan-terminate-300";
+      return "bg-plan-terminate-500";
     case "24":
-      return "bg-last-slide-300";
+      return "bg-last-slide-500";
     default:
       return "bg-[#FFE299]";
   }
@@ -1161,50 +1162,55 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-past-year-400",
           text: "text-past-year-900",
           border: "border-past-year-900",
-          postit: "bg-past-year-400",
+          postit: "bg-past-year-500",
           star: "past-year-900",
-          pageBg: "past-year-600",
-          scrollbar: "past-year-600"
+          pageBg: "past-year-500",
+          scrollbar: "past-year-600",
+          textColor: "text-past-year-900"
         };
       case "02":
         return {
           bg: "bg-health-check-400",
           text: "text-health-check-900",
           border: "border-health-check-900",
-          postit: "bg-health-check-400",
+          postit: "bg-health-check-500",
           star: "health-check-900",
-          pageBg: "health-check-600",
-          scrollbar: "health-check-600"
+          pageBg: "health-check-500",
+          scrollbar: "health-check-600",
+          textColor: "text-health-check-900"
         };
       case "03":
         return {
           bg: "bg-new-year-400",
           text: "text-new-year-900",
           border: "border-new-year-900",
-          postit: "bg-new-year-400",
+          postit: "bg-new-year-500",
           star: "new-year-900",
-          pageBg: "new-year-600",
-          scrollbar: "new-year-600"
+          pageBg: "new-year-500",
+          scrollbar: "new-year-600",
+          textColor: "text-new-year-900"
         };
       case "04":
         return {
           bg: "bg-plan-terminate-400",
           text: "text-plan-terminate-900",
           border: "border-plan-terminate-900",
-          postit: "bg-plan-terminate-400",
+          postit: "bg-plan-terminate-500",
           star: "plan-terminate-900",
-          pageBg: "plan-terminate-600",
-          scrollbar: "plan-terminate-600"
+          pageBg: "plan-terminate-500",
+          scrollbar: "plan-terminate-600",
+          textColor: "text-plan-terminate-900"
         };
       case "Finally":
         return {
           bg: "bg-last-slide-400",
           text: "text-last-slide-900",
           border: "border-last-slide-900",
-          postit: "bg-last-slide-400",
+          postit: "bg-last-slide-500",
           star: "last-slide-900",
-          pageBg: "last-slide-600",
-          scrollbar: "last-slide-600"
+          pageBg: "last-slide-500",
+          scrollbar: "last-slide-600",
+          textColor: "text-last-slide-900"
         };
       default:
         return {
@@ -1214,7 +1220,8 @@ const Slide: React.FC<SlideProps> = ({
           postit: "bg-[#FFE299]",
           star: "white",
           pageBg: "black",
-          scrollbar: "gray-500"
+          scrollbar: "gray-500",
+          textColor: "text-white"
         };
     }
   };
@@ -1600,31 +1607,46 @@ export default function YearPlannerGenerator() {
     };
   }, []);
 
-  // Get current slide's background color
+  // Get current slide's background color and text color
   const getCurrentBg = () => {
     const currentSlideData = slidesArray[currentSlide];
     if (!currentSlideData) return "bg-black";
     
     const labelNumber = currentSlideData.label.number;
     switch (labelNumber) {
-      case "01": return "bg-past-year-600";
-      case "02": return "bg-health-check-600";
-      case "03": return "bg-new-year-600";
-      case "04": return "bg-plan-terminate-600";
-      case "Finally": return "bg-last-slide-600";
+      case "01": return "bg-past-year-500";
+      case "02": return "bg-health-check-500";
+      case "03": return "bg-new-year-500";
+      case "04": return "bg-plan-terminate-500";
+      case "Finally": return "bg-last-slide-500";
       default: return "bg-black";
     }
   };
 
+  const getCurrentTextColor = () => {
+    const currentSlideData = slidesArray[currentSlide];
+    if (!currentSlideData) return "text-white";
+    
+    const labelNumber = currentSlideData.label.number;
+    switch (labelNumber) {
+      case "01": return "text-past-year-900";
+      case "02": return "text-health-check-900";
+      case "03": return "text-new-year-900";
+      case "04": return "text-plan-terminate-900";
+      case "Finally": return "text-last-slide-900";
+      default: return "text-white";
+    }
+  };
+
   return (
-    <div className={`w-full h-dvh overflow-hidden relative transition-colors duration-700 ${getCurrentBg()}`} style={{ touchAction: 'pan-x', overscrollBehavior: 'none' }}>
+    <div className={`w-full h-dvh overflow-hidden relative ${getCurrentBg()}`} style={{ transition: 'background-color 300ms ease-out', touchAction: 'pan-x', overscrollBehavior: 'none' }}>
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-2 md:pt-4">
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
-          <h1 className="text-[24px] md:text-[28px] font-bold leading-[120%] font-kokoro text-white">
+          <h1 className={`text-[24px] md:text-[28px] font-bold leading-[120%] font-kokoro transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
             Year Planning
           </h1>
-          <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
+          <div className={`flex-1 text-right text-sm md:text-base font-arial transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
             {currentSlide + 1} / 24
           </div>
         </div>
@@ -1632,7 +1654,7 @@ export default function YearPlannerGenerator() {
 
       {/* Fixed Footer */}
       <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-4 pb-2 md:pb-4">
-        <div className="flex items-center gap-2 mt-2 md:mt-4 text-sm md:text-base font-arial text-white">
+        <div className={`flex items-center gap-2 mt-2 md:mt-4 text-sm md:text-base font-arial transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
           <a 
             href="https://relationshipbydesign.de/" 
             target="_blank" 
