@@ -48,49 +48,49 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Category 1: #A94225 card with #E78AD9 elements */
-    --past-year-100: 13 64% 95%;
-    --past-year-200: 13 64% 88%;
-    --past-year-300: 13 64% 75%;
-    --past-year-400: 309 68% 72%;
-    --past-year-500: 309 68% 72%;
-    --past-year-600: 309 68% 62%;
-    --past-year-700: 309 68% 52%;
-    --past-year-800: 13 64% 50%;
-    --past-year-900: 13 64% 40%;
+    /* Category 1: Orange card with pink elements */
+    --past-year-100: 15 100% 95%;
+    --past-year-200: 15 100% 88%;
+    --past-year-300: 15 100% 75%;
+    --past-year-400: 330 100% 80%;
+    --past-year-500: 330 100% 80%;
+    --past-year-600: 330 100% 70%;
+    --past-year-700: 330 100% 60%;
+    --past-year-800: 15 100% 60%;
+    --past-year-900: 15 100% 50%;
 
-    /* Category 2: #E78AD9 card with #A94225 elements */
-    --health-check-100: 309 68% 95%;
-    --health-check-200: 309 68% 88%;
-    --health-check-300: 309 68% 82%;
-    --health-check-400: 13 64% 40%;
-    --health-check-500: 13 64% 40%;
-    --health-check-600: 13 64% 35%;
-    --health-check-700: 13 64% 30%;
-    --health-check-800: 309 68% 62%;
-    --health-check-900: 309 68% 52%;
+    /* Category 2: Pink card with orange elements */
+    --health-check-100: 330 100% 95%;
+    --health-check-200: 330 100% 88%;
+    --health-check-300: 330 100% 85%;
+    --health-check-400: 15 100% 60%;
+    --health-check-500: 15 100% 60%;
+    --health-check-600: 15 100% 52%;
+    --health-check-700: 15 100% 45%;
+    --health-check-800: 330 100% 70%;
+    --health-check-900: 330 100% 60%;
 
-    /* Category 3: #E78AD9 card with #4B40D2 elements */
-    --new-year-100: 309 68% 95%;
-    --new-year-200: 309 68% 88%;
-    --new-year-300: 309 68% 82%;
-    --new-year-400: 245 61% 54%;
-    --new-year-500: 245 61% 54%;
-    --new-year-600: 245 61% 46%;
-    --new-year-700: 245 61% 38%;
-    --new-year-800: 309 68% 62%;
-    --new-year-900: 309 68% 52%;
+    /* Category 3: Pink card with blue elements */
+    --new-year-100: 330 100% 95%;
+    --new-year-200: 330 100% 88%;
+    --new-year-300: 330 100% 85%;
+    --new-year-400: 195 100% 50%;
+    --new-year-500: 195 100% 50%;
+    --new-year-600: 195 100% 42%;
+    --new-year-700: 195 100% 35%;
+    --new-year-800: 330 100% 70%;
+    --new-year-900: 330 100% 60%;
 
-    /* Category 4: #4B40D2 card with #E78AD9 elements */
-    --plan-terminate-100: 245 61% 95%;
-    --plan-terminate-200: 245 61% 85%;
-    --plan-terminate-300: 245 61% 72%;
-    --plan-terminate-400: 309 68% 72%;
-    --plan-terminate-500: 309 68% 72%;
-    --plan-terminate-600: 309 68% 62%;
-    --plan-terminate-700: 309 68% 52%;
-    --plan-terminate-800: 245 61% 54%;
-    --plan-terminate-900: 245 61% 44%;
+    /* Category 4: Blue card with pink elements */
+    --plan-terminate-100: 195 100% 95%;
+    --plan-terminate-200: 195 100% 85%;
+    --plan-terminate-300: 195 100% 70%;
+    --plan-terminate-400: 330 100% 80%;
+    --plan-terminate-500: 330 100% 80%;
+    --plan-terminate-600: 330 100% 70%;
+    --plan-terminate-700: 330 100% 60%;
+    --plan-terminate-800: 195 100% 50%;
+    --plan-terminate-900: 195 100% 40%;
 
     /* Last slide - Mint (#98F5E1) */
     --last-slide-100: 162 83% 97%;
