@@ -424,7 +424,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-new-year-700'} placeholder-new-year-700 resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+                className={`w-full flex-1 bg-transparent ${focusValue ? '' : 'text-new-year-500'} placeholder-new-year-500 resize-none border-none outline-none font-arial text-xs leading-[120%]`}
               />
             </div>
             <div className="px-4 pb-1 flex justify-end flex-shrink-0">
@@ -730,15 +730,15 @@ interface SlideData {
 const getPostitColor = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "bg-past-year-200";
+      return "bg-past-year-300";
     case "02":
-      return "bg-health-check-200";
+      return "bg-health-check-300";
     case "03":
-      return "bg-new-year-200";
+      return "bg-new-year-300";
     case "04":
-      return "bg-plan-terminate-200";
+      return "bg-plan-terminate-300";
     case "24":
-      return "bg-last-slide-200";
+      return "bg-last-slide-300";
     default:
       return "bg-[#FFE299]";
   }
@@ -1161,48 +1161,60 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-past-year-400",
           text: "text-past-year-900",
           border: "border-past-year-900",
-          postit: "bg-past-year-200",
-          star: "past-year-900"
+          postit: "bg-past-year-300",
+          star: "past-year-900",
+          pageBg: "bg-past-year-600",
+          scrollbar: "past-year-600"
         };
       case "02":
         return {
           bg: "bg-health-check-400",
           text: "text-health-check-900",
           border: "border-health-check-900",
-          postit: "bg-health-check-200",
-          star: "health-check-900"
+          postit: "bg-health-check-300",
+          star: "health-check-900",
+          pageBg: "bg-health-check-600",
+          scrollbar: "health-check-600"
         };
       case "03":
         return {
           bg: "bg-new-year-400",
           text: "text-new-year-900",
           border: "border-new-year-900",
-          postit: "bg-new-year-200",
-          star: "new-year-900"
+          postit: "bg-new-year-300",
+          star: "new-year-900",
+          pageBg: "bg-new-year-600",
+          scrollbar: "new-year-600"
         };
       case "04":
         return {
           bg: "bg-plan-terminate-400",
           text: "text-plan-terminate-900",
           border: "border-plan-terminate-900",
-          postit: "bg-plan-terminate-200",
-          star: "plan-terminate-900"
+          postit: "bg-plan-terminate-300",
+          star: "plan-terminate-900",
+          pageBg: "bg-plan-terminate-600",
+          scrollbar: "plan-terminate-600"
         };
       case "Finally":
         return {
           bg: "bg-last-slide-400",
           text: "text-last-slide-900",
           border: "border-last-slide-900",
-          postit: "bg-last-slide-200",
-          star: "last-slide-900"
+          postit: "bg-last-slide-300",
+          star: "last-slide-900",
+          pageBg: "bg-last-slide-600",
+          scrollbar: "last-slide-600"
         };
       default:
         return {
           bg: "bg-[#161616]",
           text: "text-white",
           border: "border-white",
-          postit: "bg-[#FFEB3B]",
-          star: "white"
+          postit: "bg-[#FFE299]",
+          star: "white",
+          pageBg: "bg-black",
+          scrollbar: "gray-500"
         };
     }
   };
@@ -1210,9 +1222,24 @@ const Slide: React.FC<SlideProps> = ({
   const colorTheme = getColorTheme();
 
   return (
-  <div className="w-full h-full flex items-center justify-center bg-black text-white select-none">
+  <div className={`w-full h-full flex items-center justify-center ${colorTheme.pageBg} text-white select-none transition-colors duration-700`}>
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
       <div className={`flex-1 ${colorTheme.bg} rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 relative ${colorTheme.text}`}>
+        <style>{`
+          .scrollbar-custom::-webkit-scrollbar {
+            width: 8px;
+          }
+          .scrollbar-custom::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: hsl(var(--${colorTheme.scrollbar}));
+            border-radius: 4px;
+          }
+          .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: hsl(var(--${colorTheme.scrollbar}) / 0.8);
+          }
+        `}</style>
         <button
           onClick={onPrevSlide}
           className="absolute left-0 top-0 w-8 h-full z-10 cursor-pointer"
@@ -1311,7 +1338,7 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
             
-            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">{slide.content}</div>
+            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-custom">{slide.content}</div>
           </>
         )}
       </div>
