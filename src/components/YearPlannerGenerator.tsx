@@ -153,12 +153,21 @@ const TextArea: React.FC<TextAreaProps> = ({
 }) => {
   return (
     <div className={`${bgColor} p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
+      <style>
+        {`
+          .textarea-${bgColor.replace('bg-', '')}::placeholder {
+            color: hsl(var(--${placeholderColor.replace('text-', '')} / 0.7));
+          }
+          .textarea-${bgColor.replace('bg-', '')} {
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}));
+          }
+        `}
+      </style>
       <textarea
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
-        style={value ? { color: 'hsl(var(--' + bgColor.replace('bg-', '').replace('-500', '-900') + '))' } : { color: 'hsl(var(--' + placeholderColor.replace('text-', '') + ') / 0.7)' }}
+        className={`textarea-${bgColor.replace('bg-', '')} w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
         rows={fillHeight ? undefined : rows}
       />
     </div>
@@ -420,12 +429,21 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
         return (
           <div key={i} className={`${getPostitColor("03")} flex flex-col flex-1 min-h-0`}>
             <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
+              <style>
+                {`
+                  .textarea-focus-${index}::placeholder {
+                    color: hsl(var(--new-year-900) / 0.7);
+                  }
+                  .textarea-focus-${index} {
+                    color: hsl(var(--new-year-900));
+                  }
+                `}
+              </style>
               <textarea
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                style={focusValue ? { color: "hsl(var(--new-year-900))" } : { color: "hsl(var(--new-year-900) / 0.7)" }}
-                className="w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]"
+                className={`textarea-focus-${index} w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]`}
               />
             </div>
             <div className="px-4 pb-1 flex justify-end flex-shrink-0">
