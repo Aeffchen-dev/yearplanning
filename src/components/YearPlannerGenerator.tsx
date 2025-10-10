@@ -779,7 +779,7 @@ const getStarColorHex = (labelNumber: string) => {
     case "01":
       return "#EB5200";
     case "02":
-      return "#EB5200";
+      return "#671F2A";
     case "03":
       return "#424790";
     case "04":
