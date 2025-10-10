@@ -48,7 +48,7 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* The past year - Card: #F1A8C6, Elements: #EB5200 */
+    /* The past year - Card: #F1A8C6, Elements: 15% darker */
     --past-year-100: 21 100% 97%;
     --past-year-200: 21 100% 93%;
     --past-year-300: 21 100% 85%;
@@ -56,10 +56,10 @@
     --past-year-500: 335 72% 88%;
     --past-year-600: 335 72% 82%;
     --past-year-700: 335 72% 75%;
-    --past-year-800: 21 100% 60%;
-    --past-year-900: 21 100% 46%;
+    --past-year-800: 335 72% 73%;
+    --past-year-900: 335 72% 73%;
 
-    /* Health Check - Card: #FFECEA, Elements: #671F2A */
+    /* Health Check - Card: #FFECEA, Elements: 15% darker */
     --health-check-100: 351 54% 95%;
     --health-check-200: 351 54% 85%;
     --health-check-300: 351 54% 70%;
@@ -67,10 +67,10 @@
     --health-check-500: 6 100% 96%;
     --health-check-600: 6 100% 94%;
     --health-check-700: 6 100% 92%;
-    --health-check-800: 351 54% 36%;
-    --health-check-900: 351 54% 26%;
+    --health-check-800: 6 100% 81%;
+    --health-check-900: 6 100% 81%;
 
-    /* The new year - Card: #C2CDFF, Elements: #424790 */
+    /* The new year - Card: #C2CDFF, Elements: 15% darker */
     --new-year-100: 236 37% 95%;
     --new-year-200: 236 37% 85%;
     --new-year-300: 236 37% 70%;
@@ -78,10 +78,10 @@
     --new-year-500: 229 100% 88%;
     --new-year-600: 229 100% 82%;
     --new-year-700: 229 100% 75%;
-    --new-year-800: 236 37% 50%;
-    --new-year-900: 236 37% 41%;
+    --new-year-800: 229 100% 73%;
+    --new-year-900: 229 100% 73%;
 
-    /* Plan and terminate - Card: #424790, Elements: #FFECEA */
+    /* Plan and terminate - Card: #424790, Elements: 15% darker */
     --plan-terminate-100: 6 100% 99%;
     --plan-terminate-200: 6 100% 97%;
     --plan-terminate-300: 6 100% 95%;
@@ -89,19 +89,19 @@
     --plan-terminate-500: 236 37% 41%;
     --plan-terminate-600: 236 37% 35%;
     --plan-terminate-700: 236 37% 30%;
-    --plan-terminate-800: 6 100% 94%;
-    --plan-terminate-900: 6 100% 96%;
+    --plan-terminate-800: 236 37% 26%;
+    --plan-terminate-900: 236 37% 26%;
 
-    /* Last slide - Mint (#98F5E1) */
+    /* Last slide - Mint (#98F5E1), Elements: 15% darker */
     --last-slide-100: 162 83% 97%;
     --last-slide-200: 162 83% 93%;
     --last-slide-300: 162 83% 82%;
     --last-slide-400: 162 83% 77%;
-    --last-slide-500: 162 83% 69%;
+    --last-slide-500: 162 83% 77%;
     --last-slide-600: 162 83% 61%;
     --last-slide-700: 162 83% 53%;
-    --last-slide-800: 162 83% 30%;
-    --last-slide-900: 162 83% 15%;
+    --last-slide-800: 162 83% 62%;
+    --last-slide-900: 162 83% 62%;
   }
 
   .dark {
