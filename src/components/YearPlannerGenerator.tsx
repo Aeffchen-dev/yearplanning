@@ -158,6 +158,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent ${value ? 'text-black' : placeholderColor} placeholder-${placeholderColor.replace('text-', '')} resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
+        style={value ? { color: 'hsl(var(--' + bgColor.replace('bg-', '').replace('-200', '-900') + '))' } : {}}
         rows={fillHeight ? undefined : rows}
       />
     </div>
@@ -729,13 +730,15 @@ interface SlideData {
 const getPostitColor = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "bg-past-year-500";
+      return "bg-past-year-200";
     case "02":
-      return "bg-health-check-500";
+      return "bg-health-check-200";
     case "03":
-      return "bg-new-year-500";
+      return "bg-new-year-200";
     case "04":
-      return "bg-plan-terminate-500";
+      return "bg-plan-terminate-200";
+    case "24":
+      return "bg-last-slide-200";
     default:
       return "bg-[#FFE299]";
   }
@@ -745,13 +748,15 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#8c2463"; // past-year-900 approximation
+      return "#681444"; // past-year-900 approximation
     case "02":
-      return "#5d2d8f"; // health-check-900 approximation
+      return "#3d1a5c"; // health-check-900 approximation
     case "03":
-      return "#1a5999"; // new-year-900 approximation
+      return "#0f3d66"; // new-year-900 approximation
     case "04":
-      return "#1a7b99"; // plan-terminate-900 approximation
+      return "#0f5266"; // plan-terminate-900 approximation
+    case "24":
+      return "#0f5d4d"; // last-slide-900 approximation
     default:
       return "white";
   }
@@ -773,7 +778,7 @@ const slides = (
       "Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.",
     content: (
       <div className="flex-1 flex flex-col justify-center">
-        <div className="text-center text-white text-xs font-arial">
+        <div className="text-center text-past-year-900 text-xs font-arial">
           Swipe um weiter zu navigieren
         </div>
       </div>
@@ -806,7 +811,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide3-proud', value)}
             fillHeight={true}
             bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-700"
+            placeholderColor="text-past-year-500"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -819,7 +824,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide3-grateful', value)}
             fillHeight={true}
             bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-700"
+            placeholderColor="text-past-year-500"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -832,7 +837,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide3-improve', value)}
             fillHeight={true}
             bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-700"
+            placeholderColor="text-past-year-500"
           />
         </div>
       </div>
@@ -961,7 +966,7 @@ const slides = (
           value={textareaValues['slide7-insights'] || ''}
           onChange={(value) => updateTextareaValue('slide7-insights', value)}
           bgColor={getPostitColor("02")}
-          placeholderColor="text-health-check-700"
+          placeholderColor="text-health-check-500"
         />
       </div>
     ),
@@ -989,7 +994,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide9-initiate', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-500"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1002,7 +1007,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide9-stop', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-500"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1015,7 +1020,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide9-continue', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-500"
           />
         </div>
       </div>
@@ -1037,7 +1042,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide10-achieve', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-500"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1050,7 +1055,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide10-carry', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-500"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1156,32 +1161,40 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-past-year-400",
           text: "text-past-year-900",
           border: "border-past-year-900",
-          postit: "bg-past-year-500",
-          star: "past-year-600"
+          postit: "bg-past-year-200",
+          star: "past-year-900"
         };
       case "02":
         return {
           bg: "bg-health-check-400",
           text: "text-health-check-900",
           border: "border-health-check-900",
-          postit: "bg-health-check-500",
-          star: "health-check-600"
+          postit: "bg-health-check-200",
+          star: "health-check-900"
         };
       case "03":
         return {
           bg: "bg-new-year-400",
           text: "text-new-year-900",
           border: "border-new-year-900",
-          postit: "bg-new-year-500",
-          star: "new-year-600"
+          postit: "bg-new-year-200",
+          star: "new-year-900"
         };
       case "04":
         return {
           bg: "bg-plan-terminate-400",
           text: "text-plan-terminate-900",
           border: "border-plan-terminate-900",
-          postit: "bg-plan-terminate-500",
-          star: "plan-terminate-600"
+          postit: "bg-plan-terminate-200",
+          star: "plan-terminate-900"
+        };
+      case "Finally":
+        return {
+          bg: "bg-last-slide-400",
+          text: "text-last-slide-900",
+          border: "border-last-slide-900",
+          postit: "bg-last-slide-200",
+          star: "last-slide-900"
         };
       default:
         return {

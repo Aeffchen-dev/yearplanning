@@ -114,6 +114,17 @@ export default {
 					700: 'hsl(var(--plan-terminate-700))',
 					800: 'hsl(var(--plan-terminate-800))',
 					900: 'hsl(var(--plan-terminate-900))',
+				},
+				'last-slide': {
+					100: 'hsl(var(--last-slide-100))',
+					200: 'hsl(var(--last-slide-200))',
+					300: 'hsl(var(--last-slide-300))',
+					400: 'hsl(var(--last-slide-400))',
+					500: 'hsl(var(--last-slide-500))',
+					600: 'hsl(var(--last-slide-600))',
+					700: 'hsl(var(--last-slide-700))',
+					800: 'hsl(var(--last-slide-800))',
+					900: 'hsl(var(--last-slide-900))',
 				}
 			},
 			borderRadius: {
