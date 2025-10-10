@@ -831,7 +831,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
             Worauf seid ihr stolz?
           </div>
           <TextArea 
@@ -844,7 +844,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
             Wofür seid ihr dankbar?
           </div>
           <TextArea 
@@ -857,7 +857,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
             Was wollt ihr nächstes Jahr besser machen?
           </div>
           <TextArea 
@@ -887,7 +887,7 @@ const slides = (
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Sexualität</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>Sexualität</div>
             <StarRating 
               value={starRatings['slide5-sexuality'] || 0}
               onChange={(value) => updateStarRating('slide5-sexuality', value)}
@@ -895,7 +895,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>
               Emotionale Verbundenheit
             </div>
             <StarRating 
@@ -905,7 +905,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Kommunikation</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>Kommunikation</div>
             <StarRating 
               value={starRatings['slide5-communication'] || 0}
               onChange={(value) => updateStarRating('slide5-communication', value)}
@@ -913,7 +913,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Vertrauen</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>Vertrauen</div>
             <StarRating 
               value={starRatings['slide5-trust'] || 0}
               onChange={(value) => updateStarRating('slide5-trust', value)}
@@ -935,7 +935,7 @@ const slides = (
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Gemeinsame Zeit</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>Gemeinsame Zeit</div>
             <StarRating 
               value={starRatings['slide6-time'] || 0}
               onChange={(value) => updateStarRating('slide6-time', value)}
@@ -943,7 +943,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>
               Zusammen gelacht
             </div>
             <StarRating 
@@ -953,7 +953,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>
               Konfliktbewältigung
             </div>
             <StarRating 
@@ -963,7 +963,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>
               Freiheit, Unabhängigkeit
             </div>
             <StarRating 
@@ -985,7 +985,7 @@ const slides = (
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col">
-        <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+        <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--health-check-900))' }}>
           Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder
           fürs kommende Jahr aus.
         </div>
@@ -1014,7 +1014,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900))' }}>
             Was wollen wir neu initiieren?
           </div>
           <TextArea 
@@ -1027,7 +1027,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900))' }}>
             Womit wollen wir aufhören, weil es uns nicht gut tut?
           </div>
           <TextArea 
@@ -1040,7 +1040,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900))' }}>
             Was wollt ihr weiter machen?
           </div>
           <TextArea 
@@ -1062,7 +1062,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900))' }}>
             Was wollen wir bis Jahresende geschafft haben?
           </div>
           <TextArea 
@@ -1075,7 +1075,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900))' }}>
             Welches Ziel nehmen wir aus dem letzten Jahr mit?
           </div>
           <TextArea 
@@ -1088,7 +1088,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900))' }}>
             Welche Projekte nehmen wir uns vor?
           </div>
           <TextArea 
@@ -1194,7 +1194,7 @@ const Slide: React.FC<SlideProps> = ({
           star: "past-year-900",
           pageBg: "past-year-900",
           scrollbar: "past-year-600",
-          textColor: "text-past-year-900"
+          textColor: "text-past-year-400"
         };
       case "02":
         return {
@@ -1205,7 +1205,7 @@ const Slide: React.FC<SlideProps> = ({
           star: "health-check-900",
           pageBg: "health-check-900",
           scrollbar: "health-check-600",
-          textColor: "text-health-check-900"
+          textColor: "text-health-check-400"
         };
       case "03":
         return {
@@ -1216,7 +1216,7 @@ const Slide: React.FC<SlideProps> = ({
           star: "new-year-900",
           pageBg: "new-year-900",
           scrollbar: "new-year-600",
-          textColor: "text-new-year-900"
+          textColor: "text-new-year-400"
         };
       case "04":
         return {
@@ -1227,7 +1227,7 @@ const Slide: React.FC<SlideProps> = ({
           star: "plan-terminate-900",
           pageBg: "plan-terminate-900",
           scrollbar: "plan-terminate-600",
-          textColor: "text-plan-terminate-900"
+          textColor: "text-plan-terminate-400"
         };
       case "Finally":
         return {
