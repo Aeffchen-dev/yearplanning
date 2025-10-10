@@ -48,49 +48,49 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Category 1: Orange card with rosa elements */
-    --past-year-100: 335 85% 97%;
-    --past-year-200: 335 85% 93%;
-    --past-year-300: 335 85% 85%;
-    --past-year-400: 21 100% 85%;
-    --past-year-500: 21 100% 85%;
-    --past-year-600: 21 100% 75%;
-    --past-year-700: 21 100% 65%;
-    --past-year-800: 335 85% 70%;
-    --past-year-900: 335 85% 55%;
+    /* Category 1: Orange card with rosa elements - from screenshot */
+    --past-year-100: 315 75% 95%;
+    --past-year-200: 315 75% 90%;
+    --past-year-300: 315 75% 85%;
+    --past-year-400: 25 90% 68%;
+    --past-year-500: 25 90% 68%;
+    --past-year-600: 25 90% 60%;
+    --past-year-700: 25 90% 52%;
+    --past-year-800: 315 75% 78%;
+    --past-year-900: 315 75% 68%;
 
-    /* Category 2: Rosa card with orange elements */
-    --health-check-100: 21 100% 97%;
-    --health-check-200: 21 100% 93%;
-    --health-check-300: 21 100% 85%;
-    --health-check-400: 335 85% 85%;
-    --health-check-500: 335 85% 85%;
-    --health-check-600: 335 85% 75%;
-    --health-check-700: 335 85% 65%;
-    --health-check-800: 21 100% 65%;
-    --health-check-900: 21 100% 50%;
+    /* Category 2: Rosa card with orange elements - from screenshot */
+    --health-check-100: 25 90% 95%;
+    --health-check-200: 25 90% 88%;
+    --health-check-300: 25 90% 80%;
+    --health-check-400: 315 75% 78%;
+    --health-check-500: 315 75% 78%;
+    --health-check-600: 315 75% 70%;
+    --health-check-700: 315 75% 62%;
+    --health-check-800: 25 90% 60%;
+    --health-check-900: 25 90% 52%;
 
-    /* Category 3: Rosa card with purple elements */
-    --new-year-100: 236 45% 97%;
-    --new-year-200: 236 45% 90%;
-    --new-year-300: 236 45% 75%;
-    --new-year-400: 335 85% 85%;
-    --new-year-500: 335 85% 85%;
-    --new-year-600: 335 85% 75%;
-    --new-year-700: 335 85% 65%;
-    --new-year-800: 236 45% 55%;
-    --new-year-900: 236 45% 40%;
+    /* Category 3: Rosa card with purple elements - from screenshot */
+    --new-year-100: 240 75% 95%;
+    --new-year-200: 240 75% 85%;
+    --new-year-300: 240 75% 70%;
+    --new-year-400: 315 75% 78%;
+    --new-year-500: 315 75% 78%;
+    --new-year-600: 315 75% 70%;
+    --new-year-700: 315 75% 62%;
+    --new-year-800: 240 75% 55%;
+    --new-year-900: 240 75% 45%;
 
-    /* Category 4: Purple card with rosa elements */
-    --plan-terminate-100: 335 85% 97%;
-    --plan-terminate-200: 335 85% 93%;
-    --plan-terminate-300: 335 85% 85%;
-    --plan-terminate-400: 236 45% 45%;
-    --plan-terminate-500: 236 45% 45%;
-    --plan-terminate-600: 236 45% 38%;
-    --plan-terminate-700: 236 45% 32%;
-    --plan-terminate-800: 335 85% 75%;
-    --plan-terminate-900: 335 85% 65%;
+    /* Category 4: Purple card with rosa elements - from screenshot */
+    --plan-terminate-100: 315 75% 95%;
+    --plan-terminate-200: 315 75% 90%;
+    --plan-terminate-300: 315 75% 85%;
+    --plan-terminate-400: 240 75% 55%;
+    --plan-terminate-500: 240 75% 55%;
+    --plan-terminate-600: 240 75% 48%;
+    --plan-terminate-700: 240 75% 42%;
+    --plan-terminate-800: 315 75% 78%;
+    --plan-terminate-900: 315 75% 68%;
 
     /* Last slide - Mint (#98F5E1) */
     --last-slide-100: 162 83% 97%;
