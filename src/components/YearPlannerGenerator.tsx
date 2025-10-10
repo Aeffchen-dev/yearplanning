@@ -777,7 +777,7 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#F1A8C6";
+      return "#EB5200";
     case "02":
       return "#EB5200";
     case "03":
