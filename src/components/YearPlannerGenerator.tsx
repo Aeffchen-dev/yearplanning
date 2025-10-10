@@ -160,11 +160,11 @@ const TextArea: React.FC<TextAreaProps> = ({
           .textarea-${bgColor.replace('bg-', '')}::-moz-placeholder,
           .textarea-${bgColor.replace('bg-', '')}:-ms-input-placeholder,
           .textarea-${bgColor.replace('bg-', '')}::-ms-input-placeholder {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-200', '-900')}) / 0.7) !important;
-            opacity: 1;
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-150', '-900')}) / 0.7) !important;
+            opacity: 1 !important;
           }
           .textarea-${bgColor.replace('bg-', '')} {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-200', '-900')}));
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-150', '-900')})) !important;
           }
         `}
       </style>
@@ -759,15 +759,15 @@ interface SlideData {
 const getPostitColor = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "bg-past-year-200";
+      return "bg-past-year-150";
     case "02":
-      return "bg-health-check-200";
+      return "bg-health-check-150";
     case "03":
-      return "bg-new-year-200";
+      return "bg-new-year-150";
     case "04":
-      return "bg-plan-terminate-200";
+      return "bg-plan-terminate-150";
     case "24":
-      return "bg-last-slide-200";
+      return "bg-last-slide-150";
     default:
       return "bg-[#FFE299]";
   }
@@ -1190,7 +1190,7 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-past-year-400",
           text: "text-past-year-900",
           border: "border-past-year-900",
-          postit: "bg-past-year-200",
+          postit: "bg-past-year-150",
           star: "past-year-900",
           pageBg: "past-year-400",
           scrollbar: "past-year-600",
@@ -1201,7 +1201,7 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-health-check-400",
           text: "text-health-check-900",
           border: "border-health-check-900",
-          postit: "bg-health-check-200",
+          postit: "bg-health-check-150",
           star: "health-check-900",
           pageBg: "health-check-400",
           scrollbar: "health-check-600",
@@ -1212,7 +1212,7 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-new-year-400",
           text: "text-new-year-900",
           border: "border-new-year-900",
-          postit: "bg-new-year-200",
+          postit: "bg-new-year-150",
           star: "new-year-900",
           pageBg: "new-year-400",
           scrollbar: "new-year-600",
@@ -1223,7 +1223,7 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-plan-terminate-400",
           text: "text-plan-terminate-900",
           border: "border-plan-terminate-900",
-          postit: "bg-plan-terminate-200",
+          postit: "bg-plan-terminate-150",
           star: "plan-terminate-900",
           pageBg: "plan-terminate-400",
           scrollbar: "plan-terminate-600",
@@ -1234,7 +1234,7 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-last-slide-400",
           text: "text-last-slide-900",
           border: "border-last-slide-900",
-          postit: "bg-last-slide-200",
+          postit: "bg-last-slide-150",
           star: "last-slide-900",
           pageBg: "last-slide-400",
           scrollbar: "last-slide-600",

@@ -73,6 +73,7 @@ export default {
 				},
 				'past-year': {
 					100: 'hsl(var(--past-year-100))',
+					150: 'hsl(var(--past-year-150))',
 					200: 'hsl(var(--past-year-200))',
 					300: 'hsl(var(--past-year-300))',
 					400: 'hsl(var(--past-year-400))',
@@ -84,6 +85,7 @@ export default {
 				},
 				'health-check': {
 					100: 'hsl(var(--health-check-100))',
+					150: 'hsl(var(--health-check-150))',
 					200: 'hsl(var(--health-check-200))',
 					300: 'hsl(var(--health-check-300))',
 					400: 'hsl(var(--health-check-400))',
@@ -95,6 +97,7 @@ export default {
 				},
 				'new-year': {
 					100: 'hsl(var(--new-year-100))',
+					150: 'hsl(var(--new-year-150))',
 					200: 'hsl(var(--new-year-200))',
 					300: 'hsl(var(--new-year-300))',
 					400: 'hsl(var(--new-year-400))',
@@ -106,6 +109,7 @@ export default {
 				},
 				'plan-terminate': {
 					100: 'hsl(var(--plan-terminate-100))',
+					150: 'hsl(var(--plan-terminate-150))',
 					200: 'hsl(var(--plan-terminate-200))',
 					300: 'hsl(var(--plan-terminate-300))',
 					400: 'hsl(var(--plan-terminate-400))',
@@ -117,6 +121,7 @@ export default {
 				},
 				'last-slide': {
 					100: 'hsl(var(--last-slide-100))',
+					150: 'hsl(var(--last-slide-150))',
 					200: 'hsl(var(--last-slide-200))',
 					300: 'hsl(var(--last-slide-300))',
 					400: 'hsl(var(--last-slide-400))',
