@@ -162,7 +162,7 @@ const TextArea: React.FC<TextAreaProps> = ({
           #${textareaId}::-moz-placeholder,
           #${textareaId}:-ms-input-placeholder {
             color: #424790 !important;
-            opacity: 0.8 !important;
+            opacity: 1 !important;
           }
           #${textareaId} {
             color: #424790 !important;
@@ -437,22 +437,21 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
           <div key={i} className={`${getPostitColor("03")} flex flex-col flex-1 min-h-0`}>
             <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
               <textarea
+                id={`focus-textarea-${index}`}
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
                 className="w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]"
-                style={{
-                  color: '#424790'
-                }}
+                style={{ color: '#424790' }}
               />
               <style dangerouslySetInnerHTML={{
                 __html: `
-                  .${getPostitColor("03").replace('bg-', '')} textarea::placeholder,
-                  .${getPostitColor("03").replace('bg-', '')} textarea::-webkit-input-placeholder,
-                  .${getPostitColor("03").replace('bg-', '')} textarea::-moz-placeholder,
-                  .${getPostitColor("03").replace('bg-', '')} textarea:-ms-input-placeholder {
+                  #focus-textarea-${index}::placeholder,
+                  #focus-textarea-${index}::-webkit-input-placeholder,
+                  #focus-textarea-${index}::-moz-placeholder,
+                  #focus-textarea-${index}:-ms-input-placeholder {
                     color: #424790 !important;
-                    opacity: 0.8 !important;
+                    opacity: 1 !important;
                   }
                 `
               }} />
