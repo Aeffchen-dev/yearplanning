@@ -1657,10 +1657,10 @@ export default function YearPlannerGenerator() {
     
     const labelNumber = currentSlideData.label.number;
     switch (labelNumber) {
-      case "01": return "text-past-year-900";
-      case "02": return "text-health-check-900";
-      case "03": return "text-new-year-900";
-      case "04": return "text-plan-terminate-900";
+      case "01": return "text-past-year-400";
+      case "02": return "text-health-check-400";
+      case "03": return "text-new-year-400";
+      case "04": return "text-plan-terminate-400";
       case "Finally": return "text-last-slide-900";
       default: return "text-white";
     }
