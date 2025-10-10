@@ -48,48 +48,48 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* The past year - #F1A8C6 */
+    /* The past year - Card: #EB5200, Elements: #F1A8C6 */
     --past-year-100: 335 72% 97%;
     --past-year-200: 335 72% 93%;
     --past-year-300: 335 72% 85%;
-    --past-year-400: 335 72% 80%;
-    --past-year-500: 335 72% 80%;
-    --past-year-600: 335 72% 70%;
-    --past-year-700: 335 72% 60%;
-    --past-year-800: 335 72% 40%;
-    --past-year-900: 21 100% 46%;
+    --past-year-400: 21 100% 46%;
+    --past-year-500: 21 100% 46%;
+    --past-year-600: 21 100% 40%;
+    --past-year-700: 21 100% 35%;
+    --past-year-800: 335 72% 70%;
+    --past-year-900: 335 72% 80%;
 
-    /* Health Check - #FFECEA and #EB5200 */
-    --health-check-100: 6 100% 98%;
-    --health-check-200: 6 100% 96%;
-    --health-check-300: 6 100% 94%;
+    /* Health Check - Card: #FFECEA, Elements: #EB5200 */
+    --health-check-100: 21 100% 97%;
+    --health-check-200: 21 100% 90%;
+    --health-check-300: 21 100% 80%;
     --health-check-400: 6 100% 96%;
     --health-check-500: 6 100% 96%;
-    --health-check-600: 6 100% 92%;
-    --health-check-700: 6 100% 88%;
+    --health-check-600: 6 100% 94%;
+    --health-check-700: 6 100% 92%;
     --health-check-800: 21 100% 60%;
     --health-check-900: 21 100% 46%;
 
-    /* The new year - #C2CDFF */
-    --new-year-100: 229 100% 95%;
-    --new-year-200: 229 100% 92%;
-    --new-year-300: 229 100% 90%;
+    /* The new year - Card: #C2CDFF, Elements: #424790 */
+    --new-year-100: 236 37% 95%;
+    --new-year-200: 236 37% 85%;
+    --new-year-300: 236 37% 70%;
     --new-year-400: 229 100% 88%;
     --new-year-500: 229 100% 88%;
     --new-year-600: 229 100% 82%;
     --new-year-700: 229 100% 75%;
-    --new-year-800: 236 37% 55%;
+    --new-year-800: 236 37% 50%;
     --new-year-900: 236 37% 41%;
 
-    /* Plan and terminate - #424790 */
-    --plan-terminate-100: 236 37% 90%;
-    --plan-terminate-200: 236 37% 80%;
-    --plan-terminate-300: 236 37% 65%;
+    /* Plan and terminate - Card: #424790, Elements: #FFECEA */
+    --plan-terminate-100: 6 100% 99%;
+    --plan-terminate-200: 6 100% 97%;
+    --plan-terminate-300: 6 100% 95%;
     --plan-terminate-400: 236 37% 41%;
     --plan-terminate-500: 236 37% 41%;
     --plan-terminate-600: 236 37% 35%;
     --plan-terminate-700: 236 37% 30%;
-    --plan-terminate-800: 6 100% 92%;
+    --plan-terminate-800: 6 100% 94%;
     --plan-terminate-900: 6 100% 96%;
 
     /* Last slide - Mint (#98F5E1) */

@@ -1187,7 +1187,7 @@ const Slide: React.FC<SlideProps> = ({
     switch (labelNumber) {
       case "01":
         return {
-          bg: "",
+          bg: "bg-past-year-400",
           text: "text-past-year-900",
           border: "border-past-year-900",
           postit: "bg-past-year-500",
@@ -1198,7 +1198,7 @@ const Slide: React.FC<SlideProps> = ({
         };
       case "02":
         return {
-          bg: "",
+          bg: "bg-health-check-400",
           text: "text-health-check-900",
           border: "border-health-check-900",
           postit: "bg-health-check-500",
@@ -1209,7 +1209,7 @@ const Slide: React.FC<SlideProps> = ({
         };
       case "03":
         return {
-          bg: "",
+          bg: "bg-new-year-400",
           text: "text-new-year-900",
           border: "border-new-year-900",
           postit: "bg-new-year-500",
@@ -1220,7 +1220,7 @@ const Slide: React.FC<SlideProps> = ({
         };
       case "04":
         return {
-          bg: "",
+          bg: "bg-plan-terminate-400",
           text: "text-plan-terminate-900",
           border: "border-plan-terminate-900",
           postit: "bg-plan-terminate-500",
