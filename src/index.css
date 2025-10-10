@@ -48,16 +48,16 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* The past year - Card: #F1A8C6, Elements: #EB5200 */
-    --past-year-100: 21 100% 97%;
-    --past-year-200: 21 100% 93%;
-    --past-year-300: 21 100% 85%;
-    --past-year-400: 335 72% 80%;
-    --past-year-500: 335 72% 80%;
-    --past-year-600: 335 72% 70%;
-    --past-year-700: 335 72% 60%;
-    --past-year-800: 21 100% 60%;
-    --past-year-900: 21 100% 46%;
+    /* The past year - Card: #EB5200, Elements: #F1A8C6 */
+    --past-year-100: 335 72% 97%;
+    --past-year-200: 335 72% 93%;
+    --past-year-300: 335 72% 85%;
+    --past-year-400: 21 100% 46%;
+    --past-year-500: 21 100% 46%;
+    --past-year-600: 21 100% 40%;
+    --past-year-700: 21 100% 35%;
+    --past-year-800: 335 72% 70%;
+    --past-year-900: 335 72% 80%;
 
     /* Health Check - Card: #FFECEA, Elements: #EB5200 */
     --health-check-100: 21 100% 97%;
