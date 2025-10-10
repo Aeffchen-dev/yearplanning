@@ -777,7 +777,7 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#F8F0F4";
+      return "#F1A8C6";
     case "02":
       return "#EB5200";
     case "03":
@@ -831,7 +831,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-100))' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
             Worauf seid ihr stolz?
           </div>
           <TextArea 
@@ -844,7 +844,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-100))' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
             Wofür seid ihr dankbar?
           </div>
           <TextArea 
@@ -857,7 +857,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-100))' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
             Was wollt ihr nächstes Jahr besser machen?
           </div>
           <TextArea 
@@ -1188,10 +1188,10 @@ const Slide: React.FC<SlideProps> = ({
       case "01":
         return {
           bg: "bg-past-year-400",
-          text: "text-past-year-100",
-          border: "border-past-year-100",
+          text: "text-past-year-900",
+          border: "border-past-year-900",
           postit: "bg-past-year-900",
-          star: "past-year-100",
+          star: "past-year-900",
           pageBg: "past-year-900",
           scrollbar: "past-year-600",
           textColor: "text-past-year-400"
