@@ -1259,8 +1259,8 @@ const Slide: React.FC<SlideProps> = ({
   return (
   <div className="w-full h-full flex items-center justify-center text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
-      <div className={`flex-1 ${colorTheme.bg} rounded-lg md:rounded-2xl flex flex-col min-h-0 relative ${colorTheme.text} overflow-hidden`}>
-        <div className="responsive-card-padding pt-0 pb-0 flex flex-col min-h-0 flex-1">
+      <div className={`flex-1 rounded-lg md:rounded-2xl flex flex-col min-h-0 relative ${colorTheme.text} overflow-hidden`}>
+        <div className="flex flex-col min-h-0 flex-1">
           <style>{`
             .scrollbar-custom {
               scrollbar-width: thin;
