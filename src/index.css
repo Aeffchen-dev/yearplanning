@@ -48,49 +48,49 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Category 1: Orange card with rosa elements - from screenshot */
-    --past-year-100: 315 75% 95%;
-    --past-year-200: 315 75% 90%;
-    --past-year-300: 315 75% 85%;
-    --past-year-400: 25 90% 68%;
-    --past-year-500: 25 90% 68%;
-    --past-year-600: 25 90% 60%;
-    --past-year-700: 25 90% 52%;
-    --past-year-800: 315 75% 78%;
-    --past-year-900: 315 75% 68%;
+    /* Category 1: #A94225 card with #E78AD9 elements */
+    --past-year-100: 13 64% 95%;
+    --past-year-200: 13 64% 88%;
+    --past-year-300: 13 64% 75%;
+    --past-year-400: 309 68% 72%;
+    --past-year-500: 309 68% 72%;
+    --past-year-600: 309 68% 62%;
+    --past-year-700: 309 68% 52%;
+    --past-year-800: 13 64% 50%;
+    --past-year-900: 13 64% 40%;
 
-    /* Category 2: Rosa card with orange elements - from screenshot */
-    --health-check-100: 25 90% 95%;
-    --health-check-200: 25 90% 88%;
-    --health-check-300: 25 90% 80%;
-    --health-check-400: 315 75% 78%;
-    --health-check-500: 315 75% 78%;
-    --health-check-600: 315 75% 70%;
-    --health-check-700: 315 75% 62%;
-    --health-check-800: 25 90% 60%;
-    --health-check-900: 25 90% 52%;
+    /* Category 2: #E78AD9 card with #A94225 elements */
+    --health-check-100: 309 68% 95%;
+    --health-check-200: 309 68% 88%;
+    --health-check-300: 309 68% 82%;
+    --health-check-400: 13 64% 40%;
+    --health-check-500: 13 64% 40%;
+    --health-check-600: 13 64% 35%;
+    --health-check-700: 13 64% 30%;
+    --health-check-800: 309 68% 62%;
+    --health-check-900: 309 68% 52%;
 
-    /* Category 3: Rosa card with purple elements - from screenshot */
-    --new-year-100: 240 75% 95%;
-    --new-year-200: 240 75% 85%;
-    --new-year-300: 240 75% 70%;
-    --new-year-400: 315 75% 78%;
-    --new-year-500: 315 75% 78%;
-    --new-year-600: 315 75% 70%;
-    --new-year-700: 315 75% 62%;
-    --new-year-800: 240 75% 55%;
-    --new-year-900: 240 75% 45%;
+    /* Category 3: #E78AD9 card with #4B40D2 elements */
+    --new-year-100: 309 68% 95%;
+    --new-year-200: 309 68% 88%;
+    --new-year-300: 309 68% 82%;
+    --new-year-400: 245 61% 54%;
+    --new-year-500: 245 61% 54%;
+    --new-year-600: 245 61% 46%;
+    --new-year-700: 245 61% 38%;
+    --new-year-800: 309 68% 62%;
+    --new-year-900: 309 68% 52%;
 
-    /* Category 4: Purple card with rosa elements - from screenshot */
-    --plan-terminate-100: 315 75% 95%;
-    --plan-terminate-200: 315 75% 90%;
-    --plan-terminate-300: 315 75% 85%;
-    --plan-terminate-400: 240 75% 55%;
-    --plan-terminate-500: 240 75% 55%;
-    --plan-terminate-600: 240 75% 48%;
-    --plan-terminate-700: 240 75% 42%;
-    --plan-terminate-800: 315 75% 78%;
-    --plan-terminate-900: 315 75% 68%;
+    /* Category 4: #4B40D2 card with #E78AD9 elements */
+    --plan-terminate-100: 245 61% 95%;
+    --plan-terminate-200: 245 61% 85%;
+    --plan-terminate-300: 245 61% 72%;
+    --plan-terminate-400: 309 68% 72%;
+    --plan-terminate-500: 309 68% 72%;
+    --plan-terminate-600: 309 68% 62%;
+    --plan-terminate-700: 309 68% 52%;
+    --plan-terminate-800: 245 61% 54%;
+    --plan-terminate-900: 245 61% 44%;
 
     /* Last slide - Mint (#98F5E1) */
     --last-slide-100: 162 83% 97%;
