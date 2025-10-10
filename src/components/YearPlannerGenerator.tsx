@@ -160,11 +160,11 @@ const TextArea: React.FC<TextAreaProps> = ({
           .textarea-${bgColor.replace('bg-', '')}::-moz-placeholder,
           .textarea-${bgColor.replace('bg-', '')}:-ms-input-placeholder,
           .textarea-${bgColor.replace('bg-', '')}::-ms-input-placeholder {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}) / 0.7) !important;
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-400').replace('-900', '-400')}) / 0.8) !important;
             opacity: 1;
           }
           .textarea-${bgColor.replace('bg-', '')} {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}));
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-400').replace('-900', '-400')}));
           }
         `}
       </style>
@@ -759,7 +759,7 @@ interface SlideData {
 const getPostitColor = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "bg-past-year-500";
+      return "bg-past-year-900";
     case "02":
       return "bg-health-check-500";
     case "03":
@@ -777,7 +777,7 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#EB5200";
+      return "#F8F0F4";
     case "02":
       return "#EB5200";
     case "03":
@@ -831,7 +831,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-100))' }}>
             Worauf seid ihr stolz?
           </div>
           <TextArea 
@@ -844,7 +844,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-100))' }}>
             Wofür seid ihr dankbar?
           </div>
           <TextArea 
@@ -857,7 +857,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900))' }}>
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-100))' }}>
             Was wollt ihr nächstes Jahr besser machen?
           </div>
           <TextArea 
@@ -1188,10 +1188,10 @@ const Slide: React.FC<SlideProps> = ({
       case "01":
         return {
           bg: "bg-past-year-400",
-          text: "text-past-year-900",
-          border: "border-past-year-900",
-          postit: "bg-past-year-500",
-          star: "past-year-900",
+          text: "text-past-year-100",
+          border: "border-past-year-100",
+          postit: "bg-past-year-900",
+          star: "past-year-100",
           pageBg: "past-year-900",
           scrollbar: "past-year-600",
           textColor: "text-past-year-400"
