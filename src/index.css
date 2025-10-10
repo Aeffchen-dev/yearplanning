@@ -48,16 +48,16 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* The past year - Card: #F1A8C6, Elements: #EB5200 */
-    --past-year-100: 21 100% 97%;
-    --past-year-200: 21 100% 93%;
-    --past-year-300: 21 100% 85%;
+    /* The past year - Card: #F1A8C6, Elements: Terracotta */
+    --past-year-100: 15 60% 95%;
+    --past-year-200: 15 60% 90%;
+    --past-year-300: 15 60% 80%;
     --past-year-400: 335 72% 88%;
     --past-year-500: 335 72% 88%;
     --past-year-600: 335 72% 82%;
     --past-year-700: 335 72% 75%;
-    --past-year-800: 21 100% 60%;
-    --past-year-900: 21 100% 46%;
+    --past-year-800: 15 60% 48%;
+    --past-year-900: 15 60% 48%;
 
     /* Health Check - Card: #F499B5, Elements: #671F2A */
     --health-check-100: 342 80% 95%;
