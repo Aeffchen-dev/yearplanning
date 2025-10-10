@@ -160,11 +160,11 @@ const TextArea: React.FC<TextAreaProps> = ({
           .textarea-${bgColor.replace('bg-', '')}::-moz-placeholder,
           .textarea-${bgColor.replace('bg-', '')}:-ms-input-placeholder,
           .textarea-${bgColor.replace('bg-', '')}::-ms-input-placeholder {
-            color: hsl(var(--new-year-900) / 0.8) !important;
+            color: rgba(66, 71, 144, 0.8) !important;
             opacity: 1;
           }
           .textarea-${bgColor.replace('bg-', '')} {
-            color: hsl(var(--new-year-900));
+            color: #424790;
           }
         `}
       </style>
@@ -441,11 +441,11 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                   .textarea-focus-${index}::-moz-placeholder,
                   .textarea-focus-${index}:-ms-input-placeholder,
                   .textarea-focus-${index}::-ms-input-placeholder {
-                    color: hsl(var(--new-year-900) / 0.8) !important;
+                    color: rgba(66, 71, 144, 0.8) !important;
                     opacity: 1;
                   }
                   .textarea-focus-${index} {
-                    color: hsl(var(--new-year-900));
+                    color: #424790;
                   }
                 `}
               </style>
