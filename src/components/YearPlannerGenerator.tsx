@@ -730,15 +730,15 @@ interface SlideData {
 const getPostitColor = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "bg-past-year-400";
+      return "bg-past-year-300";
     case "02":
-      return "bg-health-check-400";
+      return "bg-health-check-300";
     case "03":
-      return "bg-new-year-400";
+      return "bg-new-year-300";
     case "04":
-      return "bg-plan-terminate-400";
+      return "bg-plan-terminate-300";
     case "24":
-      return "bg-last-slide-400";
+      return "bg-last-slide-300";
     default:
       return "bg-[#FFE299]";
   }
@@ -811,7 +811,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide3-proud', value)}
             fillHeight={true}
             bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-700"
+            placeholderColor="text-past-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -824,7 +824,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide3-grateful', value)}
             fillHeight={true}
             bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-700"
+            placeholderColor="text-past-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -837,7 +837,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide3-improve', value)}
             fillHeight={true}
             bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-700"
+            placeholderColor="text-past-year-800"
           />
         </div>
       </div>
@@ -966,7 +966,7 @@ const slides = (
           value={textareaValues['slide7-insights'] || ''}
           onChange={(value) => updateTextareaValue('slide7-insights', value)}
           bgColor={getPostitColor("02")}
-          placeholderColor="text-health-check-700"
+          placeholderColor="text-health-check-800"
         />
       </div>
     ),
@@ -994,7 +994,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide9-initiate', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1007,7 +1007,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide9-stop', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1020,7 +1020,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide9-continue', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-800"
           />
         </div>
       </div>
@@ -1042,7 +1042,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide10-achieve', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1055,7 +1055,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide10-carry', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
@@ -1068,7 +1068,7 @@ const slides = (
             onChange={(value) => updateTextareaValue('slide10-projects', value)}
             fillHeight={true}
             bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-700"
+            placeholderColor="text-new-year-800"
           />
         </div>
       </div>
@@ -1230,6 +1230,9 @@ const Slide: React.FC<SlideProps> = ({
             .scrollbar-custom {
               scrollbar-width: thin;
               scrollbar-color: hsl(var(--${colorTheme.scrollbar})) transparent;
+              scrollbar-gutter: stable;
+              overscroll-behavior: contain;
+              -webkit-overflow-scrolling: touch;
               padding-right: 0 !important;
               margin-right: 8px;
             }
@@ -1345,7 +1348,7 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
             
-            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-custom">{slide.content}</div>
+            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-custom pr-8 -mr-8">{slide.content}</div>
           </>
         )}
         </div>
@@ -1433,7 +1436,7 @@ export default function YearPlannerGenerator() {
                 onChange={(value) => updateTextareaValue(`slide${i}-goal`, value)}
                 fillHeight={true}
                 bgColor={getPostitColor("04")}
-                placeholderColor="text-plan-terminate-700"
+                placeholderColor="text-plan-terminate-800"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -1454,7 +1457,7 @@ export default function YearPlannerGenerator() {
                 onChange={(value) => updateTextareaValue(`slide${i}-measure`, value)}
                 fillHeight={true}
                 bgColor={getPostitColor("04")}
-                placeholderColor="text-plan-terminate-700"
+                placeholderColor="text-plan-terminate-800"
               />
             </div>
             <div className="flex-1 flex flex-col">
@@ -1467,7 +1470,7 @@ export default function YearPlannerGenerator() {
                 onChange={(value) => updateTextareaValue(`slide${i}-steps`, value)}
                 fillHeight={true}
                 bgColor={getPostitColor("04")}
-                placeholderColor="text-plan-terminate-700"
+                placeholderColor="text-plan-terminate-800"
               />
             </div>
           </div>
