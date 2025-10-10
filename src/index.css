@@ -56,8 +56,8 @@
     --past-year-500: 316 75% 69%;
     --past-year-600: 316 75% 61%;
     --past-year-700: 316 75% 53%;
-    --past-year-800: 316 75% 45%;
-    --past-year-900: 316 75% 37%;
+    --past-year-800: 316 75% 35%;
+    --past-year-900: 316 75% 20%;
 
     /* Health Check - Purple (#CFBAF0) */
     --health-check-100: 265 70% 97%;
@@ -67,8 +67,8 @@
     --health-check-500: 265 70% 69%;
     --health-check-600: 265 70% 61%;
     --health-check-700: 265 70% 53%;
-    --health-check-800: 265 70% 45%;
-    --health-check-900: 265 70% 37%;
+    --health-check-800: 265 70% 35%;
+    --health-check-900: 265 70% 20%;
 
     /* The new year - Blue (#A3C4F3) */
     --new-year-100: 210 80% 97%;
@@ -78,8 +78,8 @@
     --new-year-500: 210 80% 69%;
     --new-year-600: 210 80% 61%;
     --new-year-700: 210 80% 53%;
-    --new-year-800: 210 80% 45%;
-    --new-year-900: 210 80% 37%;
+    --new-year-800: 210 80% 35%;
+    --new-year-900: 210 80% 20%;
 
     /* Plan and terminate - Light Blue (#90DBF4) */
     --plan-terminate-100: 195 77% 97%;
@@ -89,8 +89,8 @@
     --plan-terminate-500: 195 77% 69%;
     --plan-terminate-600: 195 77% 61%;
     --plan-terminate-700: 195 77% 53%;
-    --plan-terminate-800: 195 77% 45%;
-    --plan-terminate-900: 195 77% 37%;
+    --plan-terminate-800: 195 77% 35%;
+    --plan-terminate-900: 195 77% 20%;
   }
 
   .dark {
