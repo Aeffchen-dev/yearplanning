@@ -151,28 +151,30 @@ const TextArea: React.FC<TextAreaProps> = ({
   bgColor = "bg-[#FFE299]",
   placeholderColor = "text-[#B29F71]",
 }) => {
+  const textareaId = `textarea-${Math.random().toString(36).substr(2, 9)}`;
+  
   return (
     <div className={`${bgColor} p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
-      <style>
-        {`
-          .textarea-${bgColor.replace('bg-', '')}::-webkit-input-placeholder,
-          .textarea-${bgColor.replace('bg-', '')}::placeholder,
-          .textarea-${bgColor.replace('bg-', '')}::-moz-placeholder,
-          .textarea-${bgColor.replace('bg-', '')}:-ms-input-placeholder,
-          .textarea-${bgColor.replace('bg-', '')}::-ms-input-placeholder {
-            color: rgba(66, 71, 144, 0.8) !important;
-            opacity: 1;
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          #${textareaId}::placeholder,
+          #${textareaId}::-webkit-input-placeholder,
+          #${textareaId}::-moz-placeholder,
+          #${textareaId}:-ms-input-placeholder {
+            color: #424790 !important;
+            opacity: 0.8 !important;
           }
-          .textarea-${bgColor.replace('bg-', '')} {
-            color: #424790;
+          #${textareaId} {
+            color: #424790 !important;
           }
-        `}
-      </style>
+        `
+      }} />
       <textarea
+        id={textareaId}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        className={`textarea-${bgColor.replace('bg-', '')} w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
+        className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
         rows={fillHeight ? undefined : rows}
       />
     </div>
@@ -434,27 +436,26 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
         return (
           <div key={i} className={`${getPostitColor("03")} flex flex-col flex-1 min-h-0`}>
             <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
-              <style>
-                {`
-                  .textarea-focus-${index}::-webkit-input-placeholder,
-                  .textarea-focus-${index}::placeholder,
-                  .textarea-focus-${index}::-moz-placeholder,
-                  .textarea-focus-${index}:-ms-input-placeholder,
-                  .textarea-focus-${index}::-ms-input-placeholder {
-                    color: rgba(66, 71, 144, 0.8) !important;
-                    opacity: 1;
-                  }
-                  .textarea-focus-${index} {
-                    color: #424790;
-                  }
-                `}
-              </style>
               <textarea
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`textarea-focus-${index} w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+                className="w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]"
+                style={{
+                  color: '#424790'
+                }}
               />
+              <style dangerouslySetInnerHTML={{
+                __html: `
+                  .${getPostitColor("03").replace('bg-', '')} textarea::placeholder,
+                  .${getPostitColor("03").replace('bg-', '')} textarea::-webkit-input-placeholder,
+                  .${getPostitColor("03").replace('bg-', '')} textarea::-moz-placeholder,
+                  .${getPostitColor("03").replace('bg-', '')} textarea:-ms-input-placeholder {
+                    color: #424790 !important;
+                    opacity: 0.8 !important;
+                  }
+                `
+              }} />
             </div>
             <div className="px-4 pb-1 flex justify-end flex-shrink-0">
               <StarRating 
