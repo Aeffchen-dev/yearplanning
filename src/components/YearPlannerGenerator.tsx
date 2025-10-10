@@ -158,7 +158,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
-        style={value ? { color: 'hsl(var(--' + bgColor.replace('bg-', '').replace('-500', '-900') + '))' } : { color: 'hsl(var(--' + placeholderColor.replace('text-', '') + ') / 0.8)' }}
+        style={value ? { color: 'hsl(var(--' + bgColor.replace('bg-', '').replace('-500', '-900') + '))' } : { color: 'hsl(var(--' + placeholderColor.replace('text-', '') + ') / 0.7)' }}
         rows={fillHeight ? undefined : rows}
       />
     </div>
@@ -424,7 +424,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                style={focusValue ? { color: "hsl(var(--new-year-900))" } : { color: "hsl(var(--new-year-900) / 0.8)" }}
+                style={focusValue ? { color: "hsl(var(--new-year-900))" } : { color: "hsl(var(--new-year-900) / 0.7)" }}
                 className="w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]"
               />
             </div>
