@@ -152,7 +152,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   placeholderColor = "text-[#B29F71]",
 }) => {
   return (
-    <div className={`${bgColor} p-4 rounded-lg ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
+    <div className={`${bgColor} p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
       <style>
         {`
           .textarea-${bgColor.replace('bg-', '')}::-webkit-input-placeholder,
@@ -160,11 +160,11 @@ const TextArea: React.FC<TextAreaProps> = ({
           .textarea-${bgColor.replace('bg-', '')}::-moz-placeholder,
           .textarea-${bgColor.replace('bg-', '')}:-ms-input-placeholder,
           .textarea-${bgColor.replace('bg-', '')}::-ms-input-placeholder {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-150', '-900')}) / 0.8) !important;
-            opacity: 1 !important;
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}) / 0.7) !important;
+            opacity: 1;
           }
           .textarea-${bgColor.replace('bg-', '')} {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-150', '-900')})) !important;
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}));
           }
         `}
       </style>
@@ -441,7 +441,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                   .textarea-focus-${index}::-moz-placeholder,
                   .textarea-focus-${index}:-ms-input-placeholder,
                   .textarea-focus-${index}::-ms-input-placeholder {
-                    color: hsl(var(--new-year-900) / 0.8) !important;
+                    color: hsl(var(--new-year-900) / 0.7) !important;
                     opacity: 1;
                   }
                   .textarea-focus-${index} {
@@ -759,15 +759,15 @@ interface SlideData {
 const getPostitColor = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "bg-past-year-150";
+      return "bg-past-year-500";
     case "02":
-      return "bg-health-check-150";
+      return "bg-health-check-500";
     case "03":
-      return "bg-new-year-150";
+      return "bg-new-year-500";
     case "04":
-      return "bg-plan-terminate-150";
+      return "bg-plan-terminate-500";
     case "24":
-      return "bg-last-slide-150";
+      return "bg-last-slide-500";
     default:
       return "bg-[#FFE299]";
   }
@@ -831,7 +831,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-past-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
             Worauf seid ihr stolz?
           </div>
           <TextArea 
@@ -844,7 +844,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-past-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
             Wofür seid ihr dankbar?
           </div>
           <TextArea 
@@ -857,7 +857,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-past-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
             Was wollt ihr nächstes Jahr besser machen?
           </div>
           <TextArea 
@@ -887,7 +887,7 @@ const slides = (
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">Sexualität</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Sexualität</div>
             <StarRating 
               value={starRatings['slide5-sexuality'] || 0}
               onChange={(value) => updateStarRating('slide5-sexuality', value)}
@@ -895,7 +895,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
               Emotionale Verbundenheit
             </div>
             <StarRating 
@@ -905,7 +905,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">Kommunikation</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Kommunikation</div>
             <StarRating 
               value={starRatings['slide5-communication'] || 0}
               onChange={(value) => updateStarRating('slide5-communication', value)}
@@ -913,7 +913,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">Vertrauen</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Vertrauen</div>
             <StarRating 
               value={starRatings['slide5-trust'] || 0}
               onChange={(value) => updateStarRating('slide5-trust', value)}
@@ -935,7 +935,7 @@ const slides = (
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">Gemeinsame Zeit</div>
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Gemeinsame Zeit</div>
             <StarRating 
               value={starRatings['slide6-time'] || 0}
               onChange={(value) => updateStarRating('slide6-time', value)}
@@ -943,7 +943,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
               Zusammen gelacht
             </div>
             <StarRating 
@@ -953,7 +953,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
               Konfliktbewältigung
             </div>
             <StarRating 
@@ -963,7 +963,7 @@ const slides = (
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial text-health-check-900">
+            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
               Freiheit, Unabhängigkeit
             </div>
             <StarRating 
@@ -985,7 +985,7 @@ const slides = (
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col">
-        <div className="text-base mb-4 font-arial text-health-check-900">
+        <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
           Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder
           fürs kommende Jahr aus.
         </div>
@@ -1014,7 +1014,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-new-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
             Was wollen wir neu initiieren?
           </div>
           <TextArea 
@@ -1027,7 +1027,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-new-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
             Womit wollen wir aufhören, weil es uns nicht gut tut?
           </div>
           <TextArea 
@@ -1040,7 +1040,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-new-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
             Was wollt ihr weiter machen?
           </div>
           <TextArea 
@@ -1062,7 +1062,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-new-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
             Was wollen wir bis Jahresende geschafft haben?
           </div>
           <TextArea 
@@ -1075,7 +1075,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-new-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
             Welches Ziel nehmen wir aus dem letzten Jahr mit?
           </div>
           <TextArea 
@@ -1088,7 +1088,7 @@ const slides = (
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial text-new-year-900">
+          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
             Welche Projekte nehmen wir uns vor?
           </div>
           <TextArea 
@@ -1190,9 +1190,9 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-past-year-400",
           text: "text-past-year-900",
           border: "border-past-year-900",
-          postit: "bg-past-year-150",
+          postit: "bg-past-year-500",
           star: "past-year-900",
-          pageBg: "past-year-400",
+          pageBg: "past-year-500",
           scrollbar: "past-year-600",
           textColor: "text-past-year-900"
         };
@@ -1201,9 +1201,9 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-health-check-400",
           text: "text-health-check-900",
           border: "border-health-check-900",
-          postit: "bg-health-check-150",
+          postit: "bg-health-check-500",
           star: "health-check-900",
-          pageBg: "health-check-400",
+          pageBg: "health-check-500",
           scrollbar: "health-check-600",
           textColor: "text-health-check-900"
         };
@@ -1212,9 +1212,9 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-new-year-400",
           text: "text-new-year-900",
           border: "border-new-year-900",
-          postit: "bg-new-year-150",
+          postit: "bg-new-year-500",
           star: "new-year-900",
-          pageBg: "new-year-400",
+          pageBg: "new-year-500",
           scrollbar: "new-year-600",
           textColor: "text-new-year-900"
         };
@@ -1223,9 +1223,9 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-plan-terminate-400",
           text: "text-plan-terminate-900",
           border: "border-plan-terminate-900",
-          postit: "bg-plan-terminate-150",
+          postit: "bg-plan-terminate-500",
           star: "plan-terminate-900",
-          pageBg: "plan-terminate-400",
+          pageBg: "plan-terminate-500",
           scrollbar: "plan-terminate-600",
           textColor: "text-plan-terminate-900"
         };
@@ -1234,9 +1234,9 @@ const Slide: React.FC<SlideProps> = ({
           bg: "bg-last-slide-400",
           text: "text-last-slide-900",
           border: "border-last-slide-900",
-          postit: "bg-last-slide-150",
+          postit: "bg-last-slide-500",
           star: "last-slide-900",
-          pageBg: "last-slide-400",
+          pageBg: "last-slide-500",
           scrollbar: "last-slide-600",
           textColor: "text-last-slide-900"
         };
@@ -1259,8 +1259,8 @@ const Slide: React.FC<SlideProps> = ({
   return (
   <div className="w-full h-full flex items-center justify-center text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
-      <div className={`flex-1 rounded-lg md:rounded-2xl flex flex-col min-h-0 relative ${colorTheme.text} overflow-hidden`}>
-        <div className="flex flex-col min-h-0 flex-1">
+      <div className={`flex-1 ${colorTheme.bg} rounded-lg md:rounded-2xl flex flex-col min-h-0 relative ${colorTheme.text} overflow-hidden`}>
+        <div className="responsive-card-padding flex flex-col min-h-0 flex-1">
           <style>{`
             .scrollbar-custom {
               scrollbar-width: thin;
@@ -1642,11 +1642,11 @@ export default function YearPlannerGenerator() {
     
     const labelNumber = currentSlideData.label.number;
     switch (labelNumber) {
-      case "01": return "bg-past-year-400";
-      case "02": return "bg-health-check-400";
-      case "03": return "bg-new-year-400";
-      case "04": return "bg-plan-terminate-400";
-      case "Finally": return "bg-last-slide-400";
+      case "01": return "bg-past-year-500";
+      case "02": return "bg-health-check-500";
+      case "03": return "bg-new-year-500";
+      case "04": return "bg-plan-terminate-500";
+      case "Finally": return "bg-last-slide-500";
       default: return "bg-black";
     }
   };
@@ -1667,14 +1667,14 @@ export default function YearPlannerGenerator() {
   };
 
   return (
-    <div className={`w-full h-dvh overflow-hidden relative ${getCurrentBg()}`} style={{ transition: 'background-color 800ms ease-out', touchAction: 'pan-x', overscrollBehavior: 'none' }}>
+    <div className={`w-full h-dvh overflow-hidden relative ${getCurrentBg()}`} style={{ transition: 'background-color 300ms ease-out', touchAction: 'pan-x', overscrollBehavior: 'none' }}>
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-2 md:pt-4">
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
-          <h1 className={`text-[24px] md:text-[28px] font-bold leading-[120%] font-kokoro transition-colors duration-[800ms] ease-out ${getCurrentTextColor()}`}>
+          <h1 className={`text-[24px] md:text-[28px] font-bold leading-[120%] font-kokoro transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
             Year Planning
           </h1>
-          <div className={`flex-1 text-right text-sm md:text-base font-arial transition-colors duration-[800ms] ease-out ${getCurrentTextColor()}`}>
+          <div className={`flex-1 text-right text-sm md:text-base font-arial transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
             {currentSlide + 1} / 24
           </div>
         </div>
@@ -1682,7 +1682,7 @@ export default function YearPlannerGenerator() {
 
       {/* Fixed Footer */}
       <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-4 pb-2 md:pb-4">
-        <div className={`flex items-center gap-2 mt-2 md:mt-4 text-sm md:text-base font-arial transition-colors duration-[800ms] ease-out ${getCurrentTextColor()}`}>
+        <div className={`flex items-center gap-2 mt-2 md:mt-4 text-sm md:text-base font-arial transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
           <a 
             href="https://relationshipbydesign.de/" 
             target="_blank" 
