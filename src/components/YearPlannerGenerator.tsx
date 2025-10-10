@@ -155,8 +155,13 @@ const TextArea: React.FC<TextAreaProps> = ({
     <div className={`${bgColor} p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
       <style>
         {`
-          .textarea-${bgColor.replace('bg-', '')}::placeholder {
-            color: hsl(var(--${placeholderColor.replace('text-', '')} / 0.7));
+          .textarea-${bgColor.replace('bg-', '')}::-webkit-input-placeholder,
+          .textarea-${bgColor.replace('bg-', '')}::placeholder,
+          .textarea-${bgColor.replace('bg-', '')}::-moz-placeholder,
+          .textarea-${bgColor.replace('bg-', '')}:-ms-input-placeholder,
+          .textarea-${bgColor.replace('bg-', '')}::-ms-input-placeholder {
+            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}) / 0.7) !important;
+            opacity: 1;
           }
           .textarea-${bgColor.replace('bg-', '')} {
             color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}));
@@ -431,8 +436,13 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
             <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
               <style>
                 {`
-                  .textarea-focus-${index}::placeholder {
-                    color: hsl(var(--new-year-900) / 0.7);
+                  .textarea-focus-${index}::-webkit-input-placeholder,
+                  .textarea-focus-${index}::placeholder,
+                  .textarea-focus-${index}::-moz-placeholder,
+                  .textarea-focus-${index}:-ms-input-placeholder,
+                  .textarea-focus-${index}::-ms-input-placeholder {
+                    color: hsl(var(--new-year-900) / 0.7) !important;
+                    opacity: 1;
                   }
                   .textarea-focus-${index} {
                     color: hsl(var(--new-year-900));
