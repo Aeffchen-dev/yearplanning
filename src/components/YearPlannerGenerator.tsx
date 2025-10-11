@@ -777,15 +777,15 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#681444"; // past-year-900 approximation
+      return "#4a0d1f"; // past-year-900 (#F499B5)
     case "02":
-      return "#3d1a5c"; // health-check-900 approximation
+      return "#1a0a0d"; // health-check-900 (#671F2A)
     case "03":
-      return "#0f3d66"; // new-year-900 approximation
+      return "#331105"; // new-year-900 (#F26A2F)
     case "04":
-      return "#0f5266"; // plan-terminate-900 approximation
+      return "#3d3b26"; // plan-terminate-900 (#DDDOBF)
     case "24":
-      return "#0f5d4d"; // last-slide-900 approximation
+      return "#0f0e0e"; // last-slide-900 (#272222)
     default:
       return "white";
   }
