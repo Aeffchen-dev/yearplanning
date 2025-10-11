@@ -777,13 +777,13 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#EB5200";
+      return "#681444"; // past-year-900 approximation
     case "02":
-      return "#FFECEA";
+      return "#3d1a5c"; // health-check-900 approximation
     case "03":
-      return "#C2CDFF";
+      return "#0f3d66"; // new-year-900 approximation
     case "04":
-      return "#F1A8C6";
+      return "#0f5266"; // plan-terminate-900 approximation
     case "24":
       return "#0f5d4d"; // last-slide-900 approximation
     default:
@@ -1192,7 +1192,7 @@ const Slide: React.FC<SlideProps> = ({
           border: "border-past-year-900",
           postit: "bg-past-year-500",
           star: "past-year-900",
-          pageBg: "past-year-900",
+          pageBg: "past-year-500",
           scrollbar: "past-year-600",
           textColor: "text-past-year-900"
         };
@@ -1203,7 +1203,7 @@ const Slide: React.FC<SlideProps> = ({
           border: "border-health-check-900",
           postit: "bg-health-check-500",
           star: "health-check-900",
-          pageBg: "health-check-900",
+          pageBg: "health-check-500",
           scrollbar: "health-check-600",
           textColor: "text-health-check-900"
         };
@@ -1214,7 +1214,7 @@ const Slide: React.FC<SlideProps> = ({
           border: "border-new-year-900",
           postit: "bg-new-year-500",
           star: "new-year-900",
-          pageBg: "new-year-900",
+          pageBg: "new-year-500",
           scrollbar: "new-year-600",
           textColor: "text-new-year-900"
         };
@@ -1225,7 +1225,7 @@ const Slide: React.FC<SlideProps> = ({
           border: "border-plan-terminate-900",
           postit: "bg-plan-terminate-500",
           star: "plan-terminate-900",
-          pageBg: "plan-terminate-900",
+          pageBg: "plan-terminate-500",
           scrollbar: "plan-terminate-600",
           textColor: "text-plan-terminate-900"
         };
@@ -1259,7 +1259,7 @@ const Slide: React.FC<SlideProps> = ({
   return (
   <div className="w-full h-full flex items-center justify-center text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
-      <div className={`flex-1 ${colorTheme.bg} rounded-[24px] md:rounded-[32px] flex flex-col min-h-0 relative ${colorTheme.text} overflow-hidden`}>
+      <div className={`flex-1 ${colorTheme.bg} rounded-lg md:rounded-2xl flex flex-col min-h-0 relative ${colorTheme.text} overflow-hidden`}>
         <div className="responsive-card-padding flex flex-col min-h-0 flex-1">
           <style>{`
             .scrollbar-custom {
@@ -1642,10 +1642,10 @@ export default function YearPlannerGenerator() {
     
     const labelNumber = currentSlideData.label.number;
     switch (labelNumber) {
-      case "01": return "bg-past-year-900";
-      case "02": return "bg-health-check-900";
-      case "03": return "bg-new-year-900";
-      case "04": return "bg-plan-terminate-900";
+      case "01": return "bg-past-year-500";
+      case "02": return "bg-health-check-500";
+      case "03": return "bg-new-year-500";
+      case "04": return "bg-plan-terminate-500";
       case "Finally": return "bg-last-slide-500";
       default: return "bg-black";
     }
