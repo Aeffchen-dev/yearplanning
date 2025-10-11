@@ -777,13 +777,13 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#EB5200";
+      return "#F1A8C6";
     case "02":
-      return "#EB5200";
+      return "#A94225";
     case "03":
-      return "#424790";
+      return "#4B40D2";
     case "04":
-      return "#FFECEA";
+      return "#E78AD9";
     case "24":
       return "#0f5d4d"; // last-slide-900 approximation
     default:
@@ -1188,46 +1188,46 @@ const Slide: React.FC<SlideProps> = ({
       case "01":
         return {
           bg: "bg-past-year-400",
-          text: "text-past-year-900",
-          border: "border-past-year-900",
+          text: "text-past-year-400",
+          border: "border-past-year-400",
           postit: "bg-past-year-500",
           star: "past-year-900",
-          pageBg: "past-year-900",
+          pageBg: "past-year-400",
           scrollbar: "past-year-600",
-          textColor: "text-past-year-900"
+          textColor: "text-past-year-400"
         };
       case "02":
         return {
           bg: "bg-health-check-400",
-          text: "text-health-check-900",
-          border: "border-health-check-900",
+          text: "text-health-check-400",
+          border: "border-health-check-400",
           postit: "bg-health-check-500",
           star: "health-check-900",
-          pageBg: "health-check-900",
+          pageBg: "health-check-400",
           scrollbar: "health-check-600",
-          textColor: "text-health-check-900"
+          textColor: "text-health-check-400"
         };
       case "03":
         return {
           bg: "bg-new-year-400",
-          text: "text-new-year-900",
-          border: "border-new-year-900",
+          text: "text-new-year-400",
+          border: "border-new-year-400",
           postit: "bg-new-year-500",
           star: "new-year-900",
-          pageBg: "new-year-900",
+          pageBg: "new-year-400",
           scrollbar: "new-year-600",
-          textColor: "text-new-year-900"
+          textColor: "text-new-year-400"
         };
       case "04":
         return {
           bg: "bg-plan-terminate-400",
-          text: "text-plan-terminate-900",
-          border: "border-plan-terminate-900",
+          text: "text-plan-terminate-400",
+          border: "border-plan-terminate-400",
           postit: "bg-plan-terminate-500",
           star: "plan-terminate-900",
-          pageBg: "plan-terminate-900",
+          pageBg: "plan-terminate-400",
           scrollbar: "plan-terminate-600",
-          textColor: "text-plan-terminate-900"
+          textColor: "text-plan-terminate-400"
         };
       case "Finally":
         return {
