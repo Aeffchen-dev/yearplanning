@@ -777,13 +777,13 @@ const getPostitColor = (labelNumber: string) => {
 const getStarColorHex = (labelNumber: string) => {
   switch (labelNumber) {
     case "01":
-      return "#F1A8C6";
+      return "#EB5200";
     case "02":
-      return "#A94225";
+      return "#FFECEA";
     case "03":
-      return "#4B40D2";
+      return "#C2CDFF";
     case "04":
-      return "#E78AD9";
+      return "#F1A8C6";
     case "24":
       return "#0f5d4d"; // last-slide-900 approximation
     default:
