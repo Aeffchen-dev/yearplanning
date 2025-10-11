@@ -137,8 +137,6 @@ interface TextAreaProps {
   className?: string;
   rows?: number;
   fillHeight?: boolean;
-  bgColor?: string;
-  placeholderColor?: string;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -148,31 +146,14 @@ const TextArea: React.FC<TextAreaProps> = ({
   className = "",
   rows = 4,
   fillHeight = false,
-  bgColor = "bg-[#FFE299]",
-  placeholderColor = "text-[#B29F71]",
 }) => {
   return (
-    <div className={`${bgColor} p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
-      <style>
-        {`
-          .textarea-${bgColor.replace('bg-', '')}::-webkit-input-placeholder,
-          .textarea-${bgColor.replace('bg-', '')}::placeholder,
-          .textarea-${bgColor.replace('bg-', '')}::-moz-placeholder,
-          .textarea-${bgColor.replace('bg-', '')}:-ms-input-placeholder,
-          .textarea-${bgColor.replace('bg-', '')}::-ms-input-placeholder {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}) / 0.7) !important;
-            opacity: 1;
-          }
-          .textarea-${bgColor.replace('bg-', '')} {
-            color: hsl(var(--${bgColor.replace('bg-', '').replace('-500', '-900')}));
-          }
-        `}
-      </style>
+    <div className={`bg-[#FFE299] p-4 ${fillHeight ? 'flex-1 flex flex-col' : 'flex-1'} ${className}`}>
       <textarea
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        className={`textarea-${bgColor.replace('bg-', '')} w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
+        className={`w-full ${fillHeight ? 'flex-1' : 'h-full'} bg-transparent ${value ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-base leading-[120%] ${fillHeight ? '' : 'min-h-[80px]'}`}
         rows={fillHeight ? undefined : rows}
       />
     </div>
@@ -432,33 +413,18 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
         const focusValue = textareaValues[focusKey] || '';
         
         return (
-          <div key={i} className={`${getPostitColor("03")} flex flex-col flex-1 min-h-0`}>
+          <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
             <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
-              <style>
-                {`
-                  .textarea-focus-${index}::-webkit-input-placeholder,
-                  .textarea-focus-${index}::placeholder,
-                  .textarea-focus-${index}::-moz-placeholder,
-                  .textarea-focus-${index}:-ms-input-placeholder,
-                  .textarea-focus-${index}::-ms-input-placeholder {
-                    color: hsl(var(--new-year-900) / 0.7) !important;
-                    opacity: 1;
-                  }
-                  .textarea-focus-${index} {
-                    color: hsl(var(--new-year-900));
-                  }
-                `}
-              </style>
               <textarea
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`textarea-focus-${index} w-full flex-1 bg-transparent resize-none border-none outline-none font-arial text-xs leading-[120%]`}
+                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
               />
             </div>
             <div className="px-4 pb-1 flex justify-end flex-shrink-0">
               <StarRating 
-                starColor={getStarColorHex("03")} 
+                starColor="black" 
                 value={starRatings[starKey] || 0}
                 onChange={(value) => updateStarRating(starKey, value)}
               />
@@ -755,42 +721,6 @@ interface SlideData {
   content?: React.ReactNode;
 }
 
-// Helper function to get color for TextArea based on section
-const getPostitColor = (labelNumber: string) => {
-  switch (labelNumber) {
-    case "01":
-      return "bg-past-year-500";
-    case "02":
-      return "bg-health-check-500";
-    case "03":
-      return "bg-new-year-500";
-    case "04":
-      return "bg-plan-terminate-500";
-    case "24":
-      return "bg-last-slide-500";
-    default:
-      return "bg-[#FFE299]";
-  }
-};
-
-// Helper function to get star color based on section
-const getStarColorHex = (labelNumber: string) => {
-  switch (labelNumber) {
-    case "01":
-      return "#4a0d1f"; // past-year-900 (#F499B5)
-    case "02":
-      return "#1a0a0d"; // health-check-900 (#671F2A)
-    case "03":
-      return "#331105"; // new-year-900 (#F26A2F)
-    case "04":
-      return "#3d3b26"; // plan-terminate-900 (#DDDOBF)
-    case "24":
-      return "#0f0e0e"; // last-slide-900 (#272222)
-    default:
-      return "white";
-  }
-};
-
 const slides = (
   textareaValues: {[key: string]: string}, 
   updateTextareaValue: (key: string, value: string) => void,
@@ -807,7 +737,7 @@ const slides = (
       "Schaut zurück auf das letzte Jahr. Was war los? Ordnet folgende Bereiche im Graphen ein.",
     content: (
       <div className="flex-1 flex flex-col justify-center">
-        <div className="text-center text-past-year-900 text-xs font-arial">
+        <div className="text-center text-white text-xs font-arial">
           Swipe um weiter zu navigieren
         </div>
       </div>
@@ -831,7 +761,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Worauf seid ihr stolz?
           </div>
           <TextArea 
@@ -839,12 +769,10 @@ const slides = (
             value={textareaValues['slide3-proud'] || ''}
             onChange={(value) => updateTextareaValue('slide3-proud', value)}
             fillHeight={true}
-            bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Wofür seid ihr dankbar?
           </div>
           <TextArea 
@@ -852,12 +780,10 @@ const slides = (
             value={textareaValues['slide3-grateful'] || ''}
             onChange={(value) => updateTextareaValue('slide3-grateful', value)}
             fillHeight={true}
-            bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--past-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr nächstes Jahr besser machen?
           </div>
           <TextArea 
@@ -865,8 +791,6 @@ const slides = (
             value={textareaValues['slide3-improve'] || ''}
             onChange={(value) => updateTextareaValue('slide3-improve', value)}
             fillHeight={true}
-            bgColor={getPostitColor("01")}
-            placeholderColor="text-past-year-800"
           />
         </div>
       </div>
@@ -887,41 +811,37 @@ const slides = (
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Sexualität</div>
+            <div className="text-white text-base font-arial">Sexualität</div>
             <StarRating 
               value={starRatings['slide5-sexuality'] || 0}
               onChange={(value) => updateStarRating('slide5-sexuality', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-white text-base font-arial">
               Emotionale Verbundenheit
             </div>
             <StarRating 
               value={starRatings['slide5-emotional'] || 0}
               onChange={(value) => updateStarRating('slide5-emotional', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Kommunikation</div>
+            <div className="text-white text-base font-arial">Kommunikation</div>
             <StarRating 
               value={starRatings['slide5-communication'] || 0}
               onChange={(value) => updateStarRating('slide5-communication', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Vertrauen</div>
+            <div className="text-white text-base font-arial">Vertrauen</div>
             <StarRating 
               value={starRatings['slide5-trust'] || 0}
               onChange={(value) => updateStarRating('slide5-trust', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
         </div>
-        <div className="text-center text-health-check-900 text-xs font-arial flex-shrink-0 mt-4">
+        <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
           Füllt die Sterne aus, klickt erneut für halb gefüllt
         </div>
       </div>
@@ -935,45 +855,41 @@ const slides = (
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex-1 flex flex-col justify-evenly">
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>Gemeinsame Zeit</div>
+            <div className="text-white text-base font-arial">Gemeinsame Zeit</div>
             <StarRating 
               value={starRatings['slide6-time'] || 0}
               onChange={(value) => updateStarRating('slide6-time', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-white text-base font-arial">
               Zusammen gelacht
             </div>
             <StarRating 
               value={starRatings['slide6-laughter'] || 0}
               onChange={(value) => updateStarRating('slide6-laughter', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-white text-base font-arial">
               Konfliktbewältigung
             </div>
             <StarRating 
               value={starRatings['slide6-conflict'] || 0}
               onChange={(value) => updateStarRating('slide6-conflict', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
           <div className="space-y-2">
-            <div className="text-base font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+            <div className="text-white text-base font-arial">
               Freiheit, Unabhängigkeit
             </div>
             <StarRating 
               value={starRatings['slide6-freedom'] || 0}
               onChange={(value) => updateStarRating('slide6-freedom', value)}
-              starColor={getStarColorHex("02")}
             />
           </div>
         </div>
-        <div className="text-center text-health-check-900 text-xs font-arial flex-shrink-0 mt-4">
+        <div className="text-center text-white text-xs font-arial flex-shrink-0 mt-4">
           Füllt die Sterne aus, klickt erneut für halb gefüllt
         </div>
       </div>
@@ -985,7 +901,7 @@ const slides = (
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col">
-        <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--health-check-900) / 0.7)' }}>
+        <div className="text-white text-base mb-4 font-arial">
           Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder
           fürs kommende Jahr aus.
         </div>
@@ -994,8 +910,6 @@ const slides = (
           fillHeight={true}
           value={textareaValues['slide7-insights'] || ''}
           onChange={(value) => updateTextareaValue('slide7-insights', value)}
-          bgColor={getPostitColor("02")}
-          placeholderColor="text-health-check-800"
         />
       </div>
     ),
@@ -1014,7 +928,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Was wollen wir neu initiieren?
           </div>
           <TextArea 
@@ -1022,12 +936,10 @@ const slides = (
             value={textareaValues['slide9-initiate'] || ''}
             onChange={(value) => updateTextareaValue('slide9-initiate', value)}
             fillHeight={true}
-            bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Womit wollen wir aufhören, weil es uns nicht gut tut?
           </div>
           <TextArea 
@@ -1035,12 +947,10 @@ const slides = (
             value={textareaValues['slide9-stop'] || ''}
             onChange={(value) => updateTextareaValue('slide9-stop', value)}
             fillHeight={true}
-            bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Was wollt ihr weiter machen?
           </div>
           <TextArea 
@@ -1048,8 +958,6 @@ const slides = (
             value={textareaValues['slide9-continue'] || ''}
             onChange={(value) => updateTextareaValue('slide9-continue', value)}
             fillHeight={true}
-            bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-800"
           />
         </div>
       </div>
@@ -1062,7 +970,7 @@ const slides = (
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Was wollen wir bis Jahresende geschafft haben?
           </div>
           <TextArea 
@@ -1070,12 +978,10 @@ const slides = (
             value={textareaValues['slide10-achieve'] || ''}
             onChange={(value) => updateTextareaValue('slide10-achieve', value)}
             fillHeight={true}
-            bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Welches Ziel nehmen wir aus dem letzten Jahr mit?
           </div>
           <TextArea 
@@ -1083,12 +989,10 @@ const slides = (
             value={textareaValues['slide10-carry'] || ''}
             onChange={(value) => updateTextareaValue('slide10-carry', value)}
             fillHeight={true}
-            bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-800"
           />
         </div>
         <div className="flex-1 flex flex-col">
-          <div className="text-base mb-4 font-arial" style={{ color: 'hsl(var(--new-year-900) / 0.7)' }}>
+          <div className="text-white text-base mb-4 font-arial">
             Welche Projekte nehmen wir uns vor?
           </div>
           <TextArea 
@@ -1096,8 +1000,6 @@ const slides = (
             value={textareaValues['slide10-projects'] || ''}
             onChange={(value) => updateTextareaValue('slide10-projects', value)}
             fillHeight={true}
-            bgColor={getPostitColor("03")}
-            placeholderColor="text-new-year-800"
           />
         </div>
       </div>
@@ -1109,7 +1011,7 @@ const slides = (
     label: { number: "03", text: "The new year" },
     content: (
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="text-new-year-900 text-sm font-arial mb-3 flex-shrink-0">
+        <div className="text-white text-sm font-arial mb-3 flex-shrink-0">
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
         </div>
@@ -1137,7 +1039,7 @@ const slides = (
     label: { number: "04", text: "Plan and terminate" },
     content: (
       <div className="flex-1 flex flex-col h-full">
-        <div className="text-plan-terminate-900 text-base font-arial mb-4 flex-shrink-0">
+        <div className="text-white text-base font-arial mb-4 flex-shrink-0">
           Nehmt euch ein Blatt Papier und ordnet eure Ziele auf dem Graphen ein.
           Ihr könnt wenige große bzw. mehrere kleine Ziele festlegen. Ihr
           solltet nur die Ziele angehen, die einen hohen Impact haben und
@@ -1154,7 +1056,7 @@ const slides = (
           href="/Vorlage.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full h-12 border border-plan-terminate-900 rounded-full text-plan-terminate-900 text-base font-arial hover:bg-plan-terminate-900 hover:text-plan-terminate-400 transition-colors flex-shrink-0 flex items-center justify-center no-underline"
+          className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0 flex items-center justify-center no-underline"
         >
           Vorlage herunterladen
         </a>
@@ -1180,111 +1082,10 @@ const Slide: React.FC<SlideProps> = ({
   onNextSlide,
   currentSlide,
   totalSlides,
-}) => {
-  // Determine color theme based on slide label
-  const getColorTheme = () => {
-    const labelNumber = slide.label.number;
-    switch (labelNumber) {
-      case "01":
-        return {
-          bg: "bg-past-year-400",
-          text: "text-past-year-900",
-          border: "border-past-year-900",
-          postit: "bg-past-year-500",
-          star: "past-year-900",
-          pageBg: "past-year-500",
-          scrollbar: "past-year-600",
-          textColor: "text-past-year-900"
-        };
-      case "02":
-        return {
-          bg: "bg-health-check-400",
-          text: "text-health-check-900",
-          border: "border-health-check-900",
-          postit: "bg-health-check-500",
-          star: "health-check-900",
-          pageBg: "health-check-500",
-          scrollbar: "health-check-600",
-          textColor: "text-health-check-900"
-        };
-      case "03":
-        return {
-          bg: "bg-new-year-400",
-          text: "text-new-year-900",
-          border: "border-new-year-900",
-          postit: "bg-new-year-500",
-          star: "new-year-900",
-          pageBg: "new-year-500",
-          scrollbar: "new-year-600",
-          textColor: "text-new-year-900"
-        };
-      case "04":
-        return {
-          bg: "bg-plan-terminate-400",
-          text: "text-plan-terminate-900",
-          border: "border-plan-terminate-900",
-          postit: "bg-plan-terminate-500",
-          star: "plan-terminate-900",
-          pageBg: "plan-terminate-500",
-          scrollbar: "plan-terminate-600",
-          textColor: "text-plan-terminate-900"
-        };
-      case "Finally":
-        return {
-          bg: "bg-last-slide-400",
-          text: "text-last-slide-900",
-          border: "border-last-slide-900",
-          postit: "bg-last-slide-500",
-          star: "last-slide-900",
-          pageBg: "last-slide-500",
-          scrollbar: "last-slide-600",
-          textColor: "text-last-slide-900"
-        };
-      default:
-        return {
-          bg: "bg-[#161616]",
-          text: "text-white",
-          border: "border-white",
-          postit: "bg-[#FFE299]",
-          star: "white",
-          pageBg: "black",
-          scrollbar: "gray-500",
-          textColor: "text-white"
-        };
-    }
-  };
-
-  const colorTheme = getColorTheme();
-
-  return (
-  <div className="w-full h-full flex items-center justify-center text-white select-none">
+}) => (
+  <div className="w-full h-full flex items-center justify-center bg-black text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
-      <div className={`flex-1 ${colorTheme.bg} rounded-lg md:rounded-2xl flex flex-col min-h-0 relative ${colorTheme.text} overflow-hidden`}>
-        <div className="responsive-card-padding flex flex-col min-h-0 flex-1">
-          <style>{`
-            .scrollbar-custom {
-              scrollbar-width: thin;
-              scrollbar-color: hsl(var(--${colorTheme.scrollbar})) transparent;
-              scrollbar-gutter: stable;
-              overscroll-behavior: contain;
-              -webkit-overflow-scrolling: touch;
-              padding-right: 0 !important;
-              margin-right: 8px;
-            }
-            .scrollbar-custom::-webkit-scrollbar {
-              width: 8px;
-            }
-            .scrollbar-custom::-webkit-scrollbar-track {
-              background: transparent;
-            }
-            .scrollbar-custom::-webkit-scrollbar-thumb {
-              background: hsl(var(--${colorTheme.scrollbar}));
-              border-radius: 4px;
-            }
-            .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-              background: hsl(var(--${colorTheme.scrollbar}) / 0.8);
-            }
-          `}</style>
+      <div className="flex-1 bg-[#161616] rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 relative">
         <button
           onClick={onPrevSlide}
           className="absolute left-0 top-0 w-8 h-full z-10 cursor-pointer"
@@ -1304,7 +1105,7 @@ const Slide: React.FC<SlideProps> = ({
           <div className="flex-1 flex flex-col">
             <div className="flex-1 flex flex-col justify-center">
               <div className="mb-[24px]">
-              <div className={`inline-flex items-center px-3 py-1 border ${colorTheme.border} rounded-full text-xs font-bold font-kokoro leading-[100%]`}>
+              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
                   <span className="ml-1">{slide.label.text}</span>
@@ -1327,7 +1128,7 @@ const Slide: React.FC<SlideProps> = ({
           // Special layout for other title slides
           <div className="flex-1 flex flex-col justify-center">
             <div className="mb-[24px]">
-               <div className={`inline-flex items-center px-3 py-1 border ${colorTheme.border} rounded-full text-xs font-bold font-kokoro leading-[100%]`}>
+               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
                   <span className="ml-1">{slide.label.text}</span>
@@ -1349,7 +1150,7 @@ const Slide: React.FC<SlideProps> = ({
           // Slide 2 (draggable emojis), Slide 11 (focus areas), and Slide 13 (image) - no scrolling
           <>
             <div className="mb-4 md:mb-6">
-               <div className={`inline-flex items-center px-3 py-1 border ${colorTheme.border} rounded-full text-xs font-bold font-kokoro leading-[100%]`}>
+               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
                   <span className="ml-1">{slide.label.text}</span>
@@ -1369,7 +1170,7 @@ const Slide: React.FC<SlideProps> = ({
           // Regular layout for other slides with scrolling
           <>
             <div className="mb-4 md:mb-6 flex-shrink-0">
-              <div className={`inline-flex items-center px-3 py-1 border ${colorTheme.border} rounded-full text-xs font-bold font-kokoro leading-[100%]`}>
+              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
                   <span className="ml-1">{slide.label.text}</span>
@@ -1383,15 +1184,13 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
             
-            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-custom pr-8 -mr-8">{slide.content}</div>
+            <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">{slide.content}</div>
           </>
         )}
-        </div>
       </div>
     </div>
   </div>
-  );
-};
+);
 
 export default function YearPlannerGenerator() {
   // Clear expired data on component mount
@@ -1464,26 +1263,23 @@ export default function YearPlannerGenerator() {
         content: (
           <div className="space-y-6 flex-1 flex flex-col">
             <div>
-              <div className="text-plan-terminate-900 text-base mb-2 font-arial">Ziel</div>
+              <div className="text-white text-base mb-2 font-arial">Ziel</div>
               <TextArea 
                 placeholder="Ziel beschreiben" 
                 value={textareaValues[`slide${i}-goal`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-goal`, value)}
                 fillHeight={true}
-                bgColor={getPostitColor("04")}
-                placeholderColor="text-plan-terminate-800"
               />
             </div>
             <div className="flex items-center gap-2">
-              <div className="text-plan-terminate-900 text-base flex-1 font-arial">Prio</div>
+              <div className="text-white text-base flex-1 font-arial">Prio</div>
               <StarRating 
                 value={starRatings[`slide${i}-prio`] || 0}
                 onChange={(value) => updateStarRating(`slide${i}-prio`, value)}
-                starColor={getStarColorHex("04")}
               />
             </div>
             <div className="flex-1 flex flex-col">
-              <div className="text-plan-terminate-900 text-base mb-2 font-arial">
+              <div className="text-white text-base mb-2 font-arial">
                 Wie messen wir den Erfolg?
               </div>
               <TextArea 
@@ -1491,12 +1287,10 @@ export default function YearPlannerGenerator() {
                 value={textareaValues[`slide${i}-measure`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-measure`, value)}
                 fillHeight={true}
-                bgColor={getPostitColor("04")}
-                placeholderColor="text-plan-terminate-800"
               />
             </div>
             <div className="flex-1 flex flex-col">
-              <div className="text-plan-terminate-900 text-base mb-2 font-arial">
+              <div className="text-white text-base mb-2 font-arial">
                 Wie gehen wir es Schritt für Schritt an?
               </div>
               <TextArea 
@@ -1504,8 +1298,6 @@ export default function YearPlannerGenerator() {
                 value={textareaValues[`slide${i}-steps`] || ''}
                 onChange={(value) => updateTextareaValue(`slide${i}-steps`, value)}
                 fillHeight={true}
-                bgColor={getPostitColor("04")}
-                placeholderColor="text-plan-terminate-800"
               />
             </div>
           </div>
@@ -1635,46 +1427,15 @@ export default function YearPlannerGenerator() {
     };
   }, []);
 
-  // Get current slide's background color and text color
-  const getCurrentBg = () => {
-    const currentSlideData = slidesArray[currentSlide];
-    if (!currentSlideData) return "bg-black";
-    
-    const labelNumber = currentSlideData.label.number;
-    switch (labelNumber) {
-      case "01": return "bg-past-year-500";
-      case "02": return "bg-health-check-500";
-      case "03": return "bg-new-year-500";
-      case "04": return "bg-plan-terminate-500";
-      case "Finally": return "bg-last-slide-500";
-      default: return "bg-black";
-    }
-  };
-
-  const getCurrentTextColor = () => {
-    const currentSlideData = slidesArray[currentSlide];
-    if (!currentSlideData) return "text-white";
-    
-    const labelNumber = currentSlideData.label.number;
-    switch (labelNumber) {
-      case "01": return "text-past-year-900";
-      case "02": return "text-health-check-900";
-      case "03": return "text-new-year-900";
-      case "04": return "text-plan-terminate-900";
-      case "Finally": return "text-last-slide-900";
-      default: return "text-white";
-    }
-  };
-
   return (
-    <div className={`w-full h-dvh overflow-hidden relative ${getCurrentBg()}`} style={{ transition: 'background-color 300ms ease-out', touchAction: 'pan-x', overscrollBehavior: 'none' }}>
+    <div className="w-full h-dvh bg-black overflow-hidden relative" style={{ touchAction: 'pan-x', overscrollBehavior: 'none' }}>
       {/* Fixed Header */}
       <div className="absolute top-0 left-0 right-0 z-20 w-full px-4 pt-2 md:pt-4">
         <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-4">
-          <h1 className={`text-[24px] md:text-[28px] font-bold leading-[120%] font-kokoro transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
+          <h1 className="text-[24px] md:text-[28px] font-bold leading-[120%] font-kokoro text-white">
             Year Planning
           </h1>
-          <div className={`flex-1 text-right text-sm md:text-base font-arial transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
+          <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
             {currentSlide + 1} / 24
           </div>
         </div>
@@ -1682,7 +1443,7 @@ export default function YearPlannerGenerator() {
 
       {/* Fixed Footer */}
       <div className="absolute bottom-0 left-0 right-0 z-20 w-full px-4 pb-2 md:pb-4">
-        <div className={`flex items-center gap-2 mt-2 md:mt-4 text-sm md:text-base font-arial transition-colors duration-300 ease-out ${getCurrentTextColor()}`}>
+        <div className="flex items-center gap-2 mt-2 md:mt-4 text-sm md:text-base font-arial text-white">
           <a 
             href="https://relationshipbydesign.de/" 
             target="_blank" 
