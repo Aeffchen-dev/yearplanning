@@ -30,7 +30,7 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
     }
     pdf.setDrawColor(0);
     pdf.setLineWidth(0.2);
-    if (filled) pdf.setFillColor(0);
+    if (filled) pdf.setFillColor(0, 0, 0);
     for (let i = 0; i < pts.length; i++) {
       const n = (i + 1) % pts.length;
       pdf.line(pts[i][0], pts[i][1], pts[n][0], pts[n][1]);
@@ -102,7 +102,7 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
   };
 
   const addEmoji = (emoji: string, label: string, placed: boolean, y: number, xOff: number = 0): number => {
-    pdf.setFillColor(0);
+    pdf.setFillColor(0, 0, 0);
     pdf.circle(contentX + xOff + 5, y, 5, 'F');
     pdf.setFontSize(8);
     pdf.setFont('helvetica', 'normal');
