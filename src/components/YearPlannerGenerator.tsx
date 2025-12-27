@@ -1333,15 +1333,15 @@ export default function YearPlannerGenerator() {
         <div className="flex flex-col gap-4 w-full max-w-md mx-auto mt-8">
           <button
             onClick={handleExport}
-            className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0 flex items-center justify-center"
+            className="w-full h-10 border border-white rounded-full text-white text-xs font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0 flex items-center justify-center"
           >
             Inhalte exportieren
           </button>
           <button
             onClick={handleClearData}
-            className="flex items-center justify-center gap-2 text-white text-base font-arial hover:opacity-70 transition-opacity"
+            className="flex items-center justify-center gap-2 text-white text-xs font-arial hover:opacity-70 transition-opacity"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 6h18"/>
               <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
               <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
