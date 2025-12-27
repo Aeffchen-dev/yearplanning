@@ -281,14 +281,23 @@
   /* Hide last slide (export page) */
   .flex.h-full.transition-transform > div:last-child {
     display: none !important;
+    visibility: hidden !important;
     min-height: 0 !important;
     height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    page-break-before: avoid !important;
     page-break-after: avoid !important;
+    break-before: avoid !important;
+    break-after: avoid !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* Prevent empty pages */
+  /* Prevent empty page after second-to-last slide */
   .flex.h-full.transition-transform > div:nth-last-child(2) {
-    page-break-after: avoid !important;
+    page-break-after: auto !important;
+    break-after: auto !important;
   }
 
   /* Remove black backgrounds */
