@@ -299,8 +299,8 @@
   /* Slide inner container - wider for A4 */
   .w-full.max-w-\[500px\] {
     margin: 0 auto !important;
-    width: 130mm !important;
-    max-width: 130mm !important;
+    width: 162mm !important;
+    max-width: 162mm !important;
     height: 260mm !important;
     max-height: 260mm !important;
   }
