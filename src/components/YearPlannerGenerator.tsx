@@ -1131,8 +1131,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : [4, 8, 12, 24].includes(slide.id) ? (
-          // Special layout for other title slides
+        ) : [4, 8, 12].includes(slide.id) ? (
+          // Special layout for title slides (not slide 24)
           <div className="flex-1 flex flex-col justify-center">
             <div className="mb-[24px]">
                <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
@@ -1149,6 +1149,28 @@ const Slide: React.FC<SlideProps> = ({
             )}
             {slide.content && (
               <div className="mt-auto">
+                {slide.content}
+              </div>
+            )}
+          </div>
+        ) : slide.id === 24 ? (
+          // Special layout for final slide - content directly below title
+          <div className="flex-1 flex flex-col justify-center">
+            <div className="mb-[24px]">
+               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
+                {slide.label.number}
+                {slide.label.text && (
+                  <span className="ml-1">{slide.label.text}</span>
+                )}
+              </div>
+            </div>
+            {slide.title && (
+              <div className="font-arial whitespace-pre-line text-[32px] leading-[120%] text-left">
+                {slide.title}
+              </div>
+            )}
+            {slide.content && (
+              <div className="mt-8">
                 {slide.content}
               </div>
             )}
@@ -1330,7 +1352,7 @@ export default function YearPlannerGenerator() {
       title:
         "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
       content: (
-        <div className="flex flex-col w-full max-w-md mx-auto mt-8">
+        <div className="flex flex-col w-full max-w-md mx-auto">
           <button
             onClick={handleExport}
             className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0 flex items-center justify-center"
