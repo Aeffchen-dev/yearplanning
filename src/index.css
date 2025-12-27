@@ -216,7 +216,7 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 15mm 25mm;
   }
 
   * {
@@ -226,13 +226,11 @@
   }
 
   html, body {
-    position: static !important;
-    overflow: visible !important;
-    height: auto !important;
     width: 100% !important;
-    background: white !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
+    background: white !important;
   }
 
   /* Hide header and footer during print */
@@ -245,57 +243,52 @@
   .flex.h-full.transition-transform {
     display: block !important;
     transform: none !important;
-    width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    width: auto !important;
   }
 
   /* Each slide becomes a print page */
   .flex.h-full.transition-transform > div {
-    width: 210mm !important;
-    height: 297mm !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 267mm !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    overflow: hidden !important;
-    display: table !important;
     background: white !important;
+  }
+
+  /* Slide inner wrapper */
+  .flex.h-full.transition-transform > div > div {
+    width: 100% !important;
+    height: 267mm !important;
+  }
+
+  /* Inner content wrapper - the card */
+  .w-full.max-w-\[500px\] {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  /* Center slide content using table-cell */
-  .flex.h-full.transition-transform > div > div {
-    display: table-cell !important;
-    vertical-align: middle !important;
-    text-align: center !important;
-    width: 210mm !important;
-    height: 297mm !important;
-  }
-
-  /* Inner content wrapper */
-  .w-full.max-w-\[500px\] {
-    display: inline-block !important;
-    text-align: left !important;
-    width: 150mm !important;
-    max-width: 150mm !important;
-    height: 260mm !important;
-    margin: 0 auto !important;
+  /* Card container fills available space */
+  .flex-1.bg-\[\#161616\] {
+    height: 100% !important;
   }
 
   /* Hide last slide (export page) */
   .flex.h-full.transition-transform > div:last-child {
     display: none !important;
+    min-height: 0 !important;
     height: 0 !important;
     page-break-after: avoid !important;
-    break-after: avoid !important;
   }
 
   /* Prevent empty pages */
   .flex.h-full.transition-transform > div:nth-last-child(2) {
     page-break-after: avoid !important;
-    break-after: avoid !important;
   }
 
   /* Remove black backgrounds */
@@ -306,11 +299,6 @@
   /* Dark grey card background - keep this */
   .bg-\[\#161616\] {
     background-color: #161616 !important;
-  }
-
-  /* Card container */
-  .flex-1.bg-\[\#161616\] {
-    height: 100% !important;
   }
 
   /* Ensure images are visible */
