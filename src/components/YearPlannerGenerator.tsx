@@ -178,13 +178,15 @@ interface DraggableEmojiIconProps {
   emoji: string;
   label: string;
   onStartDrag: (emoji: string, label: string) => void;
+  disabled?: boolean;
 }
 
-const DraggableEmojiIcon: React.FC<DraggableEmojiIconProps> = ({ emoji, label, onStartDrag }) => {
+const DraggableEmojiIcon: React.FC<DraggableEmojiIconProps> = ({ emoji, label, onStartDrag, disabled = false }) => {
   const [isDragStarted, setIsDragStarted] = useState(false);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (disabled) return;
     if (!isDragStarted) {
       setIsDragStarted(true);
       onStartDrag(emoji, label);
@@ -195,6 +197,7 @@ const DraggableEmojiIcon: React.FC<DraggableEmojiIconProps> = ({ emoji, label, o
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
+    if (disabled) return;
     if (!isDragStarted) {
       setIsDragStarted(true);
       onStartDrag(emoji, label);
@@ -205,15 +208,15 @@ const DraggableEmojiIcon: React.FC<DraggableEmojiIconProps> = ({ emoji, label, o
 
   return (
     <div 
-      className="flex items-center gap-2 cursor-grab select-none active:cursor-grabbing" 
+      className={`flex items-center gap-2 select-none ${disabled ? 'cursor-not-allowed opacity-40' : 'cursor-grab active:cursor-grabbing'}`}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       style={{ touchAction: 'none' }}
     >
-      <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+      <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${disabled ? 'bg-gray-600' : 'bg-black hover:bg-gray-800'}`}>
         <span className="text-2xl pointer-events-none">{emoji}</span>
       </div>
-      <span className="text-white text-base font-arial flex-1 pointer-events-none">{label}</span>
+      <span className={`text-base font-arial flex-1 pointer-events-none ${disabled ? 'text-gray-500' : 'text-white'}`}>{label}</span>
     </div>
   );
 };
@@ -632,6 +635,10 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
   const [draggedEmojiId, setDraggedEmojiId] = useState<string | null>(null);
 
   const handleStartDrag = (emoji: string, label: string) => {
+    // Check if this emoji is already placed (only allow one of each)
+    const alreadyPlaced = draggedEmojis.some(e => e.emoji === emoji);
+    if (alreadyPlaced) return;
+    
     const newId = `${emoji}-${Date.now()}`;
     const newEmoji = {
       id: newId,
@@ -696,14 +703,14 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <DraggableEmojiIcon emoji="❤️" label="Beziehung" onStartDrag={handleStartDrag} />
-            <DraggableEmojiIcon emoji="👯‍♀️" label="Freunde" onStartDrag={handleStartDrag} />
-            <DraggableEmojiIcon emoji="🐶" label="Kalle" onStartDrag={handleStartDrag} />
+            <DraggableEmojiIcon emoji="❤️" label="Beziehung" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "❤️")} />
+            <DraggableEmojiIcon emoji="👯‍♀️" label="Freunde" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "👯‍♀️")} />
+            <DraggableEmojiIcon emoji="🐶" label="Kalle" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "🐶")} />
           </div>
           <div className="space-y-2">
-            <DraggableEmojiIcon emoji="🤸" label="Hobbies" onStartDrag={handleStartDrag} />
-            <DraggableEmojiIcon emoji="🫀" label="Gesundheit" onStartDrag={handleStartDrag} />
-            <DraggableEmojiIcon emoji="👩‍💻" label="Beruf" onStartDrag={handleStartDrag} />
+            <DraggableEmojiIcon emoji="🤸" label="Hobbies" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "🤸")} />
+            <DraggableEmojiIcon emoji="🫀" label="Gesundheit" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "🫀")} />
+            <DraggableEmojiIcon emoji="👩‍💻" label="Beruf" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "👩‍💻")} />
           </div>
         </div>
         <div className="text-center text-white text-sm font-arial">
