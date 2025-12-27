@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { Download } from "lucide-react";
 import { setItemWithExpiry, getItemWithExpiry, clearExpiredItems } from '@/utils/localStorage';
-import { exportToPDF } from '@/utils/pdfExport';
 
 interface StarRatingProps {
   value?: number;
@@ -1320,17 +1318,6 @@ export default function YearPlannerGenerator() {
       label: { number: "Finally", text: "" },
       title:
         "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
-      content: (
-        <div className="flex-1 flex flex-col justify-end items-center pb-4">
-          <button
-            onClick={() => exportToPDF({ textareaValues, starRatings, draggedEmojis })}
-            className="flex items-center gap-2 text-white text-sm font-arial hover:opacity-80 transition-opacity"
-          >
-            <Download size={18} />
-            <span>Inhalte als .pdf exportieren</span>
-          </button>
-        </div>
-      ),
     });
 
     return baseSlides;
@@ -1498,8 +1485,7 @@ export default function YearPlannerGenerator() {
         {slidesArray.map((slide, index) => (
           <div
             key={slide.id}
-            data-slide-index={index}
-            className="w-full h-full flex-shrink-0 slide-for-export"
+            className="w-full h-full flex-shrink-0"
             style={{ width: `${100 / slidesArray.length}%` }}
           >
             <Slide
