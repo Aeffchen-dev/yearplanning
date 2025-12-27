@@ -211,3 +211,51 @@
     }
   }
 }
+
+/* Print styles for exporting slides */
+@media print {
+  body {
+    position: static !important;
+    overflow: visible !important;
+    height: auto !important;
+    background: white !important;
+  }
+
+  /* Hide header and footer during print */
+  .absolute.top-0,
+  .absolute.bottom-0 {
+    display: none !important;
+  }
+
+  /* Make slider show all slides vertically */
+  .flex.h-full.transition-transform {
+    display: block !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+
+  /* Each slide becomes a print page */
+  .flex.h-full.transition-transform > div {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .flex.h-full.transition-transform > div:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  /* Hide navigation buttons */
+  button:has(svg[viewBox="0 0 24 24"]) {
+    display: none !important;
+  }
+
+  /* Ensure content is visible */
+  .w-full.h-dvh {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
