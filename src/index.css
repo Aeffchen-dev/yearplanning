@@ -230,7 +230,7 @@
     overflow: visible !important;
     height: auto !important;
     width: 210mm !important;
-    background: black !important;
+    background: white !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -261,6 +261,7 @@
     break-inside: avoid !important;
     overflow: hidden !important;
     display: flex !important;
+    background: white !important;
   }
 
   /* Hide last slide (export page) */
@@ -279,12 +280,12 @@
     break-after: avoid !important;
   }
 
-  /* Preserve backgrounds */
-  [class*="bg-"] {
-    background-color: inherit !important;
+  /* Remove black backgrounds */
+  .bg-black {
+    background-color: white !important;
   }
 
-  /* Dark grey card background */
+  /* Dark grey card background - keep this */
   .bg-\[\#161616\] {
     background-color: #161616 !important;
   }
@@ -294,12 +295,6 @@
     display: block !important;
     visibility: visible !important;
     max-width: 100% !important;
-  }
-
-  /* Ensure emojis and stars are visible */
-  svg {
-    display: inline-block !important;
-    visibility: visible !important;
   }
 
   /* Hide navigation buttons */
@@ -312,7 +307,7 @@
   .w-full.h-dvh {
     height: auto !important;
     overflow: visible !important;
-    background: black !important;
+    background: white !important;
   }
 
   /* Preserve card backgrounds */
@@ -330,27 +325,33 @@
     padding-bottom: 20px !important;
   }
 
-  /* Ensure star ratings are visible in print */
-  .flex.gap-1 svg,
-  .flex.gap-1.md\\:gap-3 svg {
+  /* Ensure ALL star ratings are visible in print */
+  svg {
     display: inline-block !important;
     visibility: visible !important;
   }
 
-  /* Star rating specific styles */
-  .flex.gap-1 svg path,
-  .flex.gap-1.md\\:gap-3 svg path {
+  /* Star SVG paths must be visible */
+  svg path {
     stroke: currentColor !important;
+    visibility: visible !important;
+  }
+
+  /* Star rating buttons */
+  .flex.gap-1 button,
+  .flex.gap-1.md\:gap-3 button {
+    display: inline-flex !important;
+    visibility: visible !important;
+  }
+
+  /* White stars styling */
+  .flex.gap-1.md\:gap-3 button {
+    color: white !important;
   }
 
   /* Black stars for focus areas */
-  .flex.gap-1 button {
+  .flex.gap-1:not(.md\:gap-3) button {
     color: black !important;
-  }
-
-  /* White stars for other ratings */
-  .flex.gap-1.md\\:gap-3 button {
-    color: white !important;
   }
 
   /* Ensure draggable emojis show */
