@@ -254,8 +254,6 @@
   .flex.h-full.transition-transform > div {
     width: 100% !important;
     height: 100vh !important;
-    min-height: 100vh !important;
-    max-height: 100vh !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
@@ -265,9 +263,6 @@
     justify-content: center !important;
     align-items: center !important;
     background: white !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
   }
 
   /* Hide last slide (export page) */
