@@ -1498,7 +1498,8 @@ export default function YearPlannerGenerator() {
         {slidesArray.map((slide, index) => (
           <div
             key={slide.id}
-            className="w-full h-full flex-shrink-0"
+            data-slide-index={index}
+            className="w-full h-full flex-shrink-0 slide-for-export"
             style={{ width: `${100 / slidesArray.length}%` }}
           >
             <Slide
