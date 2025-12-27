@@ -1156,7 +1156,7 @@ const Slide: React.FC<SlideProps> = ({
         ) : slide.id === 24 ? (
           // Special layout for final slide - button below title, link at bottom
           <div className="flex-1 flex flex-col">
-            <div className="flex-1 flex flex-col justify-center">
+            <div className="flex flex-col justify-center">
               <div className="mb-[24px]">
                  <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                   {slide.label.number}
@@ -1170,11 +1170,7 @@ const Slide: React.FC<SlideProps> = ({
                   {slide.title}
                 </div>
               )}
-              {slide.content && (
-                <div className="mt-8">
-                  {slide.content}
-                </div>
-              )}
+              {slide.content}
             </div>
           </div>
         ) : slide.id === 2 || slide.id === 11 || slide.id === 13 ? (
@@ -1354,17 +1350,17 @@ export default function YearPlannerGenerator() {
       title:
         "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
       content: (
-        <div className="flex flex-col h-full w-full max-w-md mx-auto">
+        <>
           <button
             onClick={handleExport}
-            className="w-full h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0 flex items-center justify-center"
+            className="w-full max-w-md mx-auto mt-8 h-12 border border-white rounded-full text-white text-base font-arial hover:bg-white hover:text-black transition-colors flex-shrink-0 flex items-center justify-center"
           >
             Inhalte exportieren
           </button>
           <div className="flex-1" />
           <button
             onClick={handleClearData}
-            className="flex items-center justify-center gap-2 text-white text-xs font-arial hover:opacity-70 transition-opacity"
+            className="flex items-center justify-center gap-2 text-white text-xs font-arial hover:opacity-70 transition-opacity mx-auto"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 6h18"/>
@@ -1375,7 +1371,7 @@ export default function YearPlannerGenerator() {
             </svg>
             Meine Einträge löschen
           </button>
-        </div>
+        </>
       ),
     });
 
