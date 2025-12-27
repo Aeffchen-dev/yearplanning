@@ -231,6 +231,15 @@
     margin: 0 !important;
     padding: 0 !important;
     background: white !important;
+    /* Critical for iOS mobile print */
+    position: static !important;
+    overflow: visible !important;
+  }
+
+  /* Override fixed positioning for print */
+  body {
+    position: static !important;
+    overflow: visible !important;
   }
 
   /* Hide header and footer during print */
@@ -314,11 +323,21 @@
     display: none !important;
   }
 
-  /* Ensure content is visible */
-  .w-full.h-dvh {
+  /* Ensure content is visible - critical for iOS */
+  .w-full.h-dvh,
+  [class*="h-dvh"],
+  [class*="h-screen"] {
     height: auto !important;
+    min-height: auto !important;
     overflow: visible !important;
     background: white !important;
+    position: static !important;
+  }
+
+  /* Fix any fixed/absolute containers */
+  .fixed,
+  .absolute {
+    position: static !important;
   }
 
   /* Preserve card backgrounds */
