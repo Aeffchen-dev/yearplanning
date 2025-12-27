@@ -214,11 +214,17 @@
 
 /* Print styles for exporting slides */
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
   body {
     position: static !important;
     overflow: visible !important;
     height: auto !important;
-    background: white !important;
+    background: black !important;
   }
 
   /* Hide header and footer during print */
@@ -248,8 +254,27 @@
     break-after: avoid !important;
   }
 
+  /* Preserve backgrounds */
+  [class*="bg-"] {
+    background-color: inherit !important;
+  }
+
+  /* Ensure images are visible */
+  img {
+    display: block !important;
+    visibility: visible !important;
+    max-width: 100% !important;
+  }
+
+  /* Ensure emojis and stars are visible */
+  svg {
+    display: inline-block !important;
+    visibility: visible !important;
+  }
+
   /* Hide navigation buttons */
-  button:has(svg[viewBox="0 0 24 24"]) {
+  .absolute.left-2,
+  .absolute.right-2 {
     display: none !important;
   }
 
@@ -257,5 +282,12 @@
   .w-full.h-dvh {
     height: auto !important;
     overflow: visible !important;
+    background: black !important;
+  }
+
+  /* Preserve card backgrounds */
+  .rounded-2xl,
+  .rounded-xl {
+    background-color: inherit !important;
   }
 }
