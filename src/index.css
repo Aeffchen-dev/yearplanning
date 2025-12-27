@@ -253,19 +253,19 @@
   /* Each slide becomes a print page - scaled to fit A4 */
   .flex.h-full.transition-transform > div {
     width: 100% !important;
-    height: 277mm !important;
-    min-height: 277mm !important;
-    max-height: 277mm !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     background: white !important;
-    padding: 0 !important;
+    padding: 5mm 0 !important;
     margin: 0 !important;
   }
 
@@ -296,13 +296,14 @@
     background-color: #161616 !important;
   }
 
-  /* Slide inner container - wider for A4 */
+  /* Slide inner container - responsive sizing */
   .w-full.max-w-\[500px\] {
     margin: 0 auto !important;
-    width: 162mm !important;
+    width: 90% !important;
     max-width: 162mm !important;
-    height: 260mm !important;
-    max-height: 260mm !important;
+    height: auto !important;
+    min-height: 250mm !important;
+    max-height: none !important;
   }
 
   /* Card container scaling */
@@ -310,7 +311,7 @@
   .bg-\[\#161616\].rounded-2xl,
   .flex-1.bg-\[\#161616\] {
     height: 100% !important;
-    transform: scale(1) !important;
+    min-height: 240mm !important;
   }
 
   /* Ensure images are visible */
