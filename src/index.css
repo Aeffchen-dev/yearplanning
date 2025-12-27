@@ -216,16 +216,22 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 10mm;
   }
 
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+    box-sizing: border-box !important;
   }
 
-  html, body {
+  html {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  body {
     position: static !important;
     overflow: visible !important;
     height: auto !important;
@@ -247,15 +253,15 @@
     transform: none !important;
     width: 100% !important;
     padding: 0 !important;
-    margin: 0 auto !important;
+    margin: 0 !important;
   }
 
   /* Each slide becomes a print page */
   .flex.h-full.transition-transform > div {
     width: 100% !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
-    max-height: 297mm !important;
+    height: auto !important;
+    min-height: 277mm !important;
+    max-height: 277mm !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
@@ -263,8 +269,10 @@
     overflow: hidden !important;
     display: flex !important;
     justify-content: center !important;
-    align-items: center !important;
+    align-items: flex-start !important;
     background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   /* Hide last slide (export page) */
@@ -293,11 +301,19 @@
     background-color: #161616 !important;
   }
 
-  /* Center the slide content card */
+  /* Slide inner container */
   .w-full.max-w-\[500px\] {
     margin: 0 auto !important;
-    width: 100% !important;
-    max-width: 500px !important;
+    width: 90mm !important;
+    max-width: 90mm !important;
+    height: 100% !important;
+  }
+
+  /* Card container */
+  .bg-\[\#161616\].rounded-lg,
+  .bg-\[\#161616\].rounded-2xl {
+    height: 100% !important;
+    max-height: 275mm !important;
   }
 
   /* Ensure images are visible */
@@ -309,7 +325,9 @@
 
   /* Hide navigation buttons */
   .absolute.left-2,
-  .absolute.right-2 {
+  .absolute.right-2,
+  button[aria-label="Previous slide"],
+  button[aria-label="Next slide"] {
     display: none !important;
   }
 
@@ -326,13 +344,12 @@
     background-color: inherit !important;
   }
 
-  /* Make slide content fit A4 */
-  .px-4.flex-1.flex.flex-col,
+  /* Make slide content fit page */
   .responsive-main-padding {
-    height: calc(297mm - 40px) !important;
+    height: 100% !important;
+    max-height: 275mm !important;
     overflow: hidden !important;
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
+    padding: 10px !important;
   }
 
   /* Ensure ALL star ratings are visible in print */
