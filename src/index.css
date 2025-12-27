@@ -216,22 +216,16 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 10mm;
+    margin: 0;
   }
 
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
-    box-sizing: border-box !important;
   }
 
-  html {
-    width: 100% !important;
-    height: auto !important;
-  }
-
-  body {
+  html, body {
     position: static !important;
     overflow: visible !important;
     height: auto !important;
@@ -259,9 +253,9 @@
   /* Each slide becomes a print page */
   .flex.h-full.transition-transform > div {
     width: 100% !important;
-    height: auto !important;
-    min-height: 277mm !important;
-    max-height: 277mm !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
@@ -269,7 +263,7 @@
     overflow: hidden !important;
     display: flex !important;
     justify-content: center !important;
-    align-items: flex-start !important;
+    align-items: center !important;
     background: white !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -283,9 +277,10 @@
     max-height: 0 !important;
     page-break-after: avoid !important;
     break-after: avoid !important;
+    visibility: hidden !important;
   }
 
-  /* Prevent empty pages - ensure no orphan breaks */
+  /* Prevent empty pages */
   .flex.h-full.transition-transform > div:nth-last-child(2) {
     page-break-after: avoid !important;
     break-after: avoid !important;
@@ -304,16 +299,8 @@
   /* Slide inner container */
   .w-full.max-w-\[500px\] {
     margin: 0 auto !important;
-    width: 90mm !important;
-    max-width: 90mm !important;
-    height: 100% !important;
-  }
-
-  /* Card container */
-  .bg-\[\#161616\].rounded-lg,
-  .bg-\[\#161616\].rounded-2xl {
-    height: 100% !important;
-    max-height: 275mm !important;
+    width: 100% !important;
+    max-width: 400px !important;
   }
 
   /* Ensure images are visible */
@@ -324,8 +311,6 @@
   }
 
   /* Hide navigation buttons */
-  .absolute.left-2,
-  .absolute.right-2,
   button[aria-label="Previous slide"],
   button[aria-label="Next slide"] {
     display: none !important;
@@ -342,14 +327,6 @@
   .rounded-2xl,
   .rounded-xl {
     background-color: inherit !important;
-  }
-
-  /* Make slide content fit page */
-  .responsive-main-padding {
-    height: 100% !important;
-    max-height: 275mm !important;
-    overflow: hidden !important;
-    padding: 10px !important;
   }
 
   /* Ensure ALL star ratings are visible in print */
@@ -391,5 +368,10 @@
   /* Yellow textarea backgrounds */
   .bg-\[\#FFE299\] {
     background-color: #FFE299 !important;
+  }
+
+  /* Hide print-hidden elements */
+  .print\:hidden {
+    display: none !important;
   }
 }
