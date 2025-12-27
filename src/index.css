@@ -246,6 +246,7 @@
     display: block !important;
     transform: none !important;
     width: 210mm !important;
+    padding: 0 !important;
   }
 
   /* Each slide becomes a print page */
@@ -259,15 +260,33 @@
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     overflow: hidden !important;
+    display: flex !important;
   }
 
+  /* Hide last slide (export page) */
   .flex.h-full.transition-transform > div:last-child {
     display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  /* Prevent empty pages - ensure no orphan breaks */
+  .flex.h-full.transition-transform > div:nth-last-child(2) {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
   /* Preserve backgrounds */
   [class*="bg-"] {
     background-color: inherit !important;
+  }
+
+  /* Dark grey card background */
+  .bg-\[\#161616\] {
+    background-color: #161616 !important;
   }
 
   /* Ensure images are visible */
@@ -303,9 +322,12 @@
   }
 
   /* Make slide content fit A4 */
-  .px-4.flex-1.flex.flex-col {
-    height: calc(297mm - 80px) !important;
+  .px-4.flex-1.flex.flex-col,
+  .responsive-main-padding {
+    height: calc(297mm - 40px) !important;
     overflow: hidden !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
   }
 
   /* Ensure star ratings are visible in print */
@@ -313,6 +335,33 @@
   .flex.gap-1.md\\:gap-3 svg {
     display: inline-block !important;
     visibility: visible !important;
-    fill: currentColor !important;
+  }
+
+  /* Star rating specific styles */
+  .flex.gap-1 svg path,
+  .flex.gap-1.md\\:gap-3 svg path {
+    stroke: currentColor !important;
+  }
+
+  /* Black stars for focus areas */
+  .flex.gap-1 button {
+    color: black !important;
+  }
+
+  /* White stars for other ratings */
+  .flex.gap-1.md\\:gap-3 button {
+    color: white !important;
+  }
+
+  /* Ensure draggable emojis show */
+  .absolute.w-12.h-12.bg-black.rounded-full {
+    display: flex !important;
+    visibility: visible !important;
+    background-color: black !important;
+  }
+
+  /* Yellow textarea backgrounds */
+  .bg-\[\#FFE299\] {
+    background-color: #FFE299 !important;
   }
 }
