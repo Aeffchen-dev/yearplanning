@@ -1092,7 +1092,7 @@ const Slide: React.FC<SlideProps> = ({
 }) => (
   <div className="w-full h-full flex items-center justify-center bg-black text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
-      <div className={`flex-1 rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 relative ${[1, 4, 8, 12, 24].includes(slide.id) ? 'bg-[#0000ff]' : 'bg-[#161616]'}`}>
+      <div className="flex-1 bg-[#161616] rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 relative">
         <button
           onClick={onPrevSlide}
           className="absolute left-0 top-0 w-8 h-full z-10 cursor-pointer"
