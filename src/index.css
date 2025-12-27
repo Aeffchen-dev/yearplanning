@@ -253,26 +253,26 @@
   /* Each slide becomes a print page */
   .flex.h-full.transition-transform > div {
     width: 100% !important;
-    min-height: 100vh !important;
+    height: 297mm !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     overflow: hidden !important;
+    display: block !important;
     background: white !important;
-    position: relative !important;
+    text-align: center !important;
+    padding-top: 10mm !important;
+    box-sizing: border-box !important;
   }
 
-  /* Center the slide content on page */
+  /* Slide inner wrapper centering */
   .flex.h-full.transition-transform > div > div {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 80% !important;
-    max-width: 160mm !important;
-    height: auto !important;
-    max-height: 90% !important;
+    display: inline-block !important;
+    text-align: left !important;
+    width: 160mm !important;
+    height: 270mm !important;
+    vertical-align: top !important;
   }
 
   /* Hide last slide (export page) */
@@ -306,7 +306,6 @@
   .bg-\[\#161616\].rounded-2xl,
   .flex-1.bg-\[\#161616\] {
     height: 100% !important;
-    min-height: 600px !important;
   }
 
   /* Ensure images are visible */
