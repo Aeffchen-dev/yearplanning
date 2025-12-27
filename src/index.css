@@ -214,17 +214,25 @@
 
 /* Print styles for exporting slides */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
   }
 
-  body {
+  html, body {
     position: static !important;
     overflow: visible !important;
     height: auto !important;
+    width: 210mm !important;
     background: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   /* Hide header and footer during print */
@@ -237,21 +245,24 @@
   .flex.h-full.transition-transform {
     display: block !important;
     transform: none !important;
-    width: 100% !important;
+    width: 210mm !important;
   }
 
   /* Each slide becomes a print page */
   .flex.h-full.transition-transform > div {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 100vh !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
     page-break-after: always !important;
     break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden !important;
   }
 
   .flex.h-full.transition-transform > div:last-child {
-    page-break-after: avoid !important;
-    break-after: avoid !important;
+    display: none !important;
   }
 
   /* Preserve backgrounds */
@@ -289,5 +300,19 @@
   .rounded-2xl,
   .rounded-xl {
     background-color: inherit !important;
+  }
+
+  /* Make slide content fit A4 */
+  .px-4.flex-1.flex.flex-col {
+    height: calc(297mm - 80px) !important;
+    overflow: hidden !important;
+  }
+
+  /* Ensure star ratings are visible in print */
+  .flex.gap-1 svg,
+  .flex.gap-1.md\\:gap-3 svg {
+    display: inline-block !important;
+    visibility: visible !important;
+    fill: currentColor !important;
   }
 }
