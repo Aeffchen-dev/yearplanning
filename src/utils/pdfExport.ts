@@ -9,460 +9,225 @@ interface ExportData {
 export const exportToPDF = async (data: ExportData): Promise<void> => {
   const { textareaValues, starRatings, draggedEmojis } = data;
   
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4',
-  });
-
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const cardMargin = 15;
-  const cardPadding = 10;
-  const cardWidth = pageWidth - cardMargin * 2;
-  const cardHeight = pageHeight - cardMargin * 2;
-  const contentX = cardMargin + cardPadding;
-  const contentWidth = cardWidth - cardPadding * 2;
-  const contentEndY = cardMargin + cardHeight - cardPadding;
+  const margin = 15;
+  const cardWidth = pageWidth - margin * 2;
+  const cardHeight = pageHeight - margin * 2;
+  const contentX = margin + 10;
+  const contentWidth = cardWidth - 20;
+  const contentEndY = margin + cardHeight - 10;
   
   let currentPage = 0;
 
-  // Draw stars manually using lines
-  const drawStarShape = (centerX: number, centerY: number, outerRadius: number, filled: boolean) => {
-    const points = 5;
-    const innerRadius = outerRadius * 0.4;
-    const path: [number, number][] = [];
-    
-    for (let i = 0; i < points * 2; i++) {
-      const radius = i % 2 === 0 ? outerRadius : innerRadius;
-      const angle = -Math.PI / 2 + (Math.PI * i) / points;
-      path.push([
-        centerX + Math.cos(angle) * radius,
-        centerY + Math.sin(angle) * radius
-      ]);
+  const drawStar = (cx: number, cy: number, r: number, filled: boolean) => {
+    const pts: [number, number][] = [];
+    for (let i = 0; i < 10; i++) {
+      const rad = i % 2 === 0 ? r : r * 0.4;
+      const ang = -Math.PI / 2 + (Math.PI * i) / 5;
+      pts.push([cx + Math.cos(ang) * rad, cy + Math.sin(ang) * rad]);
     }
-    
-    pdf.setDrawColor(0, 0, 0);
+    pdf.setDrawColor(0);
     pdf.setLineWidth(0.2);
-    
-    if (filled) {
-      pdf.setFillColor(0, 0, 0);
+    if (filled) pdf.setFillColor(0);
+    for (let i = 0; i < pts.length; i++) {
+      const n = (i + 1) % pts.length;
+      pdf.line(pts[i][0], pts[i][1], pts[n][0], pts[n][1]);
     }
-    
-    for (let i = 0; i < path.length; i++) {
-      const next = (i + 1) % path.length;
-      pdf.line(path[i][0], path[i][1], path[next][0], path[next][1]);
-    }
-    
     if (filled) {
-      for (let i = 0; i < path.length; i++) {
-        const next = (i + 1) % path.length;
-        pdf.triangle(
-          centerX, centerY,
-          path[i][0], path[i][1],
-          path[next][0], path[next][1],
-          'F'
-        );
+      for (let i = 0; i < pts.length; i++) {
+        const n = (i + 1) % pts.length;
+        pdf.triangle(cx, cy, pts[i][0], pts[i][1], pts[n][0], pts[n][1], 'F');
       }
     }
   };
 
-  const drawStarRating = (x: number, y: number, rating: number, starSize: number = 2.5) => {
-    const gap = 0.8;
+  const drawStars = (x: number, y: number, rating: number, size: number = 2.5) => {
     for (let i = 1; i <= 5; i++) {
-      const starX = x + (i - 1) * (starSize * 2 + gap) + starSize;
-      const starY = y;
-      const filled = rating >= i;
-      const halfFilled = !filled && rating > i - 1;
-      
-      if (filled) {
-        drawStarShape(starX, starY, starSize, true);
-      } else if (halfFilled) {
-        drawStarShape(starX, starY, starSize, false);
-        pdf.setFillColor(0, 0, 0);
-        pdf.rect(starX - starSize, starY - starSize, starSize, starSize * 2, 'F');
-      } else {
-        drawStarShape(starX, starY, starSize, false);
-      }
+      drawStar(x + (i - 1) * (size * 2 + 1) + size, y, size, rating >= i);
     }
   };
 
-  // Helper to load and invert image
-  const loadAndInvertImage = (src: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.drawImage(img, 0, 0);
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const imgData = imageData.data;
-          
-          for (let i = 0; i < imgData.length; i += 4) {
-            imgData[i] = 255 - imgData[i];
-            imgData[i + 1] = 255 - imgData[i + 1];
-            imgData[i + 2] = 255 - imgData[i + 2];
-          }
-          
-          ctx.putImageData(imageData, 0, 0);
-          resolve(canvas.toDataURL('image/png'));
-        } else {
-          reject(new Error('Could not get canvas context'));
-        }
-      };
-      img.onerror = reject;
-      img.src = src;
-    });
-  };
-
-  const startNewSlide = (label: string, labelText: string = ''): number => {
-    if (currentPage > 0) {
-      pdf.addPage();
-    }
+  const startSlide = (num: string, text: string): number => {
+    if (currentPage > 0) pdf.addPage();
     currentPage++;
-    
-    // White background
     pdf.setFillColor(255, 255, 255);
     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-    
-    // Card background (light gray)
     pdf.setFillColor(240, 240, 240);
-    pdf.roundedRect(cardMargin, cardMargin, cardWidth, cardHeight, 4, 4, 'F');
-    
-    // Label pill
-    const labelFullText = labelText ? `${label} ${labelText}` : label;
+    pdf.roundedRect(margin, margin, cardWidth, cardHeight, 4, 4, 'F');
+    const label = text ? `${num} ${text}` : num;
     pdf.setFontSize(8);
     pdf.setFont('times', 'bolditalic');
-    const textWidth = pdf.getTextWidth(labelFullText);
-    const pillPadding = 5;
-    const pillWidth = textWidth + pillPadding * 2;
-    const pillHeight = 5;
-    const pillX = contentX;
-    const pillY = cardMargin + cardPadding;
-    
-    pdf.setDrawColor(0, 0, 0);
+    const tw = pdf.getTextWidth(label);
+    pdf.setDrawColor(0);
     pdf.setLineWidth(0.4);
-    pdf.roundedRect(pillX, pillY, pillWidth, pillHeight, 2.5, 2.5, 'S');
-    
-    pdf.setTextColor(0, 0, 0);
-    const textCenterX = pillX + pillWidth / 2;
-    const textCenterY = pillY + pillHeight / 2 + 1;
-    pdf.text(labelFullText, textCenterX, textCenterY, { align: 'center' });
-    
-    return cardMargin + cardPadding + 10;
+    pdf.roundedRect(contentX, margin + 10, tw + 10, 5, 2.5, 2.5, 'S');
+    pdf.setTextColor(0);
+    pdf.text(label, contentX + tw / 2 + 5, margin + 13.5, { align: 'center' });
+    return margin + 20;
   };
 
-  const addTitle = (text: string, yPos: number): number => {
-    pdf.setFontSize(16);
+  const addText = (t: string, y: number, size: number = 16): number => {
+    pdf.setFontSize(size);
     pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(0, 0, 0);
-    const lines = pdf.splitTextToSize(text, contentWidth);
-    lines.forEach((line: string, i: number) => {
-      pdf.text(line, contentX, yPos + (i * 7));
-    });
-    return yPos + (lines.length * 7) + 6;
+    pdf.setTextColor(0);
+    const lines = pdf.splitTextToSize(t, contentWidth);
+    lines.forEach((l: string, i: number) => pdf.text(l, contentX, y + i * (size * 0.4)));
+    return y + lines.length * (size * 0.4) + 5;
   };
 
-  const addSubtitle = (text: string, yPos: number): number => {
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(0, 0, 0);
-    const lines = pdf.splitTextToSize(text, contentWidth);
-    lines.forEach((line: string, i: number) => {
-      pdf.text(line, contentX, yPos + (i * 4.5));
-    });
-    return yPos + (lines.length * 4.5) + 2;
-  };
-
-  const addTextArea = (text: string, yPos: number, height: number = 28): number => {
+  const addTextarea = (key: string, y: number, h: number): number => {
     pdf.setFillColor(255, 226, 153);
-    pdf.rect(contentX, yPos, contentWidth, height, 'F');
-    
-    if (text && text.trim()) {
+    pdf.rect(contentX, y, contentWidth, h, 'F');
+    const val = textareaValues[key] || '';
+    if (val) {
       pdf.setFontSize(9);
       pdf.setFont('helvetica', 'normal');
-      pdf.setTextColor(0, 0, 0);
-      const lines = pdf.splitTextToSize(text, contentWidth - 6);
-      const lineHeight = 4;
-      const maxLines = Math.floor((height - 4) / lineHeight);
-      lines.slice(0, maxLines).forEach((line: string, i: number) => {
-        pdf.text(line, contentX + 3, yPos + 4 + (i * lineHeight));
-      });
+      pdf.setTextColor(0);
+      const lines = pdf.splitTextToSize(val, contentWidth - 6);
+      const max = Math.floor((h - 4) / 4);
+      lines.slice(0, max).forEach((l: string, i: number) => pdf.text(l, contentX + 3, y + 4 + i * 4));
     }
-    
-    return yPos + height + 3;
+    return y + h + 3;
   };
 
-  const addStarRatingRow = (label: string, ratingKey: string, yPos: number): number => {
-    const rating = starRatings[ratingKey] || 0;
+  const addRating = (label: string, key: string, y: number): number => {
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(0, 0, 0);
-    pdf.text(label, contentX, yPos);
-    
-    drawStarRating(contentX, yPos + 5, rating, 2.5);
-    
-    return yPos + 13;
+    pdf.setTextColor(0);
+    pdf.text(label, contentX, y);
+    drawStars(contentX, y + 5, starRatings[key] || 0, 2.5);
+    return y + 13;
   };
 
-  // Draw emoji circle with actual emoji or first letter
-  const drawEmojiCircle = (centerX: number, centerY: number, radius: number, emoji: string, label: string) => {
-    // Draw black circle
-    pdf.setFillColor(0, 0, 0);
-    pdf.circle(centerX, centerY, radius, 'F');
-    
-    // Try to render emoji symbol - jsPDF doesn't support emojis well, so use first letter
-    pdf.setFontSize(radius * 1.2);
+  const addEmoji = (emoji: string, label: string, placed: boolean, y: number, xOff: number = 0): number => {
+    pdf.setFillColor(0);
+    pdf.circle(contentX + xOff + 5, y, 5, 'F');
+    pdf.setFontSize(8);
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(255, 255, 255);
-    pdf.text(label.charAt(0).toUpperCase(), centerX, centerY + radius * 0.35, { align: 'center' });
-  };
-
-  const addEmojiItem = (emoji: string, label: string, placed: boolean, yPos: number, xOffset: number = 0): number => {
-    const circleRadius = 5;
-    const circleX = contentX + xOffset + circleRadius;
-    
-    drawEmojiCircle(circleX, yPos, circleRadius, emoji, label);
-    
-    // Label text
+    pdf.text(label.charAt(0).toUpperCase(), contentX + xOff + 5, y + 1, { align: 'center' });
+    pdf.setTextColor(0);
     pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(0, 0, 0);
-    const statusText = placed ? ' (platziert)' : '';
-    pdf.text(`${label}${statusText}`, circleX + circleRadius + 3, yPos + 1);
-    
-    return yPos + 12;
+    pdf.text(label + (placed ? ' (platziert)' : ''), contentX + xOff + 13, y + 1);
+    return y + 12;
   };
 
-  // Slide 1: Title slide
-  let yPos = startNewSlide('01', 'The past year');
-  yPos = cardMargin + cardHeight / 3;
-  addTitle('Schaut zurück auf das letzte Jahr.\nWas war los? Ordnet folgende\nBereiche im Graphen ein.', yPos);
+  // Slide 1
+  let y = startSlide('01', 'The past year');
+  y = margin + cardHeight / 3;
+  addText('Schaut zurück auf das letzte Jahr.\nWas war los? Ordnet folgende\nBereiche im Graphen ein.', y);
 
-  // Slide 2: Draggable emojis graph
-  yPos = startNewSlide('01', 'The past year');
-  
-  // Load and add inverted graph image
-  const graphImageWidth = contentWidth * 0.95;
-  const graphImageHeight = graphImageWidth * 0.6;
-  try {
-    const graphImage = await loadAndInvertImage('/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png');
-    pdf.addImage(graphImage, 'PNG', contentX + (contentWidth - graphImageWidth) / 2, yPos, graphImageWidth, graphImageHeight);
-  } catch {
-    // Continue without image
-  }
-  yPos += graphImageHeight + 8;
-  
-  // Draw emoji items in 2 columns like frontend
-  const emojiItems = [
-    { emoji: '❤️', label: 'Beziehung' },
-    { emoji: '👯‍♀️', label: 'Freunde' },
-    { emoji: '🐶', label: 'Kalle' },
-    { emoji: '🤸', label: 'Hobbies' },
-    { emoji: '🫀', label: 'Gesundheit' },
-    { emoji: '👩‍💻', label: 'Beruf' },
-  ];
-  
-  const colWidth = contentWidth / 2;
-  let leftY = yPos;
-  let rightY = yPos;
-  
-  emojiItems.forEach((item, index) => {
-    const placed = draggedEmojis.some(e => e.emoji === item.emoji);
-    if (index < 3) {
-      leftY = addEmojiItem(item.emoji, item.label, placed, leftY, 0);
-    } else {
-      rightY = addEmojiItem(item.emoji, item.label, placed, rightY, colWidth);
-    }
-  });
-  
-  yPos = Math.max(leftY, rightY) + 2;
-  
-  // Instruction text centered
-  pdf.setFontSize(8);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setTextColor(100, 100, 100);
-  pdf.text('Platziert die Emojis auf dem Graphen', contentX + contentWidth / 2, yPos, { align: 'center' });
-
-  // Slide 3: Reflections - textareas fill available space
-  yPos = startNewSlide('01', 'The past year');
-  const slide3ContentHeight = contentEndY - yPos;
-  const slide3SectionHeight = (slide3ContentHeight - 20) / 3; // 3 sections with some spacing
-  
-  yPos = addSubtitle('Worauf seid ihr stolz?', yPos);
-  yPos = addTextArea(textareaValues['slide3-proud'] || '', yPos, slide3SectionHeight - 8);
-  yPos = addSubtitle('Wofür seid ihr dankbar?', yPos);
-  yPos = addTextArea(textareaValues['slide3-grateful'] || '', yPos, slide3SectionHeight - 8);
-  yPos = addSubtitle('Was wollt ihr nächstes Jahr besser machen?', yPos);
-  addTextArea(textareaValues['slide3-improve'] || '', yPos, slide3SectionHeight - 8);
-
-  // Slide 4: Health Check Title
-  yPos = startNewSlide('02', 'Health Check');
-  yPos = cardMargin + cardHeight / 3;
-  addTitle('Schaut auf eure Beziehung:\nWas läuft gut? Was braucht\nmehr Achtsamkeit?', yPos);
-
-  // Slide 5: Health Check Ratings 1 - better spacing
-  yPos = startNewSlide('02', 'Health Check');
-  const slide5ContentHeight = contentEndY - yPos;
-  const ratingRowHeight = slide5ContentHeight / 4;
-  
-  const ratingItems5 = [
-    { label: 'Sexualität', key: 'slide5-sexuality' },
-    { label: 'Emotionale Verbundenheit', key: 'slide5-emotional' },
-    { label: 'Kommunikation', key: 'slide5-communication' },
-    { label: 'Vertrauen', key: 'slide5-trust' },
-  ];
-  
-  ratingItems5.forEach((item) => {
-    yPos = addStarRatingRow(item.label, item.key, yPos);
-    yPos += ratingRowHeight - 13;
+  // Slide 2
+  y = startSlide('01', 'The past year');
+  y += 80;
+  const emojis = [['❤️', 'Beziehung'], ['👯‍♀️', 'Freunde'], ['🐶', 'Kalle'], ['🤸', 'Hobbies'], ['🫀', 'Gesundheit'], ['👩‍💻', 'Beruf']];
+  let ly = y, ry = y;
+  emojis.forEach(([e, l], i) => {
+    const placed = draggedEmojis.some(d => d.emoji === e);
+    if (i < 3) ly = addEmoji(e, l, placed, ly, 0);
+    else ry = addEmoji(e, l, placed, ry, contentWidth / 2);
   });
 
-  // Slide 6: Health Check Ratings 2
-  yPos = startNewSlide('02', 'Health Check');
-  const slide6ContentHeight = contentEndY - yPos;
-  const ratingRowHeight6 = slide6ContentHeight / 4;
-  
-  const ratingItems6 = [
-    { label: 'Gemeinsame Zeit', key: 'slide6-time' },
-    { label: 'Zusammen gelacht', key: 'slide6-laughter' },
-    { label: 'Konfliktbewältigung', key: 'slide6-conflict' },
-    { label: 'Freiheit, Unabhängigkeit', key: 'slide6-freedom' },
-  ];
-  
-  ratingItems6.forEach((item) => {
-    yPos = addStarRatingRow(item.label, item.key, yPos);
-    yPos += ratingRowHeight6 - 13;
-  });
+  // Slide 3
+  y = startSlide('01', 'The past year');
+  const s3h = (contentEndY - y - 18) / 3;
+  y = addText('Worauf seid ihr stolz?', y, 10);
+  y = addTextarea('slide3-proud', y, s3h);
+  y = addText('Wofür seid ihr dankbar?', y, 10);
+  y = addTextarea('slide3-grateful', y, s3h);
+  y = addText('Was wollt ihr nächstes Jahr besser machen?', y, 10);
+  addTextarea('slide3-improve', y, s3h);
 
-  // Slide 7: Insights - textarea fills space
-  yPos = startNewSlide('02', 'Health Check');
-  yPos = addSubtitle('Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder fürs kommende Jahr aus.', yPos);
-  yPos += 2;
-  const slide7TextareaHeight = contentEndY - yPos - 5;
-  addTextArea(textareaValues['slide7-insights'] || '', yPos, slide7TextareaHeight);
+  // Slide 4
+  y = startSlide('02', 'Health Check');
+  y = margin + cardHeight / 3;
+  addText('Schaut auf eure Beziehung:\nWas läuft gut? Was braucht\nmehr Achtsamkeit?', y);
 
-  // Slide 8: New Year Title
-  yPos = startNewSlide('03', 'The new year');
-  yPos = cardMargin + cardHeight / 3;
-  addTitle('Richtet euren Blick auf das\nkommende Jahr: Was nehmt ihr\neuch vor? Was wollt ihr erreichen?', yPos);
+  // Slide 5
+  y = startSlide('02', 'Health Check');
+  y = addRating('Sexualität', 'slide5-sexuality', y);
+  y = addRating('Emotionale Verbundenheit', 'slide5-emotional', y + 15);
+  y = addRating('Kommunikation', 'slide5-communication', y + 15);
+  addRating('Vertrauen', 'slide5-trust', y + 15);
 
-  // Slide 9: New initiatives - textareas fill space
-  yPos = startNewSlide('03', 'The new year');
-  const slide9ContentHeight = contentEndY - yPos;
-  const slide9SectionHeight = (slide9ContentHeight - 18) / 3;
-  
-  yPos = addSubtitle('Was wollen wir neu initiieren?', yPos);
-  yPos = addTextArea(textareaValues['slide9-initiate'] || '', yPos, slide9SectionHeight - 8);
-  yPos = addSubtitle('Womit wollen wir aufhören, weil es uns nicht gut tut?', yPos);
-  yPos = addTextArea(textareaValues['slide9-stop'] || '', yPos, slide9SectionHeight - 8);
-  yPos = addSubtitle('Was wollen wir weiter machen?', yPos);
-  addTextArea(textareaValues['slide9-continue'] || '', yPos, slide9SectionHeight - 8);
+  // Slide 6
+  y = startSlide('02', 'Health Check');
+  y = addRating('Gemeinsame Zeit', 'slide6-time', y);
+  y = addRating('Zusammen gelacht', 'slide6-laughter', y + 15);
+  y = addRating('Konfliktbewältigung', 'slide6-conflict', y + 15);
+  addRating('Freiheit, Unabhängigkeit', 'slide6-freedom', y + 15);
 
-  // Slide 10: Goals - textareas fill space
-  yPos = startNewSlide('03', 'The new year');
-  const slide10ContentHeight = contentEndY - yPos;
-  const slide10SectionHeight = (slide10ContentHeight - 18) / 3;
-  
-  yPos = addSubtitle('Was wollen wir bis Jahresende geschafft haben?', yPos);
-  yPos = addTextArea(textareaValues['slide10-achieve'] || '', yPos, slide10SectionHeight - 8);
-  yPos = addSubtitle('Welches Ziel nehmen wir aus dem letzten Jahr mit?', yPos);
-  yPos = addTextArea(textareaValues['slide10-carry'] || '', yPos, slide10SectionHeight - 8);
-  yPos = addSubtitle('Welche Projekte nehmen wir uns vor?', yPos);
-  addTextArea(textareaValues['slide10-projects'] || '', yPos, slide10SectionHeight - 8);
+  // Slide 7
+  y = startSlide('02', 'Health Check');
+  y = addText('Wie fühlt sich das an? Überrascht euch etwas?', y, 10);
+  addTextarea('slide7-insights', y, contentEndY - y - 5);
 
-  // Slide 11: Individual Focus Areas - 5 equal sections
-  yPos = startNewSlide('03', 'The new year');
-  yPos = addSubtitle('Worauf willst du deinen individuellen Fokus legen?', yPos);
-  yPos += 3;
-  
-  const slide11ContentHeight = contentEndY - yPos;
-  const focusItemHeight = (slide11ContentHeight - 8) / 5;
-  
+  // Slide 8
+  y = startSlide('03', 'The new year');
+  y = margin + cardHeight / 3;
+  addText('Richtet euren Blick auf das\nkommende Jahr: Was nehmt ihr\neuch vor? Was wollt ihr erreichen?', y);
+
+  // Slide 9
+  y = startSlide('03', 'The new year');
+  const s9h = (contentEndY - y - 18) / 3;
+  y = addText('Was wollen wir neu initiieren?', y, 10);
+  y = addTextarea('slide9-initiate', y, s9h);
+  y = addText('Womit wollen wir aufhören?', y, 10);
+  y = addTextarea('slide9-stop', y, s9h);
+  y = addText('Was wollen wir weiter machen?', y, 10);
+  addTextarea('slide9-continue', y, s9h);
+
+  // Slide 10
+  y = startSlide('03', 'The new year');
+  const s10h = (contentEndY - y - 18) / 3;
+  y = addText('Was wollen wir bis Jahresende geschafft haben?', y, 10);
+  y = addTextarea('slide10-achieve', y, s10h);
+  y = addText('Welches Ziel nehmen wir aus dem letzten Jahr mit?', y, 10);
+  y = addTextarea('slide10-carry', y, s10h);
+  y = addText('Welche Projekte nehmen wir uns vor?', y, 10);
+  addTextarea('slide10-projects', y, s10h);
+
+  // Slide 11
+  y = startSlide('03', 'The new year');
+  y = addText('Worauf willst du deinen individuellen Fokus legen?', y, 10);
+  const fh = (contentEndY - y - 8) / 5;
   for (let i = 0; i < 5; i++) {
-    const focusKey = `slide11-focus-${i}`;
-    const starKey = `slide11-star-${i}`;
-    const focusValue = textareaValues[focusKey] || '';
-    const rating = starRatings[starKey] || 0;
-    
-    // Yellow background
     pdf.setFillColor(255, 226, 153);
-    pdf.rect(contentX, yPos, contentWidth, focusItemHeight - 2, 'F');
-    
-    // Focus text
+    pdf.rect(contentX, y, contentWidth, fh - 2, 'F');
     pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(0, 0, 0);
-    pdf.text(focusValue || 'Fokus', contentX + 3, yPos + 5);
-    
-    // Stars at bottom right
-    drawStarRating(contentX + contentWidth - 35, yPos + focusItemHeight - 6, rating, 2);
-    
-    yPos += focusItemHeight;
+    pdf.setTextColor(0);
+    pdf.text(textareaValues[`slide11-focus-${i}`] || 'Fokus', contentX + 3, y + 5);
+    drawStars(contentX + contentWidth - 35, y + fh - 6, starRatings[`slide11-star-${i}`] || 0, 2);
+    y += fh;
   }
 
-  // Slide 12: Plan and Terminate Title
-  yPos = startNewSlide('04', 'Plan and terminate');
-  yPos = cardMargin + cardHeight / 3;
-  addTitle('Jetzt geht es darum, eure Ideen\nfürs kommende Jahr zu sammeln\nund auf ihre Machbarkeit zu\nuntersuchen und zu priorisieren.', yPos);
+  // Slide 12
+  y = startSlide('04', 'Plan and terminate');
+  y = margin + cardHeight / 3;
+  addText('Jetzt geht es darum, eure Ideen\nfürs kommende Jahr zu sammeln\nund zu priorisieren.', y);
 
-  // Slide 13: Goals Graph Info
-  yPos = startNewSlide('04', 'Plan and terminate');
-  yPos = addSubtitle('Nehmt euch ein Blatt Papier und ordnet eure Ziele auf dem Graphen ein.', yPos);
-  yPos += 2;
-  
-  pdf.setFontSize(9);
-  pdf.setFont('helvetica', 'normal');
-  const infoText = 'Ihr könnt wenige große bzw. mehrere kleine Ziele festlegen. Ihr solltet nur die Ziele angehen, die einen hohen Impact haben und einfach umsetzbar sind.';
-  const infoLines = pdf.splitTextToSize(infoText, contentWidth);
-  infoLines.forEach((line: string) => {
-    pdf.text(line, contentX, yPos);
-    yPos += 4;
-  });
-  yPos += 4;
-  
-  // Load and add inverted goals graph image
-  try {
-    const goalsImage = await loadAndInvertImage('/lovable-uploads/20b3daee-a65a-46df-9f4e-7fb1cd871631.png');
-    const imgWidth = contentWidth * 0.9;
-    const imgHeight = imgWidth * 0.7;
-    pdf.addImage(goalsImage, 'PNG', contentX + (contentWidth - imgWidth) / 2, yPos, imgWidth, imgHeight);
-  } catch {
-    // Continue without image
-  }
+  // Slide 13
+  y = startSlide('04', 'Plan and terminate');
+  addText('Nehmt euch ein Blatt Papier und ordnet eure Ziele auf dem Graphen ein.', y, 10);
 
-  // Slides 14-23: Goal Planning - no "Ziel X" headline, no bold, better proportions
+  // Slides 14-23
   for (let i = 14; i <= 23; i++) {
-    yPos = startNewSlide('04', 'Plan and terminate');
-    
-    const goalContentHeight = contentEndY - yPos;
-    const goalSectionHeight = (goalContentHeight - 20) / 3;
-    
-    // Goal textarea (larger)
-    yPos = addSubtitle('Ziel', yPos);
-    yPos = addTextArea(textareaValues[`slide${i}-goal`] || '', yPos, goalSectionHeight);
-    
-    // Priority with graphic stars
-    const prio = starRatings[`slide${i}-prio`] || 0;
+    y = startSlide('04', 'Plan and terminate');
+    const gh = (contentEndY - y - 20) / 3;
+    y = addText('Ziel', y, 10);
+    y = addTextarea(`slide${i}-goal`, y, gh);
     pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text('Prio:', contentX, yPos + 2);
-    drawStarRating(contentX + 12, yPos + 2, prio, 2);
-    yPos += 10;
-    
-    // Measure success
-    yPos = addSubtitle('Wie messen wir den Erfolg?', yPos);
-    yPos = addTextArea(textareaValues[`slide${i}-measure`] || '', yPos, goalSectionHeight - 4);
-    
-    // Steps
-    yPos = addSubtitle('Wie gehen wir es Schritt für Schritt an?', yPos);
-    addTextArea(textareaValues[`slide${i}-steps`] || '', yPos, goalSectionHeight - 4);
+    pdf.text('Prio:', contentX, y + 2);
+    drawStars(contentX + 12, y + 2, starRatings[`slide${i}-prio`] || 0, 2);
+    y += 10;
+    y = addText('Wie messen wir den Erfolg?', y, 10);
+    y = addTextarea(`slide${i}-measure`, y, gh - 4);
+    y = addText('Wie gehen wir es Schritt für Schritt an?', y, 10);
+    addTextarea(`slide${i}-steps`, y, gh - 4);
   }
 
-  // Save the PDF (slide 24 excluded)
   pdf.save('year-planning-export.pdf');
 };
