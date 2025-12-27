@@ -229,7 +229,7 @@
     position: static !important;
     overflow: visible !important;
     height: auto !important;
-    width: 210mm !important;
+    width: 100% !important;
     background: white !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -245,13 +245,14 @@
   .flex.h-full.transition-transform {
     display: block !important;
     transform: none !important;
-    width: 210mm !important;
+    width: 100% !important;
     padding: 0 !important;
+    margin: 0 auto !important;
   }
 
   /* Each slide becomes a print page */
   .flex.h-full.transition-transform > div {
-    width: 210mm !important;
+    width: 100% !important;
     height: 297mm !important;
     min-height: 297mm !important;
     max-height: 297mm !important;
@@ -261,6 +262,8 @@
     break-inside: avoid !important;
     overflow: hidden !important;
     display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     background: white !important;
   }
 
@@ -288,6 +291,13 @@
   /* Dark grey card background - keep this */
   .bg-\[\#161616\] {
     background-color: #161616 !important;
+  }
+
+  /* Center the slide content card */
+  .w-full.max-w-\[500px\] {
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 500px !important;
   }
 
   /* Ensure images are visible */
