@@ -6,16 +6,6 @@ interface ExportData {
   draggedEmojis: Array<{ id: string; emoji: string; label: string; x: number; y: number }>;
 }
 
-// Emoji labels mapping for display
-const emojiToLabel: { [key: string]: string } = {
-  '❤️': 'Herz',
-  '👯‍♀️': 'Freunde',
-  '🐶': 'Hund',
-  '🤸': 'Sport',
-  '🫀': 'Gesundheit',
-  '👩‍💻': 'Beruf',
-};
-
 export const exportToPDF = async (data: ExportData): Promise<void> => {
   const { textareaValues, starRatings, draggedEmojis } = data;
   
@@ -27,12 +17,13 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
 
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const cardMargin = 20;
-  const cardPadding = 12;
+  const cardMargin = 15;
+  const cardPadding = 10;
   const cardWidth = pageWidth - cardMargin * 2;
   const cardHeight = pageHeight - cardMargin * 2;
   const contentX = cardMargin + cardPadding;
   const contentWidth = cardWidth - cardPadding * 2;
+  const contentEndY = cardMargin + cardHeight - cardPadding;
   
   let currentPage = 0;
 
@@ -51,7 +42,6 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
       ]);
     }
     
-    // Draw the star polygon
     pdf.setDrawColor(0, 0, 0);
     pdf.setLineWidth(0.2);
     
@@ -59,13 +49,11 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
       pdf.setFillColor(0, 0, 0);
     }
     
-    // Start path
     for (let i = 0; i < path.length; i++) {
       const next = (i + 1) % path.length;
       pdf.line(path[i][0], path[i][1], path[next][0], path[next][1]);
     }
     
-    // Fill using triangles from center
     if (filled) {
       for (let i = 0; i < path.length; i++) {
         const next = (i + 1) % path.length;
@@ -79,8 +67,8 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
     }
   };
 
-  const drawStarRating = (x: number, y: number, rating: number, starSize: number = 3) => {
-    const gap = 1;
+  const drawStarRating = (x: number, y: number, rating: number, starSize: number = 2.5) => {
+    const gap = 0.8;
     for (let i = 1; i <= 5; i++) {
       const starX = x + (i - 1) * (starSize * 2 + gap) + starSize;
       const starY = y;
@@ -90,9 +78,7 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
       if (filled) {
         drawStarShape(starX, starY, starSize, true);
       } else if (halfFilled) {
-        // Draw empty star then half fill
         drawStarShape(starX, starY, starSize, false);
-        // Add visual indicator for half
         pdf.setFillColor(0, 0, 0);
         pdf.rect(starX - starSize, starY - starSize, starSize, starSize * 2, 'F');
       } else {
@@ -112,19 +98,14 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          // Draw the image
           ctx.drawImage(img, 0, 0);
-          
-          // Get image data and invert colors
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const data = imageData.data;
+          const imgData = imageData.data;
           
-          for (let i = 0; i < data.length; i += 4) {
-            // Invert RGB values
-            data[i] = 255 - data[i];       // R
-            data[i + 1] = 255 - data[i + 1]; // G
-            data[i + 2] = 255 - data[i + 2]; // B
-            // Keep alpha unchanged
+          for (let i = 0; i < imgData.length; i += 4) {
+            imgData[i] = 255 - imgData[i];
+            imgData[i + 1] = 255 - imgData[i + 1];
+            imgData[i + 2] = 255 - imgData[i + 2];
           }
           
           ctx.putImageData(imageData, 0, 0);
@@ -152,55 +133,52 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
     pdf.setFillColor(240, 240, 240);
     pdf.roundedRect(cardMargin, cardMargin, cardWidth, cardHeight, 4, 4, 'F');
     
-    // Label pill - calculate proper centering
+    // Label pill
     const labelFullText = labelText ? `${label} ${labelText}` : label;
     pdf.setFontSize(8);
     pdf.setFont('times', 'bolditalic');
     const textWidth = pdf.getTextWidth(labelFullText);
-    const pillPadding = 6;
+    const pillPadding = 5;
     const pillWidth = textWidth + pillPadding * 2;
-    const pillHeight = 6;
+    const pillHeight = 5;
     const pillX = contentX;
     const pillY = cardMargin + cardPadding;
     
-    // Draw pill outline
     pdf.setDrawColor(0, 0, 0);
     pdf.setLineWidth(0.4);
-    pdf.roundedRect(pillX, pillY, pillWidth, pillHeight, 3, 3, 'S');
+    pdf.roundedRect(pillX, pillY, pillWidth, pillHeight, 2.5, 2.5, 'S');
     
-    // Center text in pill
     pdf.setTextColor(0, 0, 0);
-    const textX = pillX + pillWidth / 2;
-    const textY = pillY + pillHeight / 2 + 1;
-    pdf.text(labelFullText, textX, textY, { align: 'center' });
+    const textCenterX = pillX + pillWidth / 2;
+    const textCenterY = pillY + pillHeight / 2 + 1;
+    pdf.text(labelFullText, textCenterX, textCenterY, { align: 'center' });
     
-    return cardMargin + cardPadding + 14;
+    return cardMargin + cardPadding + 10;
   };
 
   const addTitle = (text: string, yPos: number): number => {
-    pdf.setFontSize(18);
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(0, 0, 0);
     const lines = pdf.splitTextToSize(text, contentWidth);
     lines.forEach((line: string, i: number) => {
-      pdf.text(line, contentX, yPos + (i * 8));
+      pdf.text(line, contentX, yPos + (i * 7));
     });
-    return yPos + (lines.length * 8) + 8;
+    return yPos + (lines.length * 7) + 6;
   };
 
   const addSubtitle = (text: string, yPos: number): number => {
     pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'bold');
+    pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(0, 0, 0);
     const lines = pdf.splitTextToSize(text, contentWidth);
     lines.forEach((line: string, i: number) => {
-      pdf.text(line, contentX, yPos + (i * 5));
+      pdf.text(line, contentX, yPos + (i * 4.5));
     });
-    return yPos + (lines.length * 5) + 2;
+    return yPos + (lines.length * 4.5) + 2;
   };
 
   const addTextArea = (text: string, yPos: number, height: number = 28): number => {
-    // Yellow background
     pdf.setFillColor(255, 226, 153);
     pdf.rect(contentX, yPos, contentWidth, height, 'F');
     
@@ -208,14 +186,15 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
       pdf.setFontSize(9);
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(0, 0, 0);
-      const lines = pdf.splitTextToSize(text, contentWidth - 8);
-      const maxLines = Math.floor((height - 4) / 4);
+      const lines = pdf.splitTextToSize(text, contentWidth - 6);
+      const lineHeight = 4;
+      const maxLines = Math.floor((height - 4) / lineHeight);
       lines.slice(0, maxLines).forEach((line: string, i: number) => {
-        pdf.text(line, contentX + 4, yPos + 5 + (i * 4));
+        pdf.text(line, contentX + 3, yPos + 4 + (i * lineHeight));
       });
     }
     
-    return yPos + height + 4;
+    return yPos + height + 3;
   };
 
   const addStarRatingRow = (label: string, ratingKey: string, yPos: number): number => {
@@ -225,29 +204,36 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
     pdf.setTextColor(0, 0, 0);
     pdf.text(label, contentX, yPos);
     
-    // Draw graphic stars
-    drawStarRating(contentX, yPos + 6, rating, 2.5);
+    drawStarRating(contentX, yPos + 5, rating, 2.5);
     
-    return yPos + 14;
+    return yPos + 13;
   };
 
-  const addEmojiItem = (label: string, placed: boolean, yPos: number): number => {
-    // Draw filled circle with first letter
+  // Draw emoji circle with actual emoji or first letter
+  const drawEmojiCircle = (centerX: number, centerY: number, radius: number, emoji: string, label: string) => {
+    // Draw black circle
     pdf.setFillColor(0, 0, 0);
-    pdf.circle(contentX + 5, yPos, 5, 'F');
+    pdf.circle(centerX, centerY, radius, 'F');
     
-    // Add first letter of label in white inside circle
-    pdf.setFontSize(8);
-    pdf.setFont('helvetica', 'bold');
+    // Try to render emoji symbol - jsPDF doesn't support emojis well, so use first letter
+    pdf.setFontSize(radius * 1.2);
+    pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(255, 255, 255);
-    pdf.text(label.charAt(0).toUpperCase(), contentX + 5, yPos + 1, { align: 'center' });
+    pdf.text(label.charAt(0).toUpperCase(), centerX, centerY + radius * 0.35, { align: 'center' });
+  };
+
+  const addEmojiItem = (emoji: string, label: string, placed: boolean, yPos: number, xOffset: number = 0): number => {
+    const circleRadius = 5;
+    const circleX = contentX + xOffset + circleRadius;
+    
+    drawEmojiCircle(circleX, yPos, circleRadius, emoji, label);
     
     // Label text
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(0, 0, 0);
     const statusText = placed ? ' (platziert)' : '';
-    pdf.text(`${label}${statusText}`, contentX + 14, yPos + 1);
+    pdf.text(`${label}${statusText}`, circleX + circleRadius + 3, yPos + 1);
     
     return yPos + 12;
   };
@@ -261,19 +247,17 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
   yPos = startNewSlide('01', 'The past year');
   
   // Load and add inverted graph image
+  const graphImageWidth = contentWidth * 0.95;
+  const graphImageHeight = graphImageWidth * 0.6;
   try {
     const graphImage = await loadAndInvertImage('/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png');
-    const imgWidth = contentWidth * 0.85;
-    const imgHeight = imgWidth * 0.65;
-    pdf.addImage(graphImage, 'PNG', contentX + (contentWidth - imgWidth) / 2, yPos, imgWidth, imgHeight);
-    yPos += imgHeight + 6;
+    pdf.addImage(graphImage, 'PNG', contentX + (contentWidth - graphImageWidth) / 2, yPos, graphImageWidth, graphImageHeight);
   } catch {
-    yPos += 5;
+    // Continue without image
   }
+  yPos += graphImageHeight + 8;
   
-  addSubtitle('Bereiche:', yPos);
-  yPos += 6;
-  
+  // Draw emoji items in 2 columns like frontend
   const emojiItems = [
     { emoji: '❤️', label: 'Beziehung' },
     { emoji: '👯‍♀️', label: 'Freunde' },
@@ -283,72 +267,121 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
     { emoji: '👩‍💻', label: 'Beruf' },
   ];
   
-  emojiItems.forEach((item) => {
+  const colWidth = contentWidth / 2;
+  let leftY = yPos;
+  let rightY = yPos;
+  
+  emojiItems.forEach((item, index) => {
     const placed = draggedEmojis.some(e => e.emoji === item.emoji);
-    yPos = addEmojiItem(item.label, placed, yPos);
+    if (index < 3) {
+      leftY = addEmojiItem(item.emoji, item.label, placed, leftY, 0);
+    } else {
+      rightY = addEmojiItem(item.emoji, item.label, placed, rightY, colWidth);
+    }
   });
+  
+  yPos = Math.max(leftY, rightY) + 2;
+  
+  // Instruction text centered
+  pdf.setFontSize(8);
+  pdf.setFont('helvetica', 'normal');
+  pdf.setTextColor(100, 100, 100);
+  pdf.text('Platziert die Emojis auf dem Graphen', contentX + contentWidth / 2, yPos, { align: 'center' });
 
-  // Slide 3: Reflections
+  // Slide 3: Reflections - textareas fill available space
   yPos = startNewSlide('01', 'The past year');
+  const slide3ContentHeight = contentEndY - yPos;
+  const slide3SectionHeight = (slide3ContentHeight - 20) / 3; // 3 sections with some spacing
+  
   yPos = addSubtitle('Worauf seid ihr stolz?', yPos);
-  yPos = addTextArea(textareaValues['slide3-proud'] || '', yPos, 32);
+  yPos = addTextArea(textareaValues['slide3-proud'] || '', yPos, slide3SectionHeight - 8);
   yPos = addSubtitle('Wofür seid ihr dankbar?', yPos);
-  yPos = addTextArea(textareaValues['slide3-grateful'] || '', yPos, 32);
+  yPos = addTextArea(textareaValues['slide3-grateful'] || '', yPos, slide3SectionHeight - 8);
   yPos = addSubtitle('Was wollt ihr nächstes Jahr besser machen?', yPos);
-  addTextArea(textareaValues['slide3-improve'] || '', yPos, 32);
+  addTextArea(textareaValues['slide3-improve'] || '', yPos, slide3SectionHeight - 8);
 
   // Slide 4: Health Check Title
   yPos = startNewSlide('02', 'Health Check');
   yPos = cardMargin + cardHeight / 3;
   addTitle('Schaut auf eure Beziehung:\nWas läuft gut? Was braucht\nmehr Achtsamkeit?', yPos);
 
-  // Slide 5: Health Check Ratings 1
+  // Slide 5: Health Check Ratings 1 - better spacing
   yPos = startNewSlide('02', 'Health Check');
-  yPos = addStarRatingRow('Sexualität', 'slide5-sexuality', yPos);
-  yPos = addStarRatingRow('Emotionale Verbundenheit', 'slide5-emotional', yPos);
-  yPos = addStarRatingRow('Kommunikation', 'slide5-communication', yPos);
-  yPos = addStarRatingRow('Vertrauen', 'slide5-trust', yPos);
+  const slide5ContentHeight = contentEndY - yPos;
+  const ratingRowHeight = slide5ContentHeight / 4;
+  
+  const ratingItems5 = [
+    { label: 'Sexualität', key: 'slide5-sexuality' },
+    { label: 'Emotionale Verbundenheit', key: 'slide5-emotional' },
+    { label: 'Kommunikation', key: 'slide5-communication' },
+    { label: 'Vertrauen', key: 'slide5-trust' },
+  ];
+  
+  ratingItems5.forEach((item) => {
+    yPos = addStarRatingRow(item.label, item.key, yPos);
+    yPos += ratingRowHeight - 13;
+  });
 
   // Slide 6: Health Check Ratings 2
   yPos = startNewSlide('02', 'Health Check');
-  yPos = addStarRatingRow('Gemeinsame Zeit', 'slide6-time', yPos);
-  yPos = addStarRatingRow('Zusammen gelacht', 'slide6-laughter', yPos);
-  yPos = addStarRatingRow('Konfliktbewältigung', 'slide6-conflict', yPos);
-  yPos = addStarRatingRow('Freiheit, Unabhängigkeit', 'slide6-freedom', yPos);
+  const slide6ContentHeight = contentEndY - yPos;
+  const ratingRowHeight6 = slide6ContentHeight / 4;
+  
+  const ratingItems6 = [
+    { label: 'Gemeinsame Zeit', key: 'slide6-time' },
+    { label: 'Zusammen gelacht', key: 'slide6-laughter' },
+    { label: 'Konfliktbewältigung', key: 'slide6-conflict' },
+    { label: 'Freiheit, Unabhängigkeit', key: 'slide6-freedom' },
+  ];
+  
+  ratingItems6.forEach((item) => {
+    yPos = addStarRatingRow(item.label, item.key, yPos);
+    yPos += ratingRowHeight6 - 13;
+  });
 
-  // Slide 7: Insights
+  // Slide 7: Insights - textarea fills space
   yPos = startNewSlide('02', 'Health Check');
   yPos = addSubtitle('Wie fühlt sich das an? Überrascht euch etwas? Wählt zwei Fokus-Felder fürs kommende Jahr aus.', yPos);
   yPos += 2;
-  addTextArea(textareaValues['slide7-insights'] || '', yPos, 100);
+  const slide7TextareaHeight = contentEndY - yPos - 5;
+  addTextArea(textareaValues['slide7-insights'] || '', yPos, slide7TextareaHeight);
 
   // Slide 8: New Year Title
   yPos = startNewSlide('03', 'The new year');
   yPos = cardMargin + cardHeight / 3;
   addTitle('Richtet euren Blick auf das\nkommende Jahr: Was nehmt ihr\neuch vor? Was wollt ihr erreichen?', yPos);
 
-  // Slide 9: New initiatives
+  // Slide 9: New initiatives - textareas fill space
   yPos = startNewSlide('03', 'The new year');
+  const slide9ContentHeight = contentEndY - yPos;
+  const slide9SectionHeight = (slide9ContentHeight - 18) / 3;
+  
   yPos = addSubtitle('Was wollen wir neu initiieren?', yPos);
-  yPos = addTextArea(textareaValues['slide9-initiate'] || '', yPos, 32);
+  yPos = addTextArea(textareaValues['slide9-initiate'] || '', yPos, slide9SectionHeight - 8);
   yPos = addSubtitle('Womit wollen wir aufhören, weil es uns nicht gut tut?', yPos);
-  yPos = addTextArea(textareaValues['slide9-stop'] || '', yPos, 32);
+  yPos = addTextArea(textareaValues['slide9-stop'] || '', yPos, slide9SectionHeight - 8);
   yPos = addSubtitle('Was wollen wir weiter machen?', yPos);
-  addTextArea(textareaValues['slide9-continue'] || '', yPos, 32);
+  addTextArea(textareaValues['slide9-continue'] || '', yPos, slide9SectionHeight - 8);
 
-  // Slide 10: Goals
+  // Slide 10: Goals - textareas fill space
   yPos = startNewSlide('03', 'The new year');
+  const slide10ContentHeight = contentEndY - yPos;
+  const slide10SectionHeight = (slide10ContentHeight - 18) / 3;
+  
   yPos = addSubtitle('Was wollen wir bis Jahresende geschafft haben?', yPos);
-  yPos = addTextArea(textareaValues['slide10-achieve'] || '', yPos, 32);
+  yPos = addTextArea(textareaValues['slide10-achieve'] || '', yPos, slide10SectionHeight - 8);
   yPos = addSubtitle('Welches Ziel nehmen wir aus dem letzten Jahr mit?', yPos);
-  yPos = addTextArea(textareaValues['slide10-carry'] || '', yPos, 32);
+  yPos = addTextArea(textareaValues['slide10-carry'] || '', yPos, slide10SectionHeight - 8);
   yPos = addSubtitle('Welche Projekte nehmen wir uns vor?', yPos);
-  addTextArea(textareaValues['slide10-projects'] || '', yPos, 32);
+  addTextArea(textareaValues['slide10-projects'] || '', yPos, slide10SectionHeight - 8);
 
-  // Slide 11: Individual Focus Areas
+  // Slide 11: Individual Focus Areas - 5 equal sections
   yPos = startNewSlide('03', 'The new year');
   yPos = addSubtitle('Worauf willst du deinen individuellen Fokus legen?', yPos);
-  yPos += 4;
+  yPos += 3;
+  
+  const slide11ContentHeight = contentEndY - yPos;
+  const focusItemHeight = (slide11ContentHeight - 8) / 5;
   
   for (let i = 0; i < 5; i++) {
     const focusKey = `slide11-focus-${i}`;
@@ -358,18 +391,18 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
     
     // Yellow background
     pdf.setFillColor(255, 226, 153);
-    pdf.rect(contentX, yPos, contentWidth, 18, 'F');
+    pdf.rect(contentX, yPos, contentWidth, focusItemHeight - 2, 'F');
     
     // Focus text
     pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
     pdf.setTextColor(0, 0, 0);
-    pdf.text(focusValue || 'Fokus', contentX + 4, yPos + 6);
+    pdf.text(focusValue || 'Fokus', contentX + 3, yPos + 5);
     
-    // Stars - draw them graphically
-    drawStarRating(contentX + contentWidth - 40, yPos + 12, rating, 2);
+    // Stars at bottom right
+    drawStarRating(contentX + contentWidth - 35, yPos + focusItemHeight - 6, rating, 2);
     
-    yPos += 22;
+    yPos += focusItemHeight;
   }
 
   // Slide 12: Plan and Terminate Title
@@ -395,38 +428,39 @@ export const exportToPDF = async (data: ExportData): Promise<void> => {
   // Load and add inverted goals graph image
   try {
     const goalsImage = await loadAndInvertImage('/lovable-uploads/20b3daee-a65a-46df-9f4e-7fb1cd871631.png');
-    const imgWidth = contentWidth * 0.8;
+    const imgWidth = contentWidth * 0.9;
     const imgHeight = imgWidth * 0.7;
     pdf.addImage(goalsImage, 'PNG', contentX + (contentWidth - imgWidth) / 2, yPos, imgWidth, imgHeight);
   } catch {
     // Continue without image
   }
 
-  // Slides 14-23: Goal Planning
+  // Slides 14-23: Goal Planning - no "Ziel X" headline, no bold, better proportions
   for (let i = 14; i <= 23; i++) {
     yPos = startNewSlide('04', 'Plan and terminate');
     
-    pdf.setFontSize(14);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(`Ziel ${i - 13}`, contentX, yPos);
-    yPos += 10;
+    const goalContentHeight = contentEndY - yPos;
+    const goalSectionHeight = (goalContentHeight - 20) / 3;
     
+    // Goal textarea (larger)
     yPos = addSubtitle('Ziel', yPos);
-    yPos = addTextArea(textareaValues[`slide${i}-goal`] || '', yPos, 22);
+    yPos = addTextArea(textareaValues[`slide${i}-goal`] || '', yPos, goalSectionHeight);
     
     // Priority with graphic stars
     const prio = starRatings[`slide${i}-prio`] || 0;
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
     pdf.text('Prio:', contentX, yPos + 2);
-    drawStarRating(contentX + 15, yPos + 2, prio, 2.5);
+    drawStarRating(contentX + 12, yPos + 2, prio, 2);
     yPos += 10;
     
+    // Measure success
     yPos = addSubtitle('Wie messen wir den Erfolg?', yPos);
-    yPos = addTextArea(textareaValues[`slide${i}-measure`] || '', yPos, 22);
+    yPos = addTextArea(textareaValues[`slide${i}-measure`] || '', yPos, goalSectionHeight - 4);
     
+    // Steps
     yPos = addSubtitle('Wie gehen wir es Schritt für Schritt an?', yPos);
-    addTextArea(textareaValues[`slide${i}-steps`] || '', yPos, 22);
+    addTextArea(textareaValues[`slide${i}-steps`] || '', yPos, goalSectionHeight - 4);
   }
 
   // Save the PDF (slide 24 excluded)
