@@ -361,7 +361,7 @@
     display: none !important;
   }
 
-  /* Ensure draggable emojis show - use percentage-based positioning for print */
+  /* Ensure draggable emojis show - use left/top percentage positioning for print */
   .print-emoji,
   .absolute.w-12.h-12.bg-black.rounded-full {
     display: flex !important;
@@ -369,11 +369,12 @@
     background-color: black !important;
     width: 8mm !important;
     height: 8mm !important;
-    /* Use percentage-based transform for print - uses CSS custom properties */
-    transform: translate(
-      calc(var(--emoji-x-percent, 0%) * 3.2),
-      calc(var(--emoji-y-percent, 0%) * 2.67)
-    ) !important;
+    /* Switch from transform to left/top for proper percentage scaling */
+    position: absolute !important;
+    left: calc(50% + var(--emoji-x-percent, 0%)) !important;
+    top: calc(50% + var(--emoji-y-percent, 0%)) !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
   }
   
   /* Emoji text size in print */
