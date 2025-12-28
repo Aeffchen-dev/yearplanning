@@ -457,7 +457,17 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
   const [showDeleteTooltip, setShowDeleteTooltip] = useState(false);
+  const [containerSize, setContainerSize] = useState({ width: 500, height: 400 });
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Track container size for percentage calculations
+  useEffect(() => {
+    const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
+    if (cardElement) {
+      const rect = cardElement.getBoundingClientRect();
+      setContainerSize({ width: rect.width, height: rect.height });
+    }
+  }, [position]);
 
   const startLongPress = () => {
     if (onDelete) {
@@ -590,24 +600,33 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     }
   }, [isDragging, handleMouseMove, handleTouchMove, handleMouseUp]);
 
+  // Calculate percentage positions for print scaling
+  const percentX = (position.x / containerSize.width) * 100;
+  const percentY = (position.y / containerSize.height) * 100;
+
   return (
     <div
       ref={containerRef}
-      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 ${isDragging ? 'opacity-75' : ''}`}
+      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 print-emoji ${isDragging ? 'opacity-75' : ''}`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: isDragging ? 'none' : 'transform 0.1s ease',
-        touchAction: 'none'
-      }}
+        touchAction: 'none',
+        // Store percentage positions as CSS custom properties for print
+        '--emoji-x-percent': `${percentX}%`,
+        '--emoji-y-percent': `${percentY}%`,
+      } as React.CSSProperties}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       title={label}
+      data-emoji-x={percentX}
+      data-emoji-y={percentY}
     >
       <span className="text-2xl pointer-events-none">{emoji}</span>
       
       {/* Delete tooltip */}
       {showDeleteTooltip && (
-        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30">
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30 print:hidden">
           <button 
             onClick={handleDelete}
             className="hover:text-gray-300"
