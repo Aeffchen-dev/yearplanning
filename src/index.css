@@ -355,14 +355,20 @@
     color: black !important;
   }
 
+  /* Hide any slider track elements that may appear */
+  .flex.h-full.transition-transform::before,
+  .flex.h-full.transition-transform::after {
+    display: none !important;
+  }
+
   /* Ensure draggable emojis show - use percentage-based positioning for print */
   .print-emoji,
   .absolute.w-12.h-12.bg-black.rounded-full {
     display: flex !important;
     visibility: visible !important;
     background-color: black !important;
-    width: 10mm !important;
-    height: 10mm !important;
+    width: 8mm !important;
+    height: 8mm !important;
     /* Use percentage-based transform for print - uses CSS custom properties */
     transform: translate(
       calc(var(--emoji-x-percent, 0%) * 3.2),
@@ -373,28 +379,55 @@
   /* Emoji text size in print */
   .print-emoji span,
   .absolute.w-12.h-12.bg-black.rounded-full span {
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
   
-  /* The graph container for proper emoji positioning */
+  /* The graph container - ensure proper display and sizing */
   .flex-1.flex.items-center.justify-center.min-h-0.relative {
     position: relative !important;
     width: 100% !important;
+    min-height: auto !important;
     height: auto !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
-  /* Graph image container */
-  .flex-1.flex.items-center.justify-center.min-h-0.relative > div {
+  /* Graph image container - ensure it shows */
+  .flex-1.flex.items-center.justify-center.min-h-0.relative > .w-full.h-full {
     width: 100% !important;
     height: auto !important;
+    min-height: 80mm !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
-  /* Graph image itself */
+  /* Graph image itself - force visibility */
   .flex-1.flex.items-center.justify-center.min-h-0.relative img {
+    display: block !important;
+    visibility: visible !important;
     width: 100% !important;
     height: auto !important;
     max-width: 100% !important;
     max-height: none !important;
+    object-fit: contain !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Hide any overflow bars/elements */
+  [class*="overflow"] {
+    overflow: visible !important;
+  }
+  
+  /* Ensure slide content container shows properly */
+  .flex.flex-col.h-full.gap-8.relative {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    gap: 4mm !important;
   }
 
   /* Yellow textarea backgrounds */
