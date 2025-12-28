@@ -457,15 +457,16 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
   const [showDeleteTooltip, setShowDeleteTooltip] = useState(false);
-  const [containerSize, setContainerSize] = useState({ width: 500, height: 400 });
+  const [graphContainerSize, setGraphContainerSize] = useState({ width: 300, height: 250 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Track container size for percentage calculations
+  // Track the graph container size for accurate percentage calculations
   useEffect(() => {
-    const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
-    if (cardElement) {
-      const rect = cardElement.getBoundingClientRect();
-      setContainerSize({ width: rect.width, height: rect.height });
+    // Find the graph container (the relative container that holds the emojis)
+    const graphContainer = document.querySelector('.flex-1.flex.items-center.justify-center.min-h-0.relative');
+    if (graphContainer) {
+      const rect = graphContainer.getBoundingClientRect();
+      setGraphContainerSize({ width: rect.width, height: rect.height });
     }
   }, [position]);
 
@@ -600,9 +601,9 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     }
   }, [isDragging, handleMouseMove, handleTouchMove, handleMouseUp]);
 
-  // Calculate percentage positions for print scaling
-  const percentX = (position.x / containerSize.width) * 100;
-  const percentY = (position.y / containerSize.height) * 100;
+  // Calculate percentage positions for print scaling (relative to graph container)
+  const percentX = (position.x / graphContainerSize.width) * 100;
+  const percentY = (position.y / graphContainerSize.height) * 100;
 
   return (
     <div
