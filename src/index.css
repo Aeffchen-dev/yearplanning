@@ -355,12 +355,46 @@
     color: black !important;
   }
 
-  /* Ensure draggable emojis show */
+  /* Ensure draggable emojis show - use percentage-based positioning for print */
+  .print-emoji,
   .absolute.w-12.h-12.bg-black.rounded-full {
     display: flex !important;
     visibility: visible !important;
     background-color: black !important;
+    width: 10mm !important;
+    height: 10mm !important;
+    /* Use percentage-based transform for print - uses CSS custom properties */
+    transform: translate(
+      calc(var(--emoji-x-percent, 0%) * 3.2),
+      calc(var(--emoji-y-percent, 0%) * 2.67)
+    ) !important;
+  }
+  
+  /* Emoji text size in print */
+  .print-emoji span,
+  .absolute.w-12.h-12.bg-black.rounded-full span {
+    font-size: 16px !important;
+  }
+  
+  /* The graph container for proper emoji positioning */
+  .flex-1.flex.items-center.justify-center.min-h-0.relative {
     position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* Graph image container */
+  .flex-1.flex.items-center.justify-center.min-h-0.relative > div {
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* Graph image itself */
+  .flex-1.flex.items-center.justify-center.min-h-0.relative img {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: none !important;
   }
 
   /* Yellow textarea backgrounds */
