@@ -22,21 +22,25 @@ const StarRating: React.FC<StarRatingProps> = ({
     setRating(value);
   }, [value]);
 
-  const handleClick = (starIndex: number) => {
+  const handleClick = (starIndex: number, event: React.MouseEvent<HTMLButtonElement>) => {
     if (readonly) return;
     
-    const lastFullStar = Math.ceil(rating);
+    // Get click position within the star to determine half or full
+    const rect = event.currentTarget.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const isLeftHalf = clickX < rect.width / 2;
     
-    if (lastFullStar === starIndex) {
-      // Clicking on the last set star - toggle between full and half
-      const isFullStar = rating === starIndex;
-      const newRating = isFullStar ? starIndex - 0.5 : starIndex;
+    // Calculate the new rating based on click position
+    const newRating = isLeftHalf ? starIndex - 0.5 : starIndex;
+    
+    // If clicking the same value, toggle it off (go to previous half step)
+    if (newRating === rating) {
+      const decreasedRating = Math.max(0, newRating - 0.5);
+      setRating(decreasedRating);
+      onChange?.(decreasedRating);
+    } else {
       setRating(newRating);
       onChange?.(newRating);
-    } else {
-      // Clicking on a different star - set full rating
-      setRating(starIndex);
-      onChange?.(starIndex);
     }
   };
 
@@ -91,7 +95,7 @@ const StarRating: React.FC<StarRatingProps> = ({
             type="button"
             className={`${starColor === 'black' ? 'w-6 h-6' : 'w-8 h-8 md:w-10 md:h-10'} cursor-pointer transition-colors duration-200`}
             style={{ color: starColor, touchAction: 'manipulation' }}
-            onClick={() => handleClick(starIndex)}
+            onClick={(e) => handleClick(starIndex, e)}
             onMouseEnter={() => handleMouseEnter(starIndex)}
             onMouseLeave={handleMouseLeave}
             onTouchStart={() => handleTouchStart(starIndex)}
@@ -1266,11 +1270,25 @@ export default function YearPlannerGenerator() {
     return saved || {};
   });
 
+  // Default star ratings for slides 14-23 (Prio)
+  const defaultStarRatings: {[key: string]: number} = {
+    'slide14-prio': 3,
+    'slide15-prio': 2.5,
+    'slide16-prio': 2,
+    'slide17-prio': 1.5,
+    'slide18-prio': 1,
+    'slide19-prio': 0.5,
+    'slide20-prio': 0,
+    'slide21-prio': 0,
+    'slide22-prio': 0,
+    'slide23-prio': 0,
+  };
+
   // State for star ratings with localStorage persistence
   const [starRatings, setStarRatings] = useState<{[key: string]: number}>(() => {
-    if (typeof window === 'undefined') return {};
+    if (typeof window === 'undefined') return defaultStarRatings;
     const saved = getItemWithExpiry('yearPlanner-starRatings');
-    return saved || {};
+    return saved ? { ...defaultStarRatings, ...saved } : defaultStarRatings;
   });
 
   // State for dragged emojis with localStorage persistence
