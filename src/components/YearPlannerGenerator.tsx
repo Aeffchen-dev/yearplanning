@@ -492,16 +492,13 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       }
     };
 
-    // Add listeners with a small delay to prevent immediate close
-    const timeoutId = setTimeout(() => {
-      document.addEventListener('mousedown', handleOutsideClick);
-      document.addEventListener('touchstart', handleOutsideClick);
-    }, 50);
+    // Add listeners immediately
+    document.addEventListener('mousedown', handleOutsideClick, true);
+    document.addEventListener('touchstart', handleOutsideClick, true);
 
     return () => {
-      clearTimeout(timeoutId);
-      document.removeEventListener('mousedown', handleOutsideClick);
-      document.removeEventListener('touchstart', handleOutsideClick);
+      document.removeEventListener('mousedown', handleOutsideClick, true);
+      document.removeEventListener('touchstart', handleOutsideClick, true);
     };
   }, [isTooltipOpen, onTooltipChange]);
 
@@ -536,12 +533,9 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // If tooltip is open, clicking closes it
+    // Close tooltip if open, but continue to allow drag
     if (isTooltipOpen) {
       onTooltipChange(null);
-      e.preventDefault();
-      e.stopPropagation();
-      return;
     }
     
     setHasMoved(false);
@@ -556,12 +550,9 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // If tooltip is open, clicking closes it
+    // Close tooltip if open, but continue to allow drag
     if (isTooltipOpen) {
       onTooltipChange(null);
-      e.preventDefault();
-      e.stopPropagation();
-      return;
     }
     
     setHasMoved(false);
