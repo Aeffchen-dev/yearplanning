@@ -461,8 +461,10 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
   const [showDeleteTooltip, setShowDeleteTooltip] = useState(false);
+  const [hasMoved, setHasMoved] = useState(false);
   const [graphContainerSize, setGraphContainerSize] = useState({ width: 300, height: 250 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   // Track the graph container size for accurate percentage calculations
   useEffect(() => {
@@ -474,13 +476,45 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     }
   }, [position]);
 
+  // Close tooltip when clicking/tapping outside
+  useEffect(() => {
+    if (!showDeleteTooltip) return;
+
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node;
+      // Check if click is outside the tooltip and emoji container
+      if (
+        tooltipRef.current && !tooltipRef.current.contains(target) &&
+        containerRef.current && !containerRef.current.contains(target)
+      ) {
+        setShowDeleteTooltip(false);
+      }
+    };
+
+    // Add listeners with a small delay to prevent immediate close
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', handleOutsideClick);
+      document.addEventListener('touchstart', handleOutsideClick);
+    }, 50);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('touchstart', handleOutsideClick);
+    };
+  }, [showDeleteTooltip]);
+
   const startLongPress = () => {
     if (onDelete) {
       const timer = setTimeout(() => {
-        if (navigator.vibrate) {
-          navigator.vibrate(50); // Haptic feedback
+        // Only show tooltip if user hasn't moved (long press without drag)
+        if (!hasMoved) {
+          if (navigator.vibrate) {
+            navigator.vibrate(50); // Haptic feedback
+          }
+          setShowDeleteTooltip(true);
+          setIsDragging(false); // Stop dragging when tooltip appears
         }
-        setShowDeleteTooltip(true);
       }, 500); // 500ms long press
       setLongPressTimer(timer);
     }
@@ -501,12 +535,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Toggle tooltip if it's showing, otherwise start long press
+    // Don't start drag if tooltip is showing
     if (showDeleteTooltip) {
-      setShowDeleteTooltip(false);
       return;
     }
     
+    setHasMoved(false);
     startLongPress();
     setIsDragging(true);
     setDragStart({
@@ -518,12 +552,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // Toggle tooltip if it's showing, otherwise start long press
+    // Don't start drag if tooltip is showing
     if (showDeleteTooltip) {
-      setShowDeleteTooltip(false);
       return;
     }
     
+    setHasMoved(false);
     startLongPress();
     setIsDragging(true);
     const touch = e.touches[0];
@@ -538,7 +572,8 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Cancel long press if user starts dragging (but keep tooltip if showing)
+    // Mark that user has moved - cancel long press tooltip
+    setHasMoved(true);
     cancelLongPress();
     
     // Get the card container bounds
@@ -562,7 +597,8 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isDragging) return;
     
-    // Cancel long press if user starts dragging (but keep tooltip if showing)
+    // Mark that user has moved - cancel long press tooltip
+    setHasMoved(true);
     cancelLongPress();
     
     // Get the card container bounds
@@ -587,6 +623,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleMouseUp = useCallback(() => {
     cancelLongPress();
     setIsDragging(false);
+    setHasMoved(false);
   }, []);
 
   useEffect(() => {
@@ -631,7 +668,10 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       
       {/* Delete tooltip */}
       {showDeleteTooltip && (
-        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30 print:hidden">
+        <div 
+          ref={tooltipRef}
+          className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30 print:hidden"
+        >
           <button 
             onClick={handleDelete}
             className="hover:text-gray-300"
