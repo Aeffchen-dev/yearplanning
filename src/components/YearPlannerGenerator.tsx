@@ -451,16 +451,17 @@ interface DraggableFloatingEmojiProps {
   initialY: number;
   onDrag: (id: string, x: number, y: number) => void;
   onDelete?: (id: string) => void;
+  isTooltipOpen: boolean;
+  onTooltipChange: (id: string | null) => void;
 }
 
 const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({ 
-  id, emoji, label, initialX, initialY, onDrag, onDelete 
+  id, emoji, label, initialX, initialY, onDrag, onDelete, isTooltipOpen, onTooltipChange 
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
-  const [showDeleteTooltip, setShowDeleteTooltip] = useState(false);
   const [hasMoved, setHasMoved] = useState(false);
   const [graphContainerSize, setGraphContainerSize] = useState({ width: 300, height: 250 });
   const containerRef = useRef<HTMLDivElement>(null);
@@ -478,7 +479,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
 
   // Close tooltip when clicking/tapping outside
   useEffect(() => {
-    if (!showDeleteTooltip) return;
+    if (!isTooltipOpen) return;
 
     const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
       const target = e.target as Node;
@@ -487,7 +488,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
         tooltipRef.current && !tooltipRef.current.contains(target) &&
         containerRef.current && !containerRef.current.contains(target)
       ) {
-        setShowDeleteTooltip(false);
+        onTooltipChange(null);
       }
     };
 
@@ -502,7 +503,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       document.removeEventListener('mousedown', handleOutsideClick);
       document.removeEventListener('touchstart', handleOutsideClick);
     };
-  }, [showDeleteTooltip]);
+  }, [isTooltipOpen, onTooltipChange]);
 
   const startLongPress = () => {
     if (onDelete) {
@@ -512,7 +513,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
           if (navigator.vibrate) {
             navigator.vibrate(50); // Haptic feedback
           }
-          setShowDeleteTooltip(true);
+          onTooltipChange(id);
           setIsDragging(false); // Stop dragging when tooltip appears
         }
       }, 500); // 500ms long press
@@ -531,13 +532,16 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     if (onDelete) {
       onDelete(id);
     }
-    setShowDeleteTooltip(false);
+    onTooltipChange(null);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Hide tooltip if showing and allow drag to start
-    if (showDeleteTooltip) {
-      setShowDeleteTooltip(false);
+    // If tooltip is open, clicking closes it
+    if (isTooltipOpen) {
+      onTooltipChange(null);
+      e.preventDefault();
+      e.stopPropagation();
+      return;
     }
     
     setHasMoved(false);
@@ -552,9 +556,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // Hide tooltip if showing and allow drag to start
-    if (showDeleteTooltip) {
-      setShowDeleteTooltip(false);
+    // If tooltip is open, clicking closes it
+    if (isTooltipOpen) {
+      onTooltipChange(null);
+      e.preventDefault();
+      e.stopPropagation();
+      return;
     }
     
     setHasMoved(false);
@@ -575,7 +582,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     // Mark that user has moved - cancel long press tooltip and hide any visible tooltip
     setHasMoved(true);
     cancelLongPress();
-    setShowDeleteTooltip(false);
+    onTooltipChange(null);
     
     // Get the card container bounds
     const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
@@ -593,7 +600,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     
     setPosition({ x: constrainedX, y: constrainedY });
     onDrag(id, constrainedX, constrainedY);
-  }, [isDragging, dragStart, id, onDrag]);
+  }, [isDragging, dragStart, id, onDrag, onTooltipChange]);
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isDragging) return;
@@ -601,7 +608,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     // Mark that user has moved - cancel long press tooltip and hide any visible tooltip
     setHasMoved(true);
     cancelLongPress();
-    setShowDeleteTooltip(false);
+    onTooltipChange(null);
     
     // Get the card container bounds
     const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
@@ -620,7 +627,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
     
     setPosition({ x: constrainedX, y: constrainedY });
     onDrag(id, constrainedX, constrainedY);
-  }, [isDragging, dragStart, id, onDrag]);
+  }, [isDragging, dragStart, id, onDrag, onTooltipChange]);
 
   const handleMouseUp = useCallback(() => {
     cancelLongPress();
@@ -669,7 +676,7 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
       <span className="text-2xl pointer-events-none">{emoji}</span>
       
       {/* Delete tooltip */}
-      {showDeleteTooltip && (
+      {isTooltipOpen && (
         <div 
           ref={tooltipRef}
           className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-30 print:hidden"
@@ -699,6 +706,7 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
   updateDraggedEmojis 
 }) => {
   const [draggedEmojiId, setDraggedEmojiId] = useState<string | null>(null);
+  const [openTooltipId, setOpenTooltipId] = useState<string | null>(null);
 
   const handleStartDrag = (emoji: string, label: string) => {
     // Check if this emoji is already placed (only allow one of each)
@@ -728,10 +736,16 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
   const handleDeleteEmoji = (id: string) => {
     const newEmojis = draggedEmojis.filter(emoji => emoji.id !== id);
     updateDraggedEmojis(newEmojis);
+    setOpenTooltipId(null);
   };
 
   const handleReset = () => {
     updateDraggedEmojis([]);
+    setOpenTooltipId(null);
+  };
+
+  const handleTooltipChange = (id: string | null) => {
+    setOpenTooltipId(id);
   };
 
   return (
@@ -764,6 +778,8 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
             initialY={emoji.y}
             onDrag={handleEmojiDrag}
             onDelete={handleDeleteEmoji}
+            isTooltipOpen={openTooltipId === emoji.id}
+            onTooltipChange={handleTooltipChange}
           />
         ))}
       </div>
