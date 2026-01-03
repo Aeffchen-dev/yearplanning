@@ -658,11 +658,12 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none z-20 print-emoji ${isDragging ? 'opacity-75' : ''}`}
+      className={`absolute w-12 h-12 bg-black rounded-full flex items-center justify-center cursor-move select-none print-emoji ${isDragging ? 'opacity-75' : ''}`}
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: isDragging ? 'none' : 'transform 0.1s ease',
         touchAction: 'none',
+        zIndex: isTooltipOpen ? 50 : 20,
         // Store percentage positions as CSS custom properties for print
         '--emoji-x-percent': `${percentX}%`,
         '--emoji-y-percent': `${percentY}%`,
