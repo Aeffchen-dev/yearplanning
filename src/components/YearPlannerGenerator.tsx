@@ -535,9 +535,9 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Don't start drag if tooltip is showing
+    // Hide tooltip if showing and allow drag to start
     if (showDeleteTooltip) {
-      return;
+      setShowDeleteTooltip(false);
     }
     
     setHasMoved(false);
@@ -552,9 +552,9 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    // Don't start drag if tooltip is showing
+    // Hide tooltip if showing and allow drag to start
     if (showDeleteTooltip) {
-      return;
+      setShowDeleteTooltip(false);
     }
     
     setHasMoved(false);
