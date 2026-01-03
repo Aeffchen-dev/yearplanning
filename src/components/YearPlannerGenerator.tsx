@@ -668,8 +668,8 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
       id: newId,
       emoji,
       label,
-      x: 50, // Start position
-      y: 50
+      x: 0, // Center position (emojis use transform from center)
+      y: 0
     };
     const newEmojis = [...draggedEmojis, newEmoji];
     updateDraggedEmojis(newEmojis);
@@ -707,7 +707,8 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
           <img 
             src="/lovable-uploads/d3e1d8c3-4f97-4683-8ded-a54d85b8972c.png" 
             alt="Past year graph" 
-            className="max-w-full max-h-full object-contain"
+            className="max-w-full max-h-full object-contain pointer-events-none select-none"
+            draggable={false}
           />
         </div>
         {/* Dragged emojis positioned over the image */}
