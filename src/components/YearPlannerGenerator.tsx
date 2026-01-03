@@ -1261,6 +1261,7 @@ export default function YearPlannerGenerator() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
+  const [isTextareaFocused, setIsTextareaFocused] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   // State for all textarea values with localStorage persistence
@@ -1437,12 +1438,14 @@ export default function YearPlannerGenerator() {
 
   // Touch/Mouse handlers
   const handleStart = (clientX: number) => {
+    // Don't allow slider interaction while textarea is focused (mobile keyboard open)
+    if (isTextareaFocused) return;
     setIsDragging(true);
     setStartX(clientX);
   };
 
   const handleMove = (clientX: number) => {
-    if (!isDragging) return;
+    if (!isDragging || isTextareaFocused) return;
     const diff = clientX - startX;
     setTranslateX(diff);
   };
@@ -1472,6 +1475,9 @@ export default function YearPlannerGenerator() {
     const handleFocusIn = (e: FocusEvent) => {
       const target = e.target as HTMLElement;
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        // Disable slider interaction while textarea is focused
+        setIsTextareaFocused(true);
+        
         // Store current scroll position
         const scrollY = window.scrollY;
         
@@ -1496,6 +1502,9 @@ export default function YearPlannerGenerator() {
     const handleFocusOut = (e: FocusEvent) => {
       const target = e.target as HTMLElement;
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        // Re-enable slider interaction when textarea loses focus
+        setIsTextareaFocused(false);
+        
         // For iOS devices
         if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
           const scrollY = document.body.style.top;
