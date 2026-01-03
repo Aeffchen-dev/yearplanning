@@ -572,9 +572,10 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Mark that user has moved - cancel long press tooltip
+    // Mark that user has moved - cancel long press tooltip and hide any visible tooltip
     setHasMoved(true);
     cancelLongPress();
+    setShowDeleteTooltip(false);
     
     // Get the card container bounds
     const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
@@ -597,9 +598,10 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isDragging) return;
     
-    // Mark that user has moved - cancel long press tooltip
+    // Mark that user has moved - cancel long press tooltip and hide any visible tooltip
     setHasMoved(true);
     cancelLongPress();
+    setShowDeleteTooltip(false);
     
     // Get the card container bounds
     const cardElement = document.querySelector('.bg-\\[\\#161616\\]');
