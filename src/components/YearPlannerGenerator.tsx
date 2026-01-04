@@ -413,6 +413,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   setFocusFieldCount
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const handleFocusChange = (index: number, value: string) => {
     updateTextareaValue(`slide11-focus-${index}`, value);
@@ -440,13 +442,96 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
     }
   };
 
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIndex !== null && draggedIndex !== index) {
+      setDragOverIndex(index);
+    }
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (targetIndex: number) => {
+    if (draggedIndex === null || draggedIndex === targetIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    // Get the values for both indices
+    const draggedFocus = textareaValues[`slide11-focus-${draggedIndex}`] || '';
+    const draggedStar = starRatings[`slide11-star-${draggedIndex}`] || 0;
+    const targetFocus = textareaValues[`slide11-focus-${targetIndex}`] || '';
+    const targetStar = starRatings[`slide11-star-${targetIndex}`] || 0;
+
+    // Swap the values
+    updateTextareaValue(`slide11-focus-${draggedIndex}`, targetFocus);
+    updateStarRating(`slide11-star-${draggedIndex}`, targetStar);
+    updateTextareaValue(`slide11-focus-${targetIndex}`, draggedFocus);
+    updateStarRating(`slide11-star-${targetIndex}`, draggedStar);
+
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  // Touch-based reordering
+  const [touchDragIndex, setTouchDragIndex] = useState<number | null>(null);
+  const [touchStartY, setTouchStartY] = useState<number>(0);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleTouchStart = (e: React.TouchEvent, index: number) => {
+    if (!isEditMode) return;
+    setTouchDragIndex(index);
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchDragIndex === null || !isEditMode) return;
+    
+    const touch = e.touches[0];
+    const currentY = touch.clientY;
+    
+    // Find which item we're over
+    for (let i = 0; i < focusFieldCount; i++) {
+      const ref = itemRefs.current[i];
+      if (ref && i !== touchDragIndex) {
+        const rect = ref.getBoundingClientRect();
+        if (currentY >= rect.top && currentY <= rect.bottom) {
+          setDragOverIndex(i);
+          break;
+        }
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (touchDragIndex !== null && dragOverIndex !== null && touchDragIndex !== dragOverIndex) {
+      handleDrop(dragOverIndex);
+    }
+    setTouchDragIndex(null);
+    setDragOverIndex(null);
+  };
+
   return (
-    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
-      {/* Edit mode toggle - only show when more than 1 field exists */}
+    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden relative">
+      {/* Edit mode toggle - top right, always visible when more than 1 field */}
       {focusFieldCount > 1 && (
         <button
           onClick={() => setIsEditMode(!isEditMode)}
-          className={`text-white text-opacity-60 hover:text-opacity-100 font-arial text-xs flex items-center justify-center gap-1 py-1 transition-opacity flex-shrink-0 ${isEditMode ? 'text-opacity-100' : ''}`}
+          className={`absolute -top-8 right-0 font-arial text-xs transition-opacity z-10 ${
+            isEditMode ? 'text-white' : 'text-white text-opacity-60 hover:text-opacity-100'
+          }`}
         >
           {isEditMode ? 'Fertig' : 'Bearbeiten'}
         </button>
@@ -455,9 +540,23 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
+        const isDragging = draggedIndex === index || touchDragIndex === index;
+        const isDragOver = dragOverIndex === index;
         
         return (
-          <div key={index} className="relative flex-shrink-0 flex items-center gap-2">
+          <div 
+            key={index} 
+            ref={(el) => { itemRefs.current[index] = el; }}
+            className={`relative flex-shrink-0 flex items-center gap-2 transition-all ${
+              isDragging ? 'opacity-50' : ''
+            } ${isDragOver ? 'border-t-2 border-white' : ''}`}
+            draggable={isEditMode}
+            onDragStart={() => handleDragStart(index)}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDragLeave={handleDragLeave}
+            onDrop={() => handleDrop(index)}
+            onDragEnd={handleDragEnd}
+          >
             {/* Delete button in edit mode */}
             {isEditMode && focusFieldCount > 1 && (
               <button
@@ -467,26 +566,43 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 <span className="text-white text-sm font-bold leading-none">−</span>
               </button>
             )}
-            <div className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] flex-1">
-              <textarea
+            <div 
+              className={`bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] ${isEditMode ? '' : 'flex-1'}`}
+              onTouchStart={(e) => handleTouchStart(e, index)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={isEditMode ? { cursor: 'grab' } : undefined}
+            >
+              <input
+                type="text"
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%] min-h-[20px] max-h-[40px]`}
-                rows={1}
+                className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] ${
+                  isEditMode ? 'w-auto min-w-[60px]' : 'flex-1 min-w-0'
+                }`}
+                style={isEditMode ? { width: `${Math.max(60, (focusValue.length || 5) * 7)}px` } : undefined}
               />
-              <div className="flex-shrink-0">
-                <StarRating 
-                  starColor="black" 
-                  value={starRatings[starKey] || 0}
-                  onChange={(value) => updateStarRating(starKey, value)}
-                />
-              </div>
+              {!isEditMode && (
+                <div className="flex-shrink-0">
+                  <StarRating 
+                    starColor="black" 
+                    value={starRatings[starKey] || 0}
+                    onChange={(value) => updateStarRating(starKey, value)}
+                  />
+                </div>
+              )}
             </div>
+            {/* Drag handle in edit mode */}
+            {isEditMode && (
+              <div className="text-white text-opacity-40 flex flex-col gap-0.5 cursor-grab">
+                <span className="text-xs leading-none">≡</span>
+              </div>
+            )}
           </div>
         );
       })}
-      {focusFieldCount < 10 && (
+      {focusFieldCount < 10 && !isEditMode && (
         <button
           onClick={handleAddField}
           className="text-white text-opacity-60 hover:text-opacity-100 font-arial text-xs flex items-center justify-center gap-1 py-1 transition-opacity flex-shrink-0"
