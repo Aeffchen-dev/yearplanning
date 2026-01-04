@@ -557,7 +557,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
               </button>
             )}
             <div 
-              className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] flex-1"
+              className={`bg-[#FFE299] flex items-center gap-2 pl-3 pr-1 py-2 min-h-[44px] transition-all duration-200 ${isEditMode ? 'flex-shrink-0' : 'flex-1'}`}
               onTouchStart={(e) => handleTouchStart(e, index)}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -568,9 +568,12 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] flex-1 min-w-0`}
+                className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] transition-all duration-200 ${
+                  isEditMode ? 'w-auto min-w-[40px] max-w-[80px]' : 'flex-1 min-w-0'
+                }`}
+                style={isEditMode ? { width: `${Math.min(80, Math.max(40, (focusValue.length || 3) * 6))}px` } : undefined}
               />
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 pr-2">
                 <StarRating 
                   starColor="black" 
                   value={starRatings[starKey] || 0}
