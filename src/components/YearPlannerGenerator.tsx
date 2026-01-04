@@ -465,17 +465,28 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
       return;
     }
 
-    // Get the values for both indices
-    const draggedFocus = textareaValues[`slide11-focus-${draggedIndex}`] || '';
-    const draggedStar = starRatings[`slide11-star-${draggedIndex}`] || 0;
-    const targetFocus = textareaValues[`slide11-focus-${targetIndex}`] || '';
-    const targetStar = starRatings[`slide11-star-${targetIndex}`] || 0;
+    // Store all current values
+    const allFocusValues: string[] = [];
+    const allStarValues: number[] = [];
+    for (let i = 0; i < focusFieldCount; i++) {
+      allFocusValues.push(textareaValues[`slide11-focus-${i}`] || '');
+      allStarValues.push(starRatings[`slide11-star-${i}`] || 0);
+    }
 
-    // Swap the values
-    updateTextareaValue(`slide11-focus-${draggedIndex}`, targetFocus);
-    updateStarRating(`slide11-star-${draggedIndex}`, targetStar);
-    updateTextareaValue(`slide11-focus-${targetIndex}`, draggedFocus);
-    updateStarRating(`slide11-star-${targetIndex}`, draggedStar);
+    // Remove the dragged item
+    const draggedFocus = allFocusValues.splice(draggedIndex, 1)[0];
+    const draggedStar = allStarValues.splice(draggedIndex, 1)[0];
+
+    // Insert at target position
+    const insertIndex = targetIndex > draggedIndex ? targetIndex : targetIndex;
+    allFocusValues.splice(insertIndex, 0, draggedFocus);
+    allStarValues.splice(insertIndex, 0, draggedStar);
+
+    // Update all values
+    for (let i = 0; i < focusFieldCount; i++) {
+      updateTextareaValue(`slide11-focus-${i}`, allFocusValues[i]);
+      updateStarRating(`slide11-star-${i}`, allStarValues[i]);
+    }
 
     setDraggedIndex(null);
     setDragOverIndex(null);
@@ -557,7 +568,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
               </button>
             )}
             <div 
-              className={`bg-[#FFE299] flex items-center gap-2 pl-3 py-2 min-h-[44px] transition-all duration-200 flex-1`}
+              className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] transition-all duration-200 flex-1 overflow-hidden"
               onTouchStart={(e) => handleTouchStart(e, index)}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -570,7 +581,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 onChange={(e) => handleFocusChange(index, e.target.value)}
                 className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] transition-all duration-200 flex-1 min-w-0`}
               />
-              <div className="flex-shrink-0 pr-3">
+              <div className="flex-shrink-0">
                 <StarRating 
                   starColor="black" 
                   value={starRatings[starKey] || 0}
