@@ -458,12 +458,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
     setDragOverIndex(null);
   };
 
-  const handleDrop = (targetIndex: number) => {
-    if (draggedIndex === null || draggedIndex === targetIndex) {
-      setDraggedIndex(null);
-      setDragOverIndex(null);
-      return;
-    }
+  const reorderItems = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
 
     // Store all current values
     const allFocusValues: string[] = [];
@@ -474,20 +470,28 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
     }
 
     // Remove the dragged item
-    const draggedFocus = allFocusValues.splice(draggedIndex, 1)[0];
-    const draggedStar = allStarValues.splice(draggedIndex, 1)[0];
+    const draggedFocus = allFocusValues.splice(fromIndex, 1)[0];
+    const draggedStar = allStarValues.splice(fromIndex, 1)[0];
 
     // Insert at target position
-    const insertIndex = targetIndex > draggedIndex ? targetIndex : targetIndex;
-    allFocusValues.splice(insertIndex, 0, draggedFocus);
-    allStarValues.splice(insertIndex, 0, draggedStar);
+    allFocusValues.splice(toIndex, 0, draggedFocus);
+    allStarValues.splice(toIndex, 0, draggedStar);
 
     // Update all values
     for (let i = 0; i < focusFieldCount; i++) {
       updateTextareaValue(`slide11-focus-${i}`, allFocusValues[i]);
       updateStarRating(`slide11-star-${i}`, allStarValues[i]);
     }
+  };
 
+  const handleDrop = (targetIndex: number) => {
+    if (draggedIndex === null || draggedIndex === targetIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    reorderItems(draggedIndex, targetIndex);
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
@@ -499,13 +503,12 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
 
   // Touch-based reordering
   const [touchDragIndex, setTouchDragIndex] = useState<number | null>(null);
-  const [touchStartY, setTouchStartY] = useState<number>(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleTouchStart = (e: React.TouchEvent, index: number) => {
     if (!isEditMode) return;
+    e.preventDefault();
     setTouchDragIndex(index);
-    setTouchStartY(e.touches[0].clientY);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -515,21 +518,23 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
     const currentY = touch.clientY;
     
     // Find which item we're over
+    let foundIndex: number | null = null;
     for (let i = 0; i < focusFieldCount; i++) {
       const ref = itemRefs.current[i];
       if (ref && i !== touchDragIndex) {
         const rect = ref.getBoundingClientRect();
         if (currentY >= rect.top && currentY <= rect.bottom) {
-          setDragOverIndex(i);
+          foundIndex = i;
           break;
         }
       }
     }
+    setDragOverIndex(foundIndex);
   };
 
   const handleTouchEnd = () => {
     if (touchDragIndex !== null && dragOverIndex !== null && touchDragIndex !== dragOverIndex) {
-      handleDrop(dragOverIndex);
+      reorderItems(touchDragIndex, dragOverIndex);
     }
     setTouchDragIndex(null);
     setDragOverIndex(null);
