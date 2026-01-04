@@ -412,9 +412,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   focusFieldCount,
   setFocusFieldCount
 }) => {
-  const [swipeOffset, setSwipeOffset] = useState<{[key: number]: number}>({});
-  const [swipeStart, setSwipeStart] = useState<{x: number, y: number, index: number} | null>(null);
-  const [isSwipingHorizontally, setIsSwipingHorizontally] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const handleFocusChange = (index: number, value: string) => {
     updateTextareaValue(`slide11-focus-${index}`, value);
@@ -439,82 +437,37 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
       updateStarRating(`slide11-star-${focusFieldCount - 1}`, 0);
       
       setFocusFieldCount(focusFieldCount - 1);
-      setSwipeOffset({});
     }
-  };
-
-  const handleTouchStart = (e: React.TouchEvent, index: number) => {
-    const touch = e.touches[0];
-    setSwipeStart({ x: touch.clientX, y: touch.clientY, index });
-    setIsSwipingHorizontally(false);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent, index: number) => {
-    if (!swipeStart || swipeStart.index !== index) return;
-    
-    const touch = e.touches[0];
-    const diffX = touch.clientX - swipeStart.x;
-    const diffY = touch.clientY - swipeStart.y;
-    
-    // Determine swipe direction on first significant movement
-    if (!isSwipingHorizontally && (Math.abs(diffX) > 10 || Math.abs(diffY) > 10)) {
-      if (Math.abs(diffX) > Math.abs(diffY)) {
-        setIsSwipingHorizontally(true);
-      } else {
-        setSwipeStart(null);
-        return;
-      }
-    }
-    
-    if (isSwipingHorizontally && focusFieldCount > 1) {
-      // Only allow swiping left (negative values)
-      const offset = Math.min(0, Math.max(-100, diffX));
-      setSwipeOffset({ ...swipeOffset, [index]: offset });
-    }
-  };
-
-  const handleTouchEnd = (index: number) => {
-    const offset = swipeOffset[index] || 0;
-    
-    // If swiped more than 60px left, delete the field
-    if (offset < -60 && focusFieldCount > 1) {
-      handleRemoveField(index);
-    } else {
-      // Reset swipe
-      setSwipeOffset({ ...swipeOffset, [index]: 0 });
-    }
-    
-    setSwipeStart(null);
-    setIsSwipingHorizontally(false);
   };
 
   return (
     <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
+      {/* Edit mode toggle - only show when more than 1 field exists */}
+      {focusFieldCount > 1 && (
+        <button
+          onClick={() => setIsEditMode(!isEditMode)}
+          className={`text-white text-opacity-60 hover:text-opacity-100 font-arial text-xs flex items-center justify-center gap-1 py-1 transition-opacity flex-shrink-0 ${isEditMode ? 'text-opacity-100' : ''}`}
+        >
+          {isEditMode ? 'Fertig' : 'Bearbeiten'}
+        </button>
+      )}
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
-        const offset = swipeOffset[index] || 0;
         
         return (
-          <div key={index} className="relative flex-shrink-0 overflow-hidden">
-            {/* Delete background */}
-            {focusFieldCount > 1 && (
-              <div className="absolute inset-y-0 right-0 w-20 bg-red-500 flex items-center justify-center">
-                <span className="text-white text-xs font-arial">Löschen</span>
-              </div>
+          <div key={index} className="relative flex-shrink-0 flex items-center gap-2">
+            {/* Delete button in edit mode */}
+            {isEditMode && focusFieldCount > 1 && (
+              <button
+                onClick={() => handleRemoveField(index)}
+                className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 transition-transform hover:scale-110"
+              >
+                <span className="text-white text-sm font-bold leading-none">−</span>
+              </button>
             )}
-            {/* Swipeable content */}
-            <div 
-              className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] relative"
-              style={{ 
-                transform: `translateX(${offset}px)`,
-                transition: swipeStart ? 'none' : 'transform 0.2s ease-out'
-              }}
-              onTouchStart={(e) => handleTouchStart(e, index)}
-              onTouchMove={(e) => handleTouchMove(e, index)}
-              onTouchEnd={() => handleTouchEnd(index)}
-            >
+            <div className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] flex-1">
               <textarea
                 placeholder="Fokus"
                 value={focusValue}
