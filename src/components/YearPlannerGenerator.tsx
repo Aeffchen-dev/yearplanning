@@ -400,27 +400,65 @@ interface FocusAreasSectionProps {
   updateStarRating: (key: string, value: number) => void;
   textareaValues: {[key: string]: string};
   updateTextareaValue: (key: string, value: string) => void;
+  focusFieldCount: number;
+  setFocusFieldCount: (count: number) => void;
 }
 
 const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({ 
   starRatings, 
   updateStarRating, 
   textareaValues, 
-  updateTextareaValue 
+  updateTextareaValue,
+  focusFieldCount,
+  setFocusFieldCount
 }) => {
   const handleFocusChange = (index: number, value: string) => {
     updateTextareaValue(`slide11-focus-${index}`, value);
   };
 
+  const handleAddField = () => {
+    if (focusFieldCount < 10) { // Max 10 fields
+      setFocusFieldCount(focusFieldCount + 1);
+    }
+  };
+
+  const handleRemoveField = (index: number) => {
+    if (focusFieldCount > 1) {
+      // Clear the removed field's data
+      updateTextareaValue(`slide11-focus-${index}`, '');
+      updateStarRating(`slide11-star-${index}`, 0);
+      
+      // Shift remaining fields up
+      for (let i = index; i < focusFieldCount - 1; i++) {
+        updateTextareaValue(`slide11-focus-${i}`, textareaValues[`slide11-focus-${i + 1}`] || '');
+        updateStarRating(`slide11-star-${i}`, starRatings[`slide11-star-${i + 1}`] || 0);
+      }
+      // Clear the last field
+      updateTextareaValue(`slide11-focus-${focusFieldCount - 1}`, '');
+      updateStarRating(`slide11-star-${focusFieldCount - 1}`, 0);
+      
+      setFocusFieldCount(focusFieldCount - 1);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col gap-2">
-      {[1, 2, 3, 4, 5].map((i, index) => {
+      {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
         
         return (
-          <div key={i} className="bg-[#FFE299] flex flex-col flex-1 min-h-0">
+          <div key={index} className="bg-[#FFE299] flex flex-col flex-1 min-h-0 relative group">
+            {focusFieldCount > 1 && (
+              <button
+                onClick={() => handleRemoveField(index)}
+                className="absolute top-1 right-1 w-5 h-5 bg-black bg-opacity-20 hover:bg-opacity-40 rounded-full flex items-center justify-center text-black text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                title="Entfernen"
+              >
+                ×
+              </button>
+            )}
             <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
               <textarea
                 placeholder="Fokus"
@@ -439,6 +477,14 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
           </div>
         );
       })}
+      {focusFieldCount < 10 && (
+        <button
+          onClick={handleAddField}
+          className="bg-[#FFE299] bg-opacity-50 hover:bg-opacity-70 border-2 border-dashed border-[#B29F71] rounded py-2 text-[#B29F71] hover:text-black font-arial text-sm transition-colors flex items-center justify-center gap-1"
+        >
+          <span className="text-lg">+</span> Fokus hinzufügen
+        </button>
+      )}
     </div>
   );
 };
@@ -809,7 +855,9 @@ const slides = (
   starRatings: {[key: string]: number},
   updateStarRating: (key: string, value: number) => void,
   draggedEmojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>,
-  updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void
+  updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void,
+  focusFieldCount: number,
+  setFocusFieldCount: (count: number) => void
 ): SlideData[] => [
   // Slide 1
   {
@@ -1103,6 +1151,8 @@ const slides = (
             updateStarRating={updateStarRating}
             textareaValues={textareaValues}
             updateTextareaValue={updateTextareaValue}
+            focusFieldCount={focusFieldCount}
+            setFocusFieldCount={setFocusFieldCount}
           />
         </div>
       </div>
@@ -1350,6 +1400,18 @@ export default function YearPlannerGenerator() {
     return saved || [];
   });
 
+  // State for focus field count with localStorage persistence
+  const [focusFieldCount, setFocusFieldCountState] = useState<number>(() => {
+    if (typeof window === 'undefined') return 5;
+    const saved = getItemWithExpiry('yearPlanner-focusFieldCount');
+    return saved ? parseInt(saved, 10) : 5;
+  });
+
+  const setFocusFieldCount = (count: number) => {
+    setFocusFieldCountState(count);
+    setItemWithExpiry('yearPlanner-focusFieldCount', count.toString());
+  };
+
   const updateTextareaValue = (key: string, value: string) => {
     const newValues = { ...textareaValues, [key]: value };
     setTextareaValues(newValues);
@@ -1374,7 +1436,7 @@ export default function YearPlannerGenerator() {
 
   // Create slides array with state integration
   const slidesArray = useMemo(() => {
-    const baseSlides = slides(textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis);
+    const baseSlides = slides(textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount);
     
     // Generate slides 14-23 with goal planning template
     for (let i = 14; i <= 23; i++) {
@@ -1469,7 +1531,7 @@ export default function YearPlannerGenerator() {
     });
 
     return baseSlides;
-  }, [textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis]);
+  }, [textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount]);
 
   const nextSlide = () => {
     if (currentSlide < slidesArray.length - 1) {
