@@ -1257,7 +1257,7 @@ const slides = (
         {focusFieldCount > 1 && (
           <button
             onClick={() => setFocusEditMode(!focusEditMode)}
-            className="absolute -top-12 right-0 text-white font-arial text-sm z-10"
+            className="absolute top-[-36px] md:-top-10 right-0 text-white text-xs font-arial z-10"
           >
             {focusEditMode ? 'Fertig' : 'Bearbeiten'}
           </button>
