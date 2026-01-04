@@ -400,6 +400,8 @@ interface FocusAreasSectionProps {
   updateStarRating: (key: string, value: number) => void;
   textareaValues: {[key: string]: string};
   updateTextareaValue: (key: string, value: string) => void;
+  batchUpdateTextareaValues: (updates: {[key: string]: string}) => void;
+  batchUpdateStarRatings: (updates: {[key: string]: number}) => void;
   focusFieldCount: number;
   setFocusFieldCount: (count: number) => void;
   isEditMode: boolean;
@@ -410,6 +412,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   updateStarRating, 
   textareaValues, 
   updateTextareaValue,
+  batchUpdateTextareaValues,
+  batchUpdateStarRatings,
   focusFieldCount,
   setFocusFieldCount,
   isEditMode
@@ -477,11 +481,15 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
     allFocusValues.splice(toIndex, 0, draggedFocus);
     allStarValues.splice(toIndex, 0, draggedStar);
 
-    // Update all values
+    // Batch update all values at once
+    const textUpdates: {[key: string]: string} = {};
+    const starUpdates: {[key: string]: number} = {};
     for (let i = 0; i < focusFieldCount; i++) {
-      updateTextareaValue(`slide11-focus-${i}`, allFocusValues[i]);
-      updateStarRating(`slide11-star-${i}`, allStarValues[i]);
+      textUpdates[`slide11-focus-${i}`] = allFocusValues[i];
+      starUpdates[`slide11-star-${i}`] = allStarValues[i];
     }
+    batchUpdateTextareaValues(textUpdates);
+    batchUpdateStarRatings(starUpdates);
   };
 
   const handleDrop = (targetIndex: number) => {
@@ -978,8 +986,10 @@ interface SlideData {
 const slides = (
   textareaValues: {[key: string]: string}, 
   updateTextareaValue: (key: string, value: string) => void,
+  batchUpdateTextareaValues: (updates: {[key: string]: string}) => void,
   starRatings: {[key: string]: number},
   updateStarRating: (key: string, value: number) => void,
+  batchUpdateStarRatings: (updates: {[key: string]: number}) => void,
   draggedEmojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>,
   updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void,
   focusFieldCount: number,
@@ -1288,6 +1298,8 @@ const slides = (
             updateStarRating={updateStarRating}
             textareaValues={textareaValues}
             updateTextareaValue={updateTextareaValue}
+            batchUpdateTextareaValues={batchUpdateTextareaValues}
+            batchUpdateStarRatings={batchUpdateStarRatings}
             focusFieldCount={focusFieldCount}
             setFocusFieldCount={setFocusFieldCount}
             isEditMode={focusEditMode}
@@ -1559,8 +1571,20 @@ export default function YearPlannerGenerator() {
     setItemWithExpiry('yearPlanner-textareas', newValues);
   };
 
+  const batchUpdateTextareaValues = (updates: {[key: string]: string}) => {
+    const newValues = { ...textareaValues, ...updates };
+    setTextareaValues(newValues);
+    setItemWithExpiry('yearPlanner-textareas', newValues);
+  };
+
   const updateStarRating = (key: string, value: number) => {
     const newRatings = { ...starRatings, [key]: value };
+    setStarRatings(newRatings);
+    setItemWithExpiry('yearPlanner-starRatings', newRatings);
+  };
+
+  const batchUpdateStarRatings = (updates: {[key: string]: number}) => {
+    const newRatings = { ...starRatings, ...updates };
     setStarRatings(newRatings);
     setItemWithExpiry('yearPlanner-starRatings', newRatings);
   };
@@ -1577,7 +1601,7 @@ export default function YearPlannerGenerator() {
 
   // Create slides array with state integration
   const slidesArray = useMemo(() => {
-    const baseSlides = slides(textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode);
+    const baseSlides = slides(textareaValues, updateTextareaValue, batchUpdateTextareaValues, starRatings, updateStarRating, batchUpdateStarRatings, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode);
     
     // Generate slides 14-23 with goal planning template
     for (let i = 14; i <= 23; i++) {
@@ -1672,7 +1696,7 @@ export default function YearPlannerGenerator() {
     });
 
     return baseSlides;
-  }, [textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode]);
+  }, [textareaValues, updateTextareaValue, batchUpdateTextareaValues, starRatings, updateStarRating, batchUpdateStarRatings, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode]);
 
   const nextSlide = () => {
     if (currentSlide < slidesArray.length - 1) {
