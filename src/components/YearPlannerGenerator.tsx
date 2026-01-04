@@ -525,7 +525,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
+    <div className={`h-full flex flex-col gap-2 ${isEditMode ? '' : 'overflow-y-auto'} overflow-x-hidden`}>
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
@@ -538,8 +538,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
             key={index} 
             ref={(el) => { itemRefs.current[index] = el; }}
             className={`relative flex-shrink-0 flex items-center gap-2 transition-all ${
-              isDragging ? 'opacity-50' : ''
-            } ${isDragOver ? 'border-t-2 border-white' : ''}`}
+              isDragging ? 'opacity-50 scale-105' : ''
+            } ${isDragOver ? 'pt-2 border-t-2 border-white' : ''}`}
             draggable={isEditMode}
             onDragStart={() => handleDragStart(index)}
             onDragOver={(e) => handleDragOver(e, index)}
@@ -557,7 +557,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
               </button>
             )}
             <div 
-              className={`bg-[#FFE299] flex items-center gap-2 pl-3 pr-1 py-2 min-h-[44px] transition-all duration-200 ${isEditMode ? 'flex-shrink-0' : 'flex-1'}`}
+              className={`bg-[#FFE299] flex items-center gap-2 pl-3 py-2 min-h-[44px] transition-all duration-200 flex-1`}
               onTouchStart={(e) => handleTouchStart(e, index)}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -568,12 +568,9 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] transition-all duration-200 ${
-                  isEditMode ? 'w-auto min-w-[40px] max-w-[80px]' : 'flex-1 min-w-0'
-                }`}
-                style={isEditMode ? { width: `${Math.min(80, Math.max(40, (focusValue.length || 3) * 6))}px` } : undefined}
+                className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] transition-all duration-200 flex-1 min-w-0`}
               />
-              <div className="flex-shrink-0 pr-2">
+              <div className="flex-shrink-0 pr-3">
                 <StarRating 
                   starColor="black" 
                   value={starRatings[starKey] || 0}
@@ -583,8 +580,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
             </div>
             {/* Drag handle in edit mode */}
             {isEditMode && (
-              <div className="text-white text-opacity-40 flex flex-col gap-0.5 cursor-grab">
-                <span className="text-xs leading-none">≡</span>
+              <div className="text-white text-opacity-60 flex flex-col cursor-grab active:cursor-grabbing">
+                <span className="text-base leading-none">☰</span>
               </div>
             )}
           </div>
