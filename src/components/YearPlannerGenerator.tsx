@@ -468,16 +468,25 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   useEffect(() => {
     if (activeTooltipIndex === null) return;
 
-    const handleOutsideClick = () => {
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as HTMLElement;
+      // Don't close if clicking the Entfernen button
+      if (target.closest('[data-tooltip-button]')) {
+        return;
+      }
       setActiveTooltipIndex(null);
     };
 
-    document.addEventListener('mousedown', handleOutsideClick, true);
-    document.addEventListener('touchstart', handleOutsideClick, true);
+    // Small delay to prevent immediate close after long press
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('click', handleOutsideClick, true);
+      document.addEventListener('touchend', handleOutsideClick, true);
+    }, 50);
 
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick, true);
-      document.removeEventListener('touchstart', handleOutsideClick, true);
+      clearTimeout(timeoutId);
+      document.removeEventListener('click', handleOutsideClick, true);
+      document.removeEventListener('touchend', handleOutsideClick, true);
     };
   }, [activeTooltipIndex]);
 
@@ -522,6 +531,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 onTouchStart={(e) => e.stopPropagation()}
               >
                 <button 
+                  data-tooltip-button
                   onClick={() => handleRemoveField(index)}
                   className="hover:text-gray-300"
                 >
