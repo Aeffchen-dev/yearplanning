@@ -449,40 +449,39 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
         const focusValue = textareaValues[focusKey] || '';
         
         return (
-          <div key={index} className="bg-[#FFE299] flex flex-col flex-1 min-h-0 relative group">
-            {focusFieldCount > 1 && (
-              <button
-                onClick={() => handleRemoveField(index)}
-                className="absolute top-1 right-1 w-5 h-5 bg-black bg-opacity-20 hover:bg-opacity-40 rounded-full flex items-center justify-center text-black text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                title="Entfernen"
-              >
-                ×
-              </button>
-            )}
-            <div className="p-4 pb-1 flex-1 min-h-0 flex flex-col">
-              <textarea
-                placeholder="Fokus"
-                value={focusValue}
-                onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`w-full flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%]`}
-              />
-            </div>
-            <div className="px-4 pb-1 flex justify-end flex-shrink-0">
+          <div key={index} className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] relative group">
+            <textarea
+              placeholder="Fokus"
+              value={focusValue}
+              onChange={(e) => handleFocusChange(index, e.target.value)}
+              className={`flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%] min-h-[20px] max-h-[40px]`}
+              rows={1}
+            />
+            <div className="flex-shrink-0">
               <StarRating 
                 starColor="black" 
                 value={starRatings[starKey] || 0}
                 onChange={(value) => updateStarRating(starKey, value)}
               />
             </div>
+            {focusFieldCount > 1 && (
+              <button
+                onClick={() => handleRemoveField(index)}
+                className="absolute top-1 right-1 w-4 h-4 flex items-center justify-center text-black text-opacity-30 hover:text-opacity-70 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                title="Entfernen"
+              >
+                ×
+              </button>
+            )}
           </div>
         );
       })}
       {focusFieldCount < 10 && (
         <button
           onClick={handleAddField}
-          className="bg-[#FFE299] bg-opacity-50 hover:bg-opacity-70 border-2 border-dashed border-[#B29F71] rounded py-2 text-[#B29F71] hover:text-black font-arial text-sm transition-colors flex items-center justify-center gap-1"
+          className="text-white text-opacity-60 hover:text-opacity-100 font-arial text-xs flex items-center gap-1 py-1 transition-opacity"
         >
-          <span className="text-lg">+</span> Fokus hinzufügen
+          <span className="text-sm">+</span> Fokus hinzufügen
         </button>
       )}
     </div>
