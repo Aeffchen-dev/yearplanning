@@ -402,6 +402,7 @@ interface FocusAreasSectionProps {
   updateTextareaValue: (key: string, value: string) => void;
   focusFieldCount: number;
   setFocusFieldCount: (count: number) => void;
+  isEditMode: boolean;
 }
 
 const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({ 
@@ -410,9 +411,9 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   textareaValues, 
   updateTextareaValue,
   focusFieldCount,
-  setFocusFieldCount
+  setFocusFieldCount,
+  isEditMode
 }) => {
-  const [isEditMode, setIsEditMode] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
@@ -524,18 +525,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden relative">
-      {/* Edit mode toggle - top right, always visible when more than 1 field */}
-      {focusFieldCount > 1 && (
-        <button
-          onClick={() => setIsEditMode(!isEditMode)}
-          className={`absolute -top-8 right-0 font-arial text-xs transition-opacity z-10 ${
-            isEditMode ? 'text-white' : 'text-white text-opacity-60 hover:text-opacity-100'
-          }`}
-        >
-          {isEditMode ? 'Fertig' : 'Bearbeiten'}
-        </button>
-      )}
+    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
@@ -605,7 +595,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
       {focusFieldCount < 10 && !isEditMode && (
         <button
           onClick={handleAddField}
-          className="text-white text-opacity-60 hover:text-opacity-100 font-arial text-xs flex items-center justify-center gap-1 py-1 transition-opacity flex-shrink-0"
+          className="text-white font-arial text-sm flex items-center justify-center gap-1 py-1 transition-opacity flex-shrink-0"
         >
           <span className="text-sm">+</span> Fokus hinzufügen
         </button>
@@ -982,7 +972,9 @@ const slides = (
   draggedEmojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>,
   updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void,
   focusFieldCount: number,
-  setFocusFieldCount: (count: number) => void
+  setFocusFieldCount: (count: number) => void,
+  focusEditMode: boolean,
+  setFocusEditMode: (mode: boolean) => void
 ): SlideData[] => [
   // Slide 1
   {
@@ -1265,7 +1257,16 @@ const slides = (
     id: 11,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0 relative">
+        {/* Edit mode toggle - top right corner of card */}
+        {focusFieldCount > 1 && (
+          <button
+            onClick={() => setFocusEditMode(!focusEditMode)}
+            className="absolute -top-12 right-0 text-white font-arial text-sm z-10"
+          >
+            {focusEditMode ? 'Fertig' : 'Bearbeiten'}
+          </button>
+        )}
         <div className="text-white text-sm font-arial mb-3 flex-shrink-0">
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
@@ -1278,6 +1279,7 @@ const slides = (
             updateTextareaValue={updateTextareaValue}
             focusFieldCount={focusFieldCount}
             setFocusFieldCount={setFocusFieldCount}
+            isEditMode={focusEditMode}
           />
         </div>
       </div>
@@ -1537,6 +1539,9 @@ export default function YearPlannerGenerator() {
     setItemWithExpiry('yearPlanner-focusFieldCount', count.toString());
   };
 
+  // State for focus edit mode
+  const [focusEditMode, setFocusEditMode] = useState(false);
+
   const updateTextareaValue = (key: string, value: string) => {
     const newValues = { ...textareaValues, [key]: value };
     setTextareaValues(newValues);
@@ -1561,7 +1566,7 @@ export default function YearPlannerGenerator() {
 
   // Create slides array with state integration
   const slidesArray = useMemo(() => {
-    const baseSlides = slides(textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount);
+    const baseSlides = slides(textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode);
     
     // Generate slides 14-23 with goal planning template
     for (let i = 14; i <= 23; i++) {
@@ -1656,7 +1661,7 @@ export default function YearPlannerGenerator() {
     });
 
     return baseSlides;
-  }, [textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount]);
+  }, [textareaValues, updateTextareaValue, starRatings, updateStarRating, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode]);
 
   const nextSlide = () => {
     if (currentSlide < slidesArray.length - 1) {
