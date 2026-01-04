@@ -557,7 +557,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
               </button>
             )}
             <div 
-              className={`bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] ${isEditMode ? '' : 'flex-1'}`}
+              className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] flex-1"
               onTouchStart={(e) => handleTouchStart(e, index)}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -568,20 +568,15 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
                 placeholder="Fokus"
                 value={focusValue}
                 onChange={(e) => handleFocusChange(index, e.target.value)}
-                className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] ${
-                  isEditMode ? 'w-auto min-w-[60px]' : 'flex-1 min-w-0'
-                }`}
-                style={isEditMode ? { width: `${Math.max(60, (focusValue.length || 5) * 7)}px` } : undefined}
+                className={`bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] border-none outline-none font-arial text-xs leading-[120%] flex-1 min-w-0`}
               />
-              {!isEditMode && (
-                <div className="flex-shrink-0">
-                  <StarRating 
-                    starColor="black" 
-                    value={starRatings[starKey] || 0}
-                    onChange={(value) => updateStarRating(starKey, value)}
-                  />
-                </div>
-              )}
+              <div className="flex-shrink-0">
+                <StarRating 
+                  starColor="black" 
+                  value={starRatings[starKey] || 0}
+                  onChange={(value) => updateStarRating(starKey, value)}
+                />
+              </div>
             </div>
             {/* Drag handle in edit mode */}
             {isEditMode && (
