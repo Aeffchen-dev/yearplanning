@@ -412,6 +412,9 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   focusFieldCount,
   setFocusFieldCount
 }) => {
+  const [activeTooltipIndex, setActiveTooltipIndex] = useState<number | null>(null);
+  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
+
   const handleFocusChange = (index: number, value: string) => {
     updateTextareaValue(`slide11-focus-${index}`, value);
   };
@@ -438,40 +441,94 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
       updateStarRating(`slide11-star-${focusFieldCount - 1}`, 0);
       
       setFocusFieldCount(focusFieldCount - 1);
+      setActiveTooltipIndex(null);
     }
   };
 
+  const startLongPress = (index: number) => {
+    if (focusFieldCount > 1) {
+      const timer = setTimeout(() => {
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+        setActiveTooltipIndex(index);
+      }, 500);
+      setLongPressTimer(timer);
+    }
+  };
+
+  const cancelLongPress = () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+  };
+
+  // Close tooltip when clicking outside
+  useEffect(() => {
+    if (activeTooltipIndex === null) return;
+
+    const handleOutsideClick = () => {
+      setActiveTooltipIndex(null);
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick, true);
+    document.addEventListener('touchstart', handleOutsideClick, true);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick, true);
+      document.removeEventListener('touchstart', handleOutsideClick, true);
+    };
+  }, [activeTooltipIndex]);
+
   return (
-    <div className="h-full flex flex-col gap-2">
+    <div className="h-full flex flex-col gap-2 overflow-y-auto">
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
         
         return (
-          <div key={index} className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] relative group">
+          <div 
+            key={index} 
+            className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] relative flex-shrink-0"
+            onMouseDown={() => startLongPress(index)}
+            onMouseUp={cancelLongPress}
+            onMouseLeave={cancelLongPress}
+            onTouchStart={() => startLongPress(index)}
+            onTouchEnd={cancelLongPress}
+          >
             <textarea
               placeholder="Fokus"
               value={focusValue}
               onChange={(e) => handleFocusChange(index, e.target.value)}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               className={`flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%] min-h-[20px] max-h-[40px]`}
               rows={1}
             />
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0" onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()}>
               <StarRating 
                 starColor="black" 
                 value={starRatings[starKey] || 0}
                 onChange={(value) => updateStarRating(starKey, value)}
               />
             </div>
-            {focusFieldCount > 1 && (
-              <button
-                onClick={() => handleRemoveField(index)}
-                className="absolute top-1 right-1 w-4 h-4 flex items-center justify-center text-black text-opacity-30 hover:text-opacity-70 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                title="Entfernen"
+            {/* Delete tooltip */}
+            {activeTooltipIndex === index && focusFieldCount > 1 && (
+              <div 
+                className="absolute -top-7 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-50"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
               >
-                ×
-              </button>
+                <button 
+                  onClick={() => handleRemoveField(index)}
+                  className="hover:text-gray-300"
+                >
+                  Entfernen
+                </button>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black"></div>
+              </div>
             )}
           </div>
         );
@@ -479,7 +536,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
       {focusFieldCount < 10 && (
         <button
           onClick={handleAddField}
-          className="text-white text-opacity-60 hover:text-opacity-100 font-arial text-xs flex items-center gap-1 py-1 transition-opacity"
+          className="text-white text-opacity-60 hover:text-opacity-100 font-arial text-xs flex items-center justify-center gap-1 py-1 transition-opacity flex-shrink-0"
         >
           <span className="text-sm">+</span> Fokus hinzufügen
         </button>
