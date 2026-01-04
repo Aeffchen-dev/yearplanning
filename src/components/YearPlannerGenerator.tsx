@@ -412,134 +412,124 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   focusFieldCount,
   setFocusFieldCount
 }) => {
-  const [activeTooltipIndex, setActiveTooltipIndex] = useState<number | null>(null);
-  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
+  const [swipeOffset, setSwipeOffset] = useState<{[key: number]: number}>({});
+  const [swipeStart, setSwipeStart] = useState<{x: number, y: number, index: number} | null>(null);
+  const [isSwipingHorizontally, setIsSwipingHorizontally] = useState(false);
 
   const handleFocusChange = (index: number, value: string) => {
     updateTextareaValue(`slide11-focus-${index}`, value);
   };
 
   const handleAddField = () => {
-    if (focusFieldCount < 10) { // Max 10 fields
+    if (focusFieldCount < 10) {
       setFocusFieldCount(focusFieldCount + 1);
     }
   };
 
   const handleRemoveField = (index: number) => {
     if (focusFieldCount > 1) {
-      // Clear the removed field's data
       updateTextareaValue(`slide11-focus-${index}`, '');
       updateStarRating(`slide11-star-${index}`, 0);
       
-      // Shift remaining fields up
       for (let i = index; i < focusFieldCount - 1; i++) {
         updateTextareaValue(`slide11-focus-${i}`, textareaValues[`slide11-focus-${i + 1}`] || '');
         updateStarRating(`slide11-star-${i}`, starRatings[`slide11-star-${i + 1}`] || 0);
       }
-      // Clear the last field
       updateTextareaValue(`slide11-focus-${focusFieldCount - 1}`, '');
       updateStarRating(`slide11-star-${focusFieldCount - 1}`, 0);
       
       setFocusFieldCount(focusFieldCount - 1);
-      setActiveTooltipIndex(null);
+      setSwipeOffset({});
     }
   };
 
-  const startLongPress = (index: number) => {
-    if (focusFieldCount > 1) {
-      const timer = setTimeout(() => {
-        if (navigator.vibrate) {
-          navigator.vibrate(50);
-        }
-        setActiveTooltipIndex(index);
-      }, 500);
-      setLongPressTimer(timer);
-    }
+  const handleTouchStart = (e: React.TouchEvent, index: number) => {
+    const touch = e.touches[0];
+    setSwipeStart({ x: touch.clientX, y: touch.clientY, index });
+    setIsSwipingHorizontally(false);
   };
 
-  const cancelLongPress = () => {
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      setLongPressTimer(null);
-    }
-  };
-
-  // Close tooltip when clicking outside
-  useEffect(() => {
-    if (activeTooltipIndex === null) return;
-
-    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
-      const target = e.target as HTMLElement;
-      // Don't close if clicking the Entfernen button
-      if (target.closest('[data-tooltip-button]')) {
+  const handleTouchMove = (e: React.TouchEvent, index: number) => {
+    if (!swipeStart || swipeStart.index !== index) return;
+    
+    const touch = e.touches[0];
+    const diffX = touch.clientX - swipeStart.x;
+    const diffY = touch.clientY - swipeStart.y;
+    
+    // Determine swipe direction on first significant movement
+    if (!isSwipingHorizontally && (Math.abs(diffX) > 10 || Math.abs(diffY) > 10)) {
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        setIsSwipingHorizontally(true);
+      } else {
+        setSwipeStart(null);
         return;
       }
-      setActiveTooltipIndex(null);
-    };
+    }
+    
+    if (isSwipingHorizontally && focusFieldCount > 1) {
+      // Only allow swiping left (negative values)
+      const offset = Math.min(0, Math.max(-100, diffX));
+      setSwipeOffset({ ...swipeOffset, [index]: offset });
+    }
+  };
 
-    // Small delay to prevent immediate close after long press
-    const timeoutId = setTimeout(() => {
-      document.addEventListener('click', handleOutsideClick, true);
-      document.addEventListener('touchend', handleOutsideClick, true);
-    }, 50);
-
-    return () => {
-      clearTimeout(timeoutId);
-      document.removeEventListener('click', handleOutsideClick, true);
-      document.removeEventListener('touchend', handleOutsideClick, true);
-    };
-  }, [activeTooltipIndex]);
+  const handleTouchEnd = (index: number) => {
+    const offset = swipeOffset[index] || 0;
+    
+    // If swiped more than 60px left, delete the field
+    if (offset < -60 && focusFieldCount > 1) {
+      handleRemoveField(index);
+    } else {
+      // Reset swipe
+      setSwipeOffset({ ...swipeOffset, [index]: 0 });
+    }
+    
+    setSwipeStart(null);
+    setIsSwipingHorizontally(false);
+  };
 
   return (
-    <div className="h-full flex flex-col gap-2 overflow-y-auto">
+    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide11-focus-${index}`;
         const starKey = `slide11-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
+        const offset = swipeOffset[index] || 0;
         
         return (
-          <div 
-            key={index} 
-            className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] relative flex-shrink-0"
-            onMouseDown={() => startLongPress(index)}
-            onMouseUp={cancelLongPress}
-            onMouseLeave={cancelLongPress}
-            onTouchStart={() => startLongPress(index)}
-            onTouchEnd={cancelLongPress}
-          >
-            <textarea
-              placeholder="Fokus"
-              value={focusValue}
-              onChange={(e) => handleFocusChange(index, e.target.value)}
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              className={`flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%] min-h-[20px] max-h-[40px]`}
-              rows={1}
-            />
-            <div className="flex-shrink-0" onMouseDown={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()}>
-              <StarRating 
-                starColor="black" 
-                value={starRatings[starKey] || 0}
-                onChange={(value) => updateStarRating(starKey, value)}
-              />
-            </div>
-            {/* Delete tooltip */}
-            {activeTooltipIndex === index && focusFieldCount > 1 && (
-              <div 
-                className="absolute -top-7 left-1/2 transform -translate-x-1/2 bg-black text-white px-3 py-1 rounded text-xs font-arial whitespace-nowrap z-50"
-                onMouseDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
-              >
-                <button 
-                  data-tooltip-button
-                  onClick={() => handleRemoveField(index)}
-                  className="hover:text-gray-300"
-                >
-                  Entfernen
-                </button>
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black"></div>
+          <div key={index} className="relative flex-shrink-0 overflow-hidden">
+            {/* Delete background */}
+            {focusFieldCount > 1 && (
+              <div className="absolute inset-y-0 right-0 w-20 bg-red-500 flex items-center justify-center">
+                <span className="text-white text-xs font-arial">Löschen</span>
               </div>
             )}
+            {/* Swipeable content */}
+            <div 
+              className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] relative"
+              style={{ 
+                transform: `translateX(${offset}px)`,
+                transition: swipeStart ? 'none' : 'transform 0.2s ease-out'
+              }}
+              onTouchStart={(e) => handleTouchStart(e, index)}
+              onTouchMove={(e) => handleTouchMove(e, index)}
+              onTouchEnd={() => handleTouchEnd(index)}
+            >
+              <textarea
+                placeholder="Fokus"
+                value={focusValue}
+                onChange={(e) => handleFocusChange(index, e.target.value)}
+                className={`flex-1 bg-transparent ${focusValue ? 'text-black' : 'text-[#B29F71]'} placeholder-[#B29F71] resize-none border-none outline-none font-arial text-xs leading-[120%] min-h-[20px] max-h-[40px]`}
+                rows={1}
+              />
+              <div className="flex-shrink-0">
+                <StarRating 
+                  starColor="black" 
+                  value={starRatings[starKey] || 0}
+                  onChange={(value) => updateStarRating(starKey, value)}
+                />
+              </div>
+            </div>
           </div>
         );
       })}
