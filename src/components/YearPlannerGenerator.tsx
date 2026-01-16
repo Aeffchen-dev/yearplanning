@@ -549,15 +549,15 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className={`h-full flex flex-col gap-2 ${focusFieldCount > 5 ? 'overflow-y-auto' : ''} overflow-x-hidden`}>
+    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide12-focus-${index}`;
         const starKey = `slide12-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
         const isDragging = draggedIndex === index || touchDragIndex === index;
         const isDragOver = dragOverIndex === index;
-        // First 5 items should flex to fill available space only when 5 or fewer items
-        const shouldFlex = index < 5 && focusFieldCount <= 5;
+        // All items should have fixed height when more than 5 to enable scrolling
+        const shouldFlex = focusFieldCount <= 5;
         
         return (
           <div 
@@ -1302,7 +1302,7 @@ const slides = (
     id: 12,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="flex-1 flex flex-col min-h-0 relative">
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Edit mode toggle - top right corner of card */}
         {focusFieldCount > 1 && (
           <button
