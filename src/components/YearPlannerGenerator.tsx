@@ -549,7 +549,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex-1 flex flex-col gap-2 min-h-0 overflow-y-auto overflow-x-hidden">
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide12-focus-${index}`;
         const starKey = `slide12-star-${index}`;
@@ -1302,24 +1302,22 @@ const slides = (
     id: 12,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex flex-col h-full">
         <div className="text-white text-sm font-arial mb-3 flex-shrink-0">
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
         </div>
-        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-          <FocusAreasSection 
-            starRatings={starRatings}
-            updateStarRating={updateStarRating}
-            textareaValues={textareaValues}
-            updateTextareaValue={updateTextareaValue}
-            batchUpdateTextareaValues={batchUpdateTextareaValues}
-            batchUpdateStarRatings={batchUpdateStarRatings}
-            focusFieldCount={focusFieldCount}
-            setFocusFieldCount={setFocusFieldCount}
-            isEditMode={focusEditMode}
-          />
-        </div>
+        <FocusAreasSection 
+          starRatings={starRatings}
+          updateStarRating={updateStarRating}
+          textareaValues={textareaValues}
+          updateTextareaValue={updateTextareaValue}
+          batchUpdateTextareaValues={batchUpdateTextareaValues}
+          batchUpdateStarRatings={batchUpdateStarRatings}
+          focusFieldCount={focusFieldCount}
+          setFocusFieldCount={setFocusFieldCount}
+          isEditMode={focusEditMode}
+        />
       </div>
     ),
   },
@@ -1501,7 +1499,7 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
             
-            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">{slide.content}</div>
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">{slide.content}</div>
           </>
         ) : (
           // Regular layout for other slides with scrolling
