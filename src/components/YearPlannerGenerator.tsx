@@ -1302,21 +1302,19 @@ const slides = (
     id: 12,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-        {/* Header with edit button */}
-        <div className="flex items-start justify-between mb-3 flex-shrink-0">
-          <div className="text-white text-sm font-arial flex-1 pr-2">
-            Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
-            hat dieser Bereich jeweils?
-          </div>
-          {focusFieldCount > 1 && (
-            <button
-              onClick={() => setFocusEditMode(!focusEditMode)}
-              className="text-white text-xs font-arial flex-shrink-0 underline"
-            >
-              {focusEditMode ? 'Fertig' : 'Bearbeiten'}
-            </button>
-          )}
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+        {/* Edit button - positioned at top right of card */}
+        {focusFieldCount > 1 && (
+          <button
+            onClick={() => setFocusEditMode(!focusEditMode)}
+            className="absolute -top-12 right-0 text-white text-xs font-arial z-10"
+          >
+            {focusEditMode ? 'Fertig' : 'Bearbeiten'}
+          </button>
+        )}
+        <div className="text-white text-sm font-arial mb-3 flex-shrink-0">
+          Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
+          hat dieser Bereich jeweils?
         </div>
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
           <FocusAreasSection 
@@ -1482,7 +1480,7 @@ const Slide: React.FC<SlideProps> = ({
           // Slide 2 (draggable emojis), Slide 12 (focus areas), and Slide 14 (image)
           <>
             <div className="mb-4 md:mb-6 flex-shrink-0">
-               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
+              <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
                   <span className="ml-1">{slide.label.text}</span>
