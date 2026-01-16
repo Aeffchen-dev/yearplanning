@@ -422,7 +422,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const handleFocusChange = (index: number, value: string) => {
-    updateTextareaValue(`slide11-focus-${index}`, value);
+    updateTextareaValue(`slide12-focus-${index}`, value);
   };
 
   const handleAddField = () => {
@@ -433,15 +433,15 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
 
   const handleRemoveField = (index: number) => {
     if (focusFieldCount > 1) {
-      updateTextareaValue(`slide11-focus-${index}`, '');
-      updateStarRating(`slide11-star-${index}`, 0);
+      updateTextareaValue(`slide12-focus-${index}`, '');
+      updateStarRating(`slide12-star-${index}`, 0);
       
       for (let i = index; i < focusFieldCount - 1; i++) {
-        updateTextareaValue(`slide11-focus-${i}`, textareaValues[`slide11-focus-${i + 1}`] || '');
-        updateStarRating(`slide11-star-${i}`, starRatings[`slide11-star-${i + 1}`] || 0);
+        updateTextareaValue(`slide12-focus-${i}`, textareaValues[`slide12-focus-${i + 1}`] || '');
+        updateStarRating(`slide12-star-${i}`, starRatings[`slide12-star-${i + 1}`] || 0);
       }
-      updateTextareaValue(`slide11-focus-${focusFieldCount - 1}`, '');
-      updateStarRating(`slide11-star-${focusFieldCount - 1}`, 0);
+      updateTextareaValue(`slide12-focus-${focusFieldCount - 1}`, '');
+      updateStarRating(`slide12-star-${focusFieldCount - 1}`, 0);
       
       setFocusFieldCount(focusFieldCount - 1);
     }
@@ -549,7 +549,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className={`h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden`}>
+    <div className={`h-full flex flex-col gap-2 ${focusFieldCount > 5 && !isEditMode ? 'overflow-y-auto' : ''} overflow-x-hidden`}>
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide12-focus-${index}`;
         const starKey = `slide12-star-${index}`;
