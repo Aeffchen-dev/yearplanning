@@ -469,8 +469,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
     const allFocusValues: string[] = [];
     const allStarValues: number[] = [];
     for (let i = 0; i < focusFieldCount; i++) {
-      allFocusValues.push(textareaValues[`slide11-focus-${i}`] || '');
-      allStarValues.push(starRatings[`slide11-star-${i}`] || 0);
+      allFocusValues.push(textareaValues[`slide12-focus-${i}`] || '');
+      allStarValues.push(starRatings[`slide12-star-${i}`] || 0);
     }
 
     // Remove the dragged item
@@ -485,8 +485,8 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
     const textUpdates: {[key: string]: string} = {};
     const starUpdates: {[key: string]: number} = {};
     for (let i = 0; i < focusFieldCount; i++) {
-      textUpdates[`slide11-focus-${i}`] = allFocusValues[i];
-      starUpdates[`slide11-star-${i}`] = allStarValues[i];
+      textUpdates[`slide12-focus-${i}`] = allFocusValues[i];
+      starUpdates[`slide12-star-${i}`] = allStarValues[i];
     }
     batchUpdateTextareaValues(textUpdates);
     batchUpdateStarRatings(starUpdates);
@@ -551,17 +551,19 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   return (
     <div className={`h-full flex flex-col gap-2 ${isEditMode ? '' : 'overflow-y-auto'} overflow-x-hidden`}>
       {Array.from({ length: focusFieldCount }, (_, index) => {
-        const focusKey = `slide11-focus-${index}`;
-        const starKey = `slide11-star-${index}`;
+        const focusKey = `slide12-focus-${index}`;
+        const starKey = `slide12-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
         const isDragging = draggedIndex === index || touchDragIndex === index;
         const isDragOver = dragOverIndex === index;
+        // First 5 items should flex to fill available space, additional items have fixed height
+        const shouldFlex = index < 5 && focusFieldCount <= 5;
         
         return (
           <div 
             key={index} 
             ref={(el) => { itemRefs.current[index] = el; }}
-            className={`relative flex-shrink-0 flex items-center gap-2 transition-all ${
+            className={`relative ${shouldFlex ? 'flex-1 min-h-[44px]' : 'flex-shrink-0'} flex items-center gap-2 transition-all ${
               isDragging ? 'opacity-50 scale-105' : ''
             } ${isDragOver ? 'pt-2 border-t-2 border-white' : ''}`}
             draggable={isEditMode}
@@ -581,7 +583,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
               </button>
             )}
             <div 
-              className="bg-[#FFE299] flex items-center gap-2 px-3 py-2 min-h-[44px] transition-all duration-200 flex-1 overflow-hidden"
+              className={`bg-[#FFE299] flex items-center gap-2 px-3 py-2 ${shouldFlex ? 'h-full' : 'min-h-[44px]'} transition-all duration-200 flex-1 overflow-hidden`}
               onTouchStart={(e) => handleTouchStart(e, index)}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -1231,9 +1233,31 @@ const slides = (
       </div>
     ),
   },
-  // Slide 10
+  // Slide 10 - New slide with wish for partner
   {
     id: 10,
+    label: { number: "03", text: "The new year" },
+    content: (
+      <div className="flex-1 flex flex-col">
+        <div className="text-white text-base mb-4 font-arial">
+          Wenn du dir eine Sache, die ich tun kann von mir im neuen Jahr wünschen kannst: Was wäre es?
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="bg-[#FFE299] p-4 w-full max-w-[280px] min-h-[120px] flex items-center justify-center transform rotate-1">
+            <textarea
+              placeholder="Ich würde mir wünschen, dass du …"
+              value={textareaValues['slide10-wish'] || ''}
+              onChange={(e) => updateTextareaValue('slide10-wish', e.target.value)}
+              className="w-full h-full min-h-[80px] bg-transparent text-black placeholder-[#B29F71] border-none outline-none font-arial text-sm leading-[140%] resize-none text-center"
+            />
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  // Slide 11
+  {
+    id: 11,
     label: { number: "03", text: "The new year" },
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
@@ -1243,8 +1267,8 @@ const slides = (
           </div>
           <TextArea 
             placeholder="Wir schaffen ..." 
-            value={textareaValues['slide10-achieve'] || ''}
-            onChange={(value) => updateTextareaValue('slide10-achieve', value)}
+            value={textareaValues['slide11-achieve'] || ''}
+            onChange={(value) => updateTextareaValue('slide11-achieve', value)}
             fillHeight={true}
           />
         </div>
@@ -1254,8 +1278,8 @@ const slides = (
           </div>
           <TextArea 
             placeholder="Wir nehmen mit ..." 
-            value={textareaValues['slide10-carry'] || ''}
-            onChange={(value) => updateTextareaValue('slide10-carry', value)}
+            value={textareaValues['slide11-carry'] || ''}
+            onChange={(value) => updateTextareaValue('slide11-carry', value)}
             fillHeight={true}
           />
         </div>
@@ -1265,17 +1289,17 @@ const slides = (
           </div>
           <TextArea 
             placeholder="Unsere Projekte ..." 
-            value={textareaValues['slide10-projects'] || ''}
-            onChange={(value) => updateTextareaValue('slide10-projects', value)}
+            value={textareaValues['slide11-projects'] || ''}
+            onChange={(value) => updateTextareaValue('slide11-projects', value)}
             fillHeight={true}
           />
         </div>
       </div>
     ),
   },
-  // Slide 11
+  // Slide 12 - Focus areas
   {
-    id: 11,
+    id: 12,
     label: { number: "03", text: "The new year" },
     content: (
       <div className="flex-1 flex flex-col min-h-0 relative">
@@ -1308,16 +1332,16 @@ const slides = (
       </div>
     ),
   },
-  // Slide 12
+  // Slide 13
   {
-    id: 12,
+    id: 13,
     label: { number: "04", text: "Plan and terminate" },
     title:
       "Jetzt geht es darum, eure Ideen fürs kommende Jahr zu sammeln und auf ihre Machbarkeit zu untersuchen und zu priorisieren.",
   },
-  // Slide 13
+  // Slide 14
   {
-    id: 13,
+    id: 14,
     label: { number: "04", text: "Plan and terminate" },
     content: (
       <div className="flex-1 flex flex-col h-full">
@@ -1428,7 +1452,7 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : slide.id === 24 ? (
+        ) : slide.id === 25 ? (
           // Special layout for final slide - same as slide 1 layout
           <div className="flex-1 flex flex-col">
             <div className="flex-1 flex flex-col justify-center">
@@ -1452,8 +1476,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : slide.id === 2 || slide.id === 11 || slide.id === 13 ? (
-          // Slide 2 (draggable emojis), Slide 11 (focus areas), and Slide 13 (image) - no scrolling
+        ) : slide.id === 2 || slide.id === 12 || slide.id === 14 ? (
+          // Slide 2 (draggable emojis), Slide 12 (focus areas), and Slide 14 (image) - no scrolling
           <>
             <div className="mb-4 md:mb-6">
                <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
@@ -1522,18 +1546,18 @@ export default function YearPlannerGenerator() {
     return saved || {};
   });
 
-  // Default star ratings for slides 14-23 (Prio)
+  // Default star ratings for slides 15-24 (Prio)
   const defaultStarRatings: {[key: string]: number} = {
-    'slide14-prio': 3,
-    'slide15-prio': 2.5,
-    'slide16-prio': 2,
-    'slide17-prio': 1.5,
-    'slide18-prio': 1,
-    'slide19-prio': 0.5,
-    'slide20-prio': 0,
+    'slide15-prio': 3,
+    'slide16-prio': 2.5,
+    'slide17-prio': 2,
+    'slide18-prio': 1.5,
+    'slide19-prio': 1,
+    'slide20-prio': 0.5,
     'slide21-prio': 0,
     'slide22-prio': 0,
     'slide23-prio': 0,
+    'slide24-prio': 0,
   };
 
   // State for star ratings with localStorage persistence
@@ -1603,8 +1627,8 @@ export default function YearPlannerGenerator() {
   const slidesArray = useMemo(() => {
     const baseSlides = slides(textareaValues, updateTextareaValue, batchUpdateTextareaValues, starRatings, updateStarRating, batchUpdateStarRatings, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode);
     
-    // Generate slides 14-23 with goal planning template
-    for (let i = 14; i <= 23; i++) {
+    // Generate slides 15-24 with goal planning template
+    for (let i = 15; i <= 24; i++) {
       baseSlides.push({
         id: i,
         label: { number: "04", text: "Plan and terminate" },
@@ -1653,7 +1677,7 @@ export default function YearPlannerGenerator() {
       });
     }
 
-    // Final slide 24
+    // Final slide 25
     const handleExport = () => {
       window.print();
     };
@@ -1666,7 +1690,7 @@ export default function YearPlannerGenerator() {
     };
 
     baseSlides.push({
-      id: 24,
+      id: 25,
       label: { number: "Finally", text: "" },
       title:
         "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
@@ -1826,7 +1850,7 @@ export default function YearPlannerGenerator() {
             Year Planning
           </h1>
           <div className="flex-1 text-right text-sm md:text-base font-arial text-white">
-            {currentSlide + 1} / 24
+            {currentSlide + 1} / 25
           </div>
         </div>
       </div>
