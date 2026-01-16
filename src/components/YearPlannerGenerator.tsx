@@ -1426,8 +1426,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : [4, 8].includes(slide.id) ? (
-          // Special layout for title slides 4 and 8
+        ) : [4, 8, 13].includes(slide.id) ? (
+          // Special layout for title slides 4, 8, and 13
           <div className="flex-1 flex flex-col justify-center">
             <div className="mb-[24px]">
                <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
