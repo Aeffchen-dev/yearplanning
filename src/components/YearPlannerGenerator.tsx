@@ -549,7 +549,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className={`h-full flex flex-col gap-2 ${isEditMode ? '' : 'overflow-y-auto'} overflow-x-hidden`}>
+    <div className={`h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden`}>
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide12-focus-${index}`;
         const starKey = `slide12-star-${index}`;
