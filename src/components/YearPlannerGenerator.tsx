@@ -870,14 +870,21 @@ const DraggableFloatingEmoji: React.FC<DraggableFloatingEmojiProps> = ({
   );
 };
 
+interface EmojiCategory {
+  emoji: string;
+  label: string;
+}
+
 interface SlideWithDraggableEmojisProps {
   draggedEmojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>;
   updateDraggedEmojis: (emojis: Array<{id: string, emoji: string, label: string, x: number, y: number}>) => void;
+  emojiCategories: EmojiCategory[];
 }
 
 const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({ 
   draggedEmojis = [], 
-  updateDraggedEmojis 
+  updateDraggedEmojis,
+  emojiCategories
 }) => {
   const [draggedEmojiId, setDraggedEmojiId] = useState<string | null>(null);
   const [openTooltipId, setOpenTooltipId] = useState<string | null>(null);
@@ -960,14 +967,26 @@ const SlideWithDraggableEmojis: React.FC<SlideWithDraggableEmojisProps> = ({
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <DraggableEmojiIcon emoji="❤️" label="Beziehung" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "❤️")} />
-            <DraggableEmojiIcon emoji="👯‍♀️" label="Freunde" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "👯‍♀️")} />
-            <DraggableEmojiIcon emoji="🐶" label="Kalle" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "🐶")} />
+            {emojiCategories.slice(0, 3).map((cat) => (
+              <DraggableEmojiIcon 
+                key={cat.emoji} 
+                emoji={cat.emoji} 
+                label={cat.label} 
+                onStartDrag={handleStartDrag} 
+                disabled={draggedEmojis.some(e => e.emoji === cat.emoji)} 
+              />
+            ))}
           </div>
           <div className="space-y-2">
-            <DraggableEmojiIcon emoji="🤸" label="Hobbies" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "🤸")} />
-            <DraggableEmojiIcon emoji="🫀" label="Gesundheit" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "🫀")} />
-            <DraggableEmojiIcon emoji="👩‍💻" label="Beruf" onStartDrag={handleStartDrag} disabled={draggedEmojis.some(e => e.emoji === "👩‍💻")} />
+            {emojiCategories.slice(3, 6).map((cat) => (
+              <DraggableEmojiIcon 
+                key={cat.emoji} 
+                emoji={cat.emoji} 
+                label={cat.label} 
+                onStartDrag={handleStartDrag} 
+                disabled={draggedEmojis.some(e => e.emoji === cat.emoji)} 
+              />
+            ))}
           </div>
         </div>
         <div className="text-center text-white text-sm font-arial">
@@ -997,7 +1016,9 @@ const slides = (
   focusFieldCount: number,
   setFocusFieldCount: (count: number) => void,
   focusEditMode: boolean,
-  setFocusEditMode: (mode: boolean) => void
+  setFocusEditMode: (mode: boolean) => void,
+  emojiCategories: EmojiCategory[],
+  updateEmojiCategory: (index: number, field: 'emoji' | 'label', value: string) => void
 ): SlideData[] => [
   // Slide 1
   {
@@ -1013,20 +1034,55 @@ const slides = (
       </div>
     ),
   },
-  // Slide 2
+  // Slide 2 - Emoji customization
   {
     id: 2,
+    label: { number: "01", text: "The past year" },
+    content: (
+      <div className="flex flex-col h-full">
+        <div className="text-white text-sm font-arial mb-4 flex-shrink-0">
+          Wähle die Bereiche aus, die ihr bewerten wollt. Klicke auf ein Emoji um es zu ändern.
+        </div>
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <div className="space-y-3">
+            {emojiCategories.map((cat, index) => (
+              <div key={index} className="flex items-center gap-3 bg-[#FFE299] rounded-lg p-3">
+                <input
+                  type="text"
+                  value={cat.emoji}
+                  onChange={(e) => updateEmojiCategory(index, 'emoji', e.target.value)}
+                  className="w-12 h-12 text-2xl text-center bg-transparent border-none outline-none"
+                  maxLength={2}
+                />
+                <input
+                  type="text"
+                  value={cat.label}
+                  onChange={(e) => updateEmojiCategory(index, 'label', e.target.value)}
+                  placeholder="Bereich"
+                  className="flex-1 bg-transparent text-black placeholder-[#B29F71] border-none outline-none font-arial text-base"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  // Slide 3 - Draggable emojis
+  {
+    id: 3,
     label: { number: "01", text: "The past year" },
     content: (
       <SlideWithDraggableEmojis 
         draggedEmojis={draggedEmojis}
         updateDraggedEmojis={updateDraggedEmojis}
+        emojiCategories={emojiCategories}
       />
     ),
   },
-  // Slide 3
+  // Slide 4
   {
-    id: 3,
+    id: 4,
     label: { number: "01", text: "The past year" },
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
@@ -1066,16 +1122,16 @@ const slides = (
       </div>
     ),
   },
-  // Slide 4
+  // Slide 5
   {
-    id: 4,
+    id: 5,
     label: { number: "02", text: "Health Check" },
     title:
       "Schaut auf eure Beziehung: Was läuft gut? Was braucht mehr Achtsamkeit?",
   },
-  // Slide 5
+  // Slide 6
   {
-    id: 5,
+    id: 6,
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col justify-between">
@@ -1117,9 +1173,9 @@ const slides = (
       </div>
     ),
   },
-  // Slide 6
+  // Slide 7
   {
-    id: 6,
+    id: 7,
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col justify-between">
@@ -1165,9 +1221,9 @@ const slides = (
       </div>
     ),
   },
-  // Slide 7
+  // Slide 8
   {
-    id: 7,
+    id: 8,
     label: { number: "02", text: "Health Check" },
     content: (
       <div className="flex-1 flex flex-col">
@@ -1184,16 +1240,16 @@ const slides = (
       </div>
     ),
   },
-  // Slide 8
+  // Slide 9
   {
-    id: 8,
+    id: 9,
     label: { number: "03", text: "The new year" },
     title:
       "Richtet euren Blick auf das kommende Jahr: Was nehmt ihr euch vor? Was wollt ihr erreichen?",
   },
-  // Slide 9
+  // Slide 10
   {
-    id: 9,
+    id: 10,
     label: { number: "03", text: "The new year" },
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
@@ -1233,9 +1289,9 @@ const slides = (
       </div>
     ),
   },
-  // Slide 10 - New slide with wish for partner
+  // Slide 11 - Wish for partner
   {
-    id: 10,
+    id: 11,
     label: { number: "03", text: "The new year" },
     content: (
       <div className="flex-1 flex flex-col">
@@ -1255,9 +1311,9 @@ const slides = (
       </div>
     ),
   },
-  // Slide 11
+  // Slide 12
   {
-    id: 11,
+    id: 12,
     label: { number: "03", text: "The new year" },
     content: (
       <div className="space-y-4 flex-1 flex flex-col">
@@ -1297,9 +1353,9 @@ const slides = (
       </div>
     ),
   },
-  // Slide 12 - Focus areas
+  // Slide 13 - Focus areas
   {
-    id: 12,
+    id: 13,
     label: { number: "03", text: "The new year" },
     content: (
       <div className="flex flex-col h-full">
@@ -1321,16 +1377,16 @@ const slides = (
       </div>
     ),
   },
-  // Slide 13
+  // Slide 14
   {
-    id: 13,
+    id: 14,
     label: { number: "04", text: "Plan and terminate" },
     title:
       "Jetzt geht es darum, eure Ideen fürs kommende Jahr zu sammeln und auf ihre Machbarkeit zu untersuchen und zu priorisieren.",
   },
-  // Slide 14
+  // Slide 15
   {
-    id: 14,
+    id: 15,
     label: { number: "04", text: "Plan and terminate" },
     content: (
       <div className="flex-1 flex flex-col h-full">
@@ -1426,8 +1482,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : [4, 8, 13].includes(slide.id) ? (
-          // Special layout for title slides 4, 8, and 13
+        ) : [5, 9, 14].includes(slide.id) ? (
+          // Special layout for title slides 5, 9, and 14
           <div className="flex-1 flex flex-col justify-center">
             <div className="mb-[24px]">
                <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
@@ -1448,7 +1504,7 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : slide.id === 25 ? (
+        ) : slide.id === 26 ? (
           // Special layout for final slide - same as slide 1 layout
           <div className="flex-1 flex flex-col">
             <div className="flex-1 flex flex-col justify-center">
@@ -1472,8 +1528,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : slide.id === 2 || slide.id === 12 || slide.id === 14 ? (
-          // Slide 2 (draggable emojis), Slide 12 (focus areas), and Slide 14 (image)
+        ) : slide.id === 2 || slide.id === 3 || slide.id === 13 || slide.id === 15 ? (
+          // Slide 2 (emoji setup), Slide 3 (draggable emojis), Slide 13 (focus areas), and Slide 15 (image)
           <>
             {/* Header with label and optional edit button */}
             <div className="flex items-start justify-between mb-4 md:mb-6 flex-shrink-0">
@@ -1579,6 +1635,30 @@ export default function YearPlannerGenerator() {
     return saved || [];
   });
 
+  // Default emoji categories
+  const defaultEmojiCategories: EmojiCategory[] = [
+    { emoji: "❤️", label: "Beziehung" },
+    { emoji: "👯‍♀️", label: "Freunde" },
+    { emoji: "🐶", label: "Kalle" },
+    { emoji: "🤸", label: "Hobbies" },
+    { emoji: "🫀", label: "Gesundheit" },
+    { emoji: "👩‍💻", label: "Beruf" },
+  ];
+
+  // State for emoji categories with localStorage persistence
+  const [emojiCategories, setEmojiCategories] = useState<EmojiCategory[]>(() => {
+    if (typeof window === 'undefined') return defaultEmojiCategories;
+    const saved = getItemWithExpiry('yearPlanner-emojiCategories');
+    return saved || defaultEmojiCategories;
+  });
+
+  const updateEmojiCategory = (index: number, field: 'emoji' | 'label', value: string) => {
+    const newCategories = [...emojiCategories];
+    newCategories[index] = { ...newCategories[index], [field]: value };
+    setEmojiCategories(newCategories);
+    setItemWithExpiry('yearPlanner-emojiCategories', newCategories);
+  };
+
   // State for focus field count with localStorage persistence
   const [focusFieldCount, setFocusFieldCountState] = useState<number>(() => {
     if (typeof window === 'undefined') return 5;
@@ -1630,10 +1710,10 @@ export default function YearPlannerGenerator() {
 
   // Create slides array with state integration
   const slidesArray = useMemo(() => {
-    const baseSlides = slides(textareaValues, updateTextareaValue, batchUpdateTextareaValues, starRatings, updateStarRating, batchUpdateStarRatings, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode);
+    const baseSlides = slides(textareaValues, updateTextareaValue, batchUpdateTextareaValues, starRatings, updateStarRating, batchUpdateStarRatings, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode, emojiCategories, updateEmojiCategory);
     
-    // Generate slides 15-24 with goal planning template
-    for (let i = 15; i <= 24; i++) {
+    // Generate slides 16-25 with goal planning template
+    for (let i = 16; i <= 25; i++) {
       baseSlides.push({
         id: i,
         label: { number: "04", text: "Plan and terminate" },
@@ -1682,7 +1762,7 @@ export default function YearPlannerGenerator() {
       });
     }
 
-    // Final slide 25
+    // Final slide 26
     const handleExport = () => {
       window.print();
     };
@@ -1695,7 +1775,7 @@ export default function YearPlannerGenerator() {
     };
 
     baseSlides.push({
-      id: 25,
+      id: 26,
       label: { number: "Finally", text: "" },
       title:
         "Es ist geschafft 🎉\nStoßt auf euch an und habt ein geiles Jahr ihr Süßen!",
@@ -1725,7 +1805,7 @@ export default function YearPlannerGenerator() {
     });
 
     return baseSlides;
-  }, [textareaValues, updateTextareaValue, batchUpdateTextareaValues, starRatings, updateStarRating, batchUpdateStarRatings, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode]);
+  }, [textareaValues, updateTextareaValue, batchUpdateTextareaValues, starRatings, updateStarRating, batchUpdateStarRatings, draggedEmojis, updateDraggedEmojis, focusFieldCount, setFocusFieldCount, focusEditMode, setFocusEditMode, emojiCategories, updateEmojiCategory]);
 
   const nextSlide = () => {
     if (currentSlide < slidesArray.length - 1) {
@@ -1907,7 +1987,7 @@ export default function YearPlannerGenerator() {
               onNextSlide={nextSlide}
               currentSlide={currentSlide}
               totalSlides={slidesArray.length}
-              showEditButton={slide.id === 12 && focusFieldCount > 1}
+              showEditButton={slide.id === 13 && focusFieldCount > 1}
               editButtonLabel={focusEditMode ? 'Fertig' : 'Bearbeiten'}
               onEditButtonClick={() => setFocusEditMode(!focusEditMode)}
             />
