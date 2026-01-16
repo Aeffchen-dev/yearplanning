@@ -1303,16 +1303,16 @@ const slides = (
     label: { number: "03", text: "The new year" },
     content: (
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-        {/* Header row with text and edit button */}
+        {/* Header with edit button */}
         <div className="flex items-start justify-between mb-3 flex-shrink-0">
-          <div className="text-white text-sm font-arial flex-1">
+          <div className="text-white text-sm font-arial flex-1 pr-2">
             Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
             hat dieser Bereich jeweils?
           </div>
           {focusFieldCount > 1 && (
             <button
               onClick={() => setFocusEditMode(!focusEditMode)}
-              className="text-white text-xs font-arial ml-2 flex-shrink-0"
+              className="text-white text-xs font-arial flex-shrink-0 underline"
             >
               {focusEditMode ? 'Fertig' : 'Bearbeiten'}
             </button>
@@ -1479,9 +1479,9 @@ const Slide: React.FC<SlideProps> = ({
             )}
           </div>
         ) : slide.id === 2 || slide.id === 12 || slide.id === 14 ? (
-          // Slide 2 (draggable emojis), Slide 12 (focus areas), and Slide 14 (image) - no scrolling
+          // Slide 2 (draggable emojis), Slide 12 (focus areas), and Slide 14 (image)
           <>
-            <div className="mb-4 md:mb-6">
+            <div className="mb-4 md:mb-6 flex-shrink-0">
                <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
@@ -1491,7 +1491,7 @@ const Slide: React.FC<SlideProps> = ({
             </div>
 
             {slide.title && (
-              <div className="font-arial whitespace-pre-line responsive-subtitle leading-[120%] mb-6 md:mb-10">
+              <div className="font-arial whitespace-pre-line responsive-subtitle leading-[120%] mb-6 md:mb-10 flex-shrink-0">
                 {slide.title}
               </div>
             )}
