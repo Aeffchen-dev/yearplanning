@@ -1316,7 +1316,7 @@ const slides = (
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
         </div>
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 min-h-0 overflow-hidden">
           <FocusAreasSection 
             starRatings={starRatings}
             updateStarRating={updateStarRating}
