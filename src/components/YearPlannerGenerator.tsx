@@ -1243,12 +1243,12 @@ const slides = (
           Wenn du dir eine Sache, die ich tun kann von mir im neuen Jahr wünschen kannst: Was wäre es?
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <div className="bg-[#FFE299] p-4 w-full max-w-[280px] min-h-[120px] flex items-center justify-center transform rotate-1">
+          <div className="bg-[#FFE299] p-4 w-full h-full flex items-center justify-center transform rotate-1">
             <textarea
-              placeholder="Ich würde mir wünschen, dass du …"
+              placeholder="Ich würde mir wünschen, dass du … …"
               value={textareaValues['slide10-wish'] || ''}
               onChange={(e) => updateTextareaValue('slide10-wish', e.target.value)}
-              className="w-full h-full min-h-[80px] bg-transparent text-black placeholder-[#B29F71] border-none outline-none font-arial text-sm leading-[140%] resize-none text-center"
+              className="w-full h-full bg-transparent text-black placeholder-[#B29F71] border-none outline-none font-arial text-sm leading-[140%] resize-none text-center"
             />
           </div>
         </div>
@@ -1548,12 +1548,12 @@ export default function YearPlannerGenerator() {
 
   // Default star ratings for slides 15-24 (Prio)
   const defaultStarRatings: {[key: string]: number} = {
-    'slide15-prio': 3,
-    'slide16-prio': 2.5,
-    'slide17-prio': 2,
-    'slide18-prio': 1.5,
-    'slide19-prio': 1,
-    'slide20-prio': 0.5,
+    'slide15-prio': 0,
+    'slide16-prio': 0,
+    'slide17-prio': 0,
+    'slide18-prio': 0,
+    'slide19-prio': 0,
+    'slide20-prio': 0,
     'slide21-prio': 0,
     'slide22-prio': 0,
     'slide23-prio': 0,
