@@ -549,7 +549,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col gap-2 overflow-x-hidden">
+    <div className="flex flex-col gap-2">
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide12-focus-${index}`;
         const starKey = `slide12-star-${index}`;
@@ -1302,16 +1302,7 @@ const slides = (
     id: 12,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
-        {/* Edit button - positioned at top right of card */}
-        {focusFieldCount > 1 && (
-          <button
-            onClick={() => setFocusEditMode(!focusEditMode)}
-            className="absolute -top-12 right-0 text-white text-xs font-arial z-10"
-          >
-            {focusEditMode ? 'Fertig' : 'Bearbeiten'}
-          </button>
-        )}
+      <div className="flex-1 flex flex-col min-h-0">
         <div className="text-white text-sm font-arial mb-3 flex-shrink-0">
           Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
           hat dieser Bereich jeweils?
@@ -1379,6 +1370,10 @@ interface SlideProps {
   onNextSlide: () => void;
   currentSlide: number;
   totalSlides: number;
+  // Optional edit button for slide 12
+  showEditButton?: boolean;
+  editButtonLabel?: string;
+  onEditButtonClick?: () => void;
 }
 
 const Slide: React.FC<SlideProps> = ({
@@ -1388,6 +1383,9 @@ const Slide: React.FC<SlideProps> = ({
   onNextSlide,
   currentSlide,
   totalSlides,
+  showEditButton,
+  editButtonLabel,
+  onEditButtonClick,
 }) => (
   <div className="w-full h-full flex items-center justify-center bg-black text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
@@ -1479,13 +1477,22 @@ const Slide: React.FC<SlideProps> = ({
         ) : slide.id === 2 || slide.id === 12 || slide.id === 14 ? (
           // Slide 2 (draggable emojis), Slide 12 (focus areas), and Slide 14 (image)
           <>
-            <div className="mb-4 md:mb-6 flex-shrink-0">
+            {/* Header with label and optional edit button */}
+            <div className="flex items-start justify-between mb-4 md:mb-6 flex-shrink-0">
               <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
                 {slide.label.number}
                 {slide.label.text && (
                   <span className="ml-1">{slide.label.text}</span>
                 )}
               </div>
+              {showEditButton && onEditButtonClick && (
+                <button
+                  onClick={onEditButtonClick}
+                  className="text-white text-xs font-arial"
+                >
+                  {editButtonLabel}
+                </button>
+              )}
             </div>
 
             {slide.title && (
@@ -1902,6 +1909,9 @@ export default function YearPlannerGenerator() {
               onNextSlide={nextSlide}
               currentSlide={currentSlide}
               totalSlides={slidesArray.length}
+              showEditButton={slide.id === 12 && focusFieldCount > 1}
+              editButtonLabel={focusEditMode ? 'Fertig' : 'Bearbeiten'}
+              onEditButtonClick={() => setFocusEditMode(!focusEditMode)}
             />
           </div>
         ))}
