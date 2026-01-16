@@ -1387,7 +1387,7 @@ const Slide: React.FC<SlideProps> = ({
 }) => (
   <div className="w-full h-full flex items-center justify-center bg-black text-white select-none">
     <div className="w-full max-w-[500px] max-h-[780px] h-full flex flex-col responsive-main-padding">
-      <div className="flex-1 bg-[#161616] rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 relative">
+      <div className="flex-1 bg-[#161616] rounded-lg md:rounded-2xl responsive-card-padding flex flex-col min-h-0 overflow-hidden relative">
         <button
           onClick={onPrevSlide}
           className="absolute left-0 top-0 w-8 h-full z-10 cursor-pointer"
@@ -1426,8 +1426,8 @@ const Slide: React.FC<SlideProps> = ({
               </div>
             )}
           </div>
-        ) : [4, 8, 12].includes(slide.id) ? (
-          // Special layout for title slides (not slide 24)
+        ) : [4, 8].includes(slide.id) ? (
+          // Special layout for title slides 4 and 8
           <div className="flex-1 flex flex-col justify-center">
             <div className="mb-[24px]">
                <div className="inline-flex items-center px-3 py-1 border border-white rounded-full text-xs font-bold font-kokoro leading-[100%]">
