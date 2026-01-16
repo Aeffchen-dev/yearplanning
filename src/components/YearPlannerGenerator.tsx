@@ -549,7 +549,7 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col gap-2 overflow-y-auto overflow-x-hidden">
+    <div className="h-full flex flex-col gap-2 overflow-x-hidden">
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide12-focus-${index}`;
         const starKey = `slide12-star-${index}`;
@@ -1302,19 +1302,21 @@ const slides = (
     id: 12,
     label: { number: "03", text: "The new year" },
     content: (
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
-        {/* Edit mode toggle - top right corner of card */}
-        {focusFieldCount > 1 && (
-          <button
-            onClick={() => setFocusEditMode(!focusEditMode)}
-            className="absolute top-[-36px] md:-top-10 right-0 text-white text-xs font-arial z-10"
-          >
-            {focusEditMode ? 'Fertig' : 'Bearbeiten'}
-          </button>
-        )}
-        <div className="text-white text-sm font-arial mb-3 flex-shrink-0">
-          Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
-          hat dieser Bereich jeweils?
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+        {/* Header row with text and edit button */}
+        <div className="flex items-start justify-between mb-3 flex-shrink-0">
+          <div className="text-white text-sm font-arial flex-1">
+            Worauf willst du deinen individuellen Fokus legen? Welche Wichtigkeit
+            hat dieser Bereich jeweils?
+          </div>
+          {focusFieldCount > 1 && (
+            <button
+              onClick={() => setFocusEditMode(!focusEditMode)}
+              className="text-white text-xs font-arial ml-2 flex-shrink-0"
+            >
+              {focusEditMode ? 'Fertig' : 'Bearbeiten'}
+            </button>
+          )}
         </div>
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
           <FocusAreasSection 
