@@ -549,22 +549,22 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
   };
 
   return (
-    <div className={`h-full flex flex-col gap-2 ${focusFieldCount > 5 && !isEditMode ? 'overflow-y-auto' : ''} overflow-x-hidden`}>
+    <div className={`h-full flex flex-col gap-2 ${focusFieldCount > 5 ? 'overflow-y-auto' : ''} overflow-x-hidden`}>
       {Array.from({ length: focusFieldCount }, (_, index) => {
         const focusKey = `slide12-focus-${index}`;
         const starKey = `slide12-star-${index}`;
         const focusValue = textareaValues[focusKey] || '';
         const isDragging = draggedIndex === index || touchDragIndex === index;
         const isDragOver = dragOverIndex === index;
-        // First 5 items should flex to fill available space, additional items have fixed height
+        // First 5 items should flex to fill available space only when 5 or fewer items
         const shouldFlex = index < 5 && focusFieldCount <= 5;
         
         return (
           <div 
             key={index} 
             ref={(el) => { itemRefs.current[index] = el; }}
-            className={`relative ${shouldFlex ? 'flex-1 min-h-[44px]' : 'flex-shrink-0'} flex items-center gap-2 transition-all ${
-              isDragging ? 'opacity-50 scale-105' : ''
+            className={`relative ${shouldFlex ? 'flex-1 min-h-[44px]' : 'flex-shrink-0 min-h-[44px]'} flex items-center gap-2 transition-all ${
+              isDragging ? 'opacity-50 scale-105 z-10' : ''
             } ${isDragOver ? 'pt-2 border-t-2 border-white' : ''}`}
             draggable={isEditMode}
             onDragStart={() => handleDragStart(index)}
@@ -572,6 +572,9 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
             onDragLeave={handleDragLeave}
             onDrop={() => handleDrop(index)}
             onDragEnd={handleDragEnd}
+            onTouchStart={(e) => handleTouchStart(e, index)}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {/* Delete button in edit mode */}
             {isEditMode && focusFieldCount > 1 && (
@@ -584,9 +587,6 @@ const FocusAreasSection: React.FC<FocusAreasSectionProps> = ({
             )}
             <div 
               className={`bg-[#FFE299] flex items-center gap-2 px-3 py-2 ${shouldFlex ? 'h-full' : 'min-h-[44px]'} transition-all duration-200 flex-1 overflow-hidden`}
-              onTouchStart={(e) => handleTouchStart(e, index)}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
               style={isEditMode ? { cursor: 'grab' } : undefined}
             >
               <input
